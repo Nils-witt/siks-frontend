@@ -1,0 +1,150 @@
+<!--* S-Plan
+ * Copyright (c) 2019 Nils Witt
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer.
+ *
+ *   * Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *   * Neither the name of the author nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *-->
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>S-Plan Stundenplan</title>
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/S-Plan.png">
+    <meta name="apple-mobile-web-app-title" content="S-Plan">
+    <link rel="stylesheet" href="/assets/css/global.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="manifest" href="/manifest.json">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="/assets/css/stundenplan.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="navBarContainer">
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">S-Plan</a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                    <span class="sr-only">Toggle navigation</span>  
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">Stundenplan</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
+                        <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">Weitere Dienste</a>
+                            <div class="dropdown-menu" role="menu">
+								<a class="dropdown-item" role="presentation" href="https://moodle.paeda.biz" target="_blank">Moodle</a>
+								<a class="dropdown-item" role="presentation" href="https://www.otto-kuehne-schule.de" target="_blank">Schulhompage</a>
+                                <a class="dropdown-item" role="presentation" href="https://paeda.nfs-cloud.org:8443" target="_blank">Netman Online</a>
+								<a class="dropdown-item" role="presentation" onClick="window.location.reload(true)">Seite Aktualisieren</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <span class="navbar-text actions"></span>
+                </div>
+                <a class="btn btn-light action-button" role="button" href="settings.html">Einstellungen</a>
+                <button class="btn btn-light action-button" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </div>
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#" id="previousWeek" onclick="updatePagination(-1); createLessonsTable();">1</a></li>
+                <li class="page-item"><a class="page-link" href="#" id="currentWeek">2</a></li>
+                <li class="page-item"><a class="page-link" href="#" id="nextWeek" onclick="updatePagination(1); createLessonsTable();">3</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div>
+        <div class="container" id='container'>
+            <div class="row" id="daysContainer">
+                <div class="col" id="day-0">
+                    <h5>Loading....</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailBox" onclick="closeDetailView()"></div>
+    <div id="detailFrame">
+        <button id="detailCloseButton" class="btn" onclick="closeDetailView();">X</button>
+        <div class="container">
+            <div class="row">
+                <div class="col" style="min-width: 300px;">
+                    <div class="row">
+                        <div class="col">
+                            <h4><span style="font-weight: bold;"><span id="detailViewCourseName"></span></span></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Anwesend: <span id="detailViewPresens">N/A</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Info: <span id="detailViewStatus">Keine Änderung</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <span id="detailViewLesson"></span>. Stunde
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Raum: <span id="detailViewRoom"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="min-width: 300px;">
+                    <h4><span style="font-weight: bold;">Aushänge:</span></h4>
+                    <div class="row">
+                        <div class="col" id="detailViewAnnouncement">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="/assets/js/databaseConnector.js"></script>
+    <script src="/assets/js/apiConnector.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/student/stundenplan.js"></script>
+
+</body>
+
+</html>

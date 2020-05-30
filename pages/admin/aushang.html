@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>S-Plan Administration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Button.css">
+</head>
+
+<body>
+    <div id="navBarContainer">
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">OKS</a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="stundenplan.html">Stundenplan</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="vertretungen.html">Vertretungsplan</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">Aushang</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="users.html">Benutzerverwaltung</a></li>
+                    </ul>
+                    <span class="navbar-text actions"></span>
+                </div>
+                <button class="btn btn-light action-button" onclick="goToMainPage()">Administration verlassen</button>
+                <button class="btn btn-light action-button" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </div>
+    <div>
+        <div class="container" id='bodyContainer'>
+            <table class="table w-auto" id="dataTable">
+                <thead>
+                <tr>
+                    <th scope="col" >Kurs</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Online</th>
+                    <th scope="col">Inhalt</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+                <tbody>
+                <tr id="createAnnouncement" style="visibility: collapse">
+                    <td>
+                        <select class="form-control" id="gradeSelect" onchange="selectUpdate()">
+                            <option selected>
+                                Grade
+                            </option>
+                        </select>
+                        <select class="form-control" id="subjectSelect" onchange="selectUpdate()">
+                            <option>
+                                Subject
+                            </option>
+                        </select>
+                        <select class="form-control" id="groupSelect">
+                            <option>
+                                Group
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control" type="date" id="dateInput">
+                    </td>
+                    <td>
+                        <input class="form-control" type="checkbox">
+                    </td>
+                    <td>
+                        <textarea class="form-control" id="announcementContent"></textarea>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-success" id="saveAnnouncement" onclick="createAnnouncement();">Speichern</button>
+                            <button class="btn btn-danger" id="clearInput">Leeren</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="openCreate">
+                    <td>
+                        <button class="btn btn-success" onclick="openCreateView();">Erstellen</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-info" id="openPresets">Vorlagen</button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/databaseConnector.js"></script>
+    <script src="/assets/js/admin/apiconnector.js"></script>
+    <script src="/assets/js/apiConnector.js"></script>
+    <script src="/assets/js/admin/aushang.js"></script>
+</body>
+
+</html>

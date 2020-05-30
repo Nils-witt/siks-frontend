@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>S-Plan Admin - Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="/assets/css/admin-users.css">
+    <script src="https://browser.sentry-cdn.com/5.7.0/bundle.min.js" integrity="sha384-pHnCJ3bbzJ+LzI19wAdyBvGAjJ5vNAC59uxeRpw5WpgkSlZUQstEADxkSbBnI95q" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <div id="navBarContainer">
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">S-Plan</a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="stundenplan.html">Stundenplan</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="vertretungen.html">Vertretungsplan</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="aushang.html">Aushang</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">Benutzerverwaltung</a></li>
+                    </ul>
+                    <span class="navbar-text actions"></span>
+                </div>
+                <button class="btn btn-light action-button" onclick="goToMainPage()">Administration verlassen</button>
+                <button class="btn btn-light action-button" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </div>
+    <div hidden>
+        <div class="container" id='load-container'>
+            <div class="row" id="daysContainer">
+                <div class="col" id="day-0">
+                    <h5>Loading....</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id='searchContainer'>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-info" onclick="window.location.href = '/pages/admin/ad-user-sync.html'">Open Active Directory Sync</button>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col">
+                Type :<br>
+                <select id="userTypeSelect" onchange="getSelectOptions();">
+                    <option value="0" selected>All</option>
+                    <option value="1">Student</option>
+                    <option value="2">Teacher</option>
+                </select>
+            </div>
+            <div class="col">
+                Aktiv:<br>
+                <select id="activeSelect" onchange="getSelectOptions();">
+                    <option value=null selected>All</option>
+                    <option value="1" >Ja</option>
+                    <option value="0" >Nein</option>
+                </select>
+            </div>
+            <div class="col">
+                Vorname:<br>
+                <input type="text" class="form-control" id="firstnameSelect" onkeyup="getSelectOptions()">
+            </div>
+            <div class="col">
+                Nachname:<br>
+                <input type="text" class="form-control" id="lastnameSelect" onkeyup="getSelectOptions()">
+            </div>
+        </div>
+    </div>
+    <div class="container" id='userContainer'>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Benutzername</th>
+                    <th scope="col">Vorname</th>
+                    <th scope="col">Nachname</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Aktiv</th>
+                    <th scope="col">Aktion</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+    <div class="confirmBox" id="confirmBox" onclick="closeConfirmViews()"></div>
+    <div class="confirmFrame" id="confirmDeleteFrame">
+        <button class="btn btn-danger" onclick="closeConfirmViews()">Abbrechen</button>
+        <button class="btn btn-success">Bestätigen</button>
+    </div>
+    <div class="confirmFrame" id="userDetailFrame">
+        <button class="btn btn-danger" onclick="closeConfirmViews()">Schließen</button>
+        <form>
+            <div class="form-group">
+                <label for="ProfileDetailusername">Username</label>
+                <input type="email" class="form-control" id="ProfileDetailusername" placeholder="Loading....." disabled>
+            </div>
+            <div class="form-group">
+                <label for="ProfileDetailFirstname">Vorname</label>
+                <input type="text" class="form-control" id="ProfileDetailFirstname" placeholder="Firstname" disabled>
+            </div>
+            <div class="form-group">
+                <label for="ProfileDetailLastname">Nachname</label>
+                <input type="text" class="form-control" id="ProfileDetailLastname" placeholder="Lastname" disabled>
+            </div>
+            <div class="form-group">
+                <label for="ProfileDetailMail">Mailaddress</label>
+                <input type="email" class="form-control" id="ProfileDetailMail" placeholder="not set" disabled>
+            </div>
+
+        </form>
+        <div class="btn-group" role="group">
+            <button class="btn btn-success">Sync from AD</button>
+            <button class="btn btn-danger">Disconnect all devices</button>
+            <button class="btn btn-info" id="buttonOpenCourseFrame">Kursliste (Loading)</button>
+        </div>
+    </div>
+
+    <div class="confirmFrame" id="userResetFrame">
+        <button class="btn btn-danger" onclick="closeConfirmViews()">Schließen</button>
+        <button class="btn btn-success">Bestätigen</button>
+    </div>
+
+    <div class="confirmFrame" id="userCoursesFrame">
+        <button class="btn btn-danger" onclick="closeConfirmViews()">Schließen</button>
+        <div class="container" id='datacourseContainer'>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Stufe</th>
+                    <th scope="col">Fach</th>
+                    <th scope="col">Gruppe</th>
+                </tr>
+                </thead>
+                <tbody id="tableBodyCoursesUser">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/databaseConnector.js"></script>
+    <script src="/assets/js/apiConnector.js"></script>
+    <script src="/assets/js/admin/apiconnector.js"></script>
+    <script src="/assets/js/admin/users.js"></script>
+</body>
+
+</html>
