@@ -3,73 +3,75 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
 
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="/S-Plan.png">
-    <meta name="apple-mobile-web-app-title" content="S-Plan">
-    <link rel="stylesheet" href="/assets/css/global.css">
+    <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+    <link href="/S-Plan.png" rel="apple-touch-icon">
+    <meta content="S-Plan" name="apple-mobile-web-app-title">
+    <link href="/assets/css/global.scss" rel="stylesheet">
 
 
     <title>S-Plan Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/assets/css/loginForm.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link href="/manifest.json" rel="manifest">
+    <link href="/assets/css/loginForm.scss" rel="stylesheet">
 
 </head>
 
 <body style="background-color: rgba(0,0,0,0.8);color: rgb(0,0,0);">
-    <div id="loginDiv" class="login-dark" style="visibility: visible">
-        <h2 class="sr-only">Login Form</h2>
-        <div id="lockIcon" class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
-        <form id="mainForm" method="post">
-            <div class="form-group">
-                <input class="form-control" type="text" id="username" placeholder="Benutzername" autofocus="" autocomplete="on" required="" minlength="3">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" id="password" placeholder="Password" minlength="8" required="" autocomplete="on">
-            </div>
-            <div class="form-group" style="color: rgb(255,255,255);">
-                <button id="loginButton" class="btn btn-primary btn-block" type="button" onclick="getApiKey()" disabled>Log In</button>
-            </div>
-			<div class="form-group" style="color: rgb(255,255,255);">
-                <button id="reloadButton" class="btn btn-primary btn-block" type="button" onclick="location.reload(true);">Seite Aktualisieren</button>
-            </div>
-			<div class="form-group" style="color: rgb(255,255,255);">
-                <button id="loginError" class="btn btn-danger btn-block" type="button" disabled style="visibility: hidden">Falsches Passwort<span id="ec" hidden="">0</span></button>
-            </div>
-        </form>
-        <!--<form action="register.html" method="get">
-            <div class="form-group" style="color: rgb(255,255,255);"><button class="btn btn-outline-primary btn-block" type="submit">Sign Up</button></div>
-        </form>
-        <button class="btn btn-outline-primary btn-block sr-only forgot" style="color: rgb(255,255,255);" type="button">SignUp</button>
-        <button class="btn btn-block" type="button" style="padding: 0;color: #6f7a85;font-size: 12px;visibility:inherit" onClick="enableHelp();">Probleme beim Login?<br /></button>-->
-    </div>
-    <div id="secondFactorDiv" class="login-dark" style="visibility: hidden">
-        <h2 class="sr-only">Login Form</h2>
-        <form id="secondFactorTOTPForm" method="post" >
-            <div class="form-group">
-                <input class="form-control" type="number" id="totpCode" placeholder="Code" maxlength="6" autofocus="" autocomplete="on" required="" minlength="3">
-            </div>
-            <div class="form-group" style="color: rgb(255,255,255);">
-                <button id="continueButton" class="btn btn-primary btn-block" type="button" onclick="getApiKey()">Confirm</button>
-            </div>
-			<div class="form-group" style="color: rgb(255,255,255);">
-                <button id="secondFactorError" class="btn btn-danger btn-block" type="button" disabled style="visibility: hidden">Invalid Key</button>
-            </div>
-        </form>
-    </div>
-    <div id="helpDiv" class="login-dark" style="visibility: hidden;">
-        <h2 class="sr-only">Login Form</h2>
-        <button class="btn btn-block" type="button" style="height: 18;padding: 0;color: #6f7a85;font-size: 12px;visibility:inherit" onClick="disableHelp();">Zurück zum Login<br /></button>
-    </div>
+<div class="login-dark" id="loginDiv" style="visibility: visible">
+    <h2 class="sr-only">Login Form</h2>
+    <div class="illustration" id="lockIcon"><i class="icon ion-ios-locked-outline"></i></div>
+    <form id="mainForm" method="post">
+        <div class="form-group">
+            <input autocomplete="on" autofocus="" class="form-control" id="username" minlength="3" placeholder="Benutzername" required="" type="text">
+        </div>
+        <div class="form-group">
+            <input autocomplete="on" class="form-control" id="password" minlength="8" placeholder="Password" required="" type="password">
+        </div>
+        <div class="form-group" style="color: rgb(255,255,255);">
+            <button class="btn btn-primary btn-block" disabled id="loginButton" onclick="getApiKey()" type="button">Log In3</button>
+        </div>
+        <div class="form-group" style="color: rgb(255,255,255);">
+            <button class="btn btn-primary btn-block" id="reloadButton" onclick="navigator.serviceWorker.getRegistrations().then(function(regs) {for(let reg of regs) {reg.unregister(); location.reload(true)}}).catch(function(err) {});" type="button">Neu laden</button>
+        </div>
+        <div class="form-group" style="color: rgb(255,255,255);">
+            <button class="btn btn-danger btn-block" disabled id="loginError" style="visibility: hidden" type="button">Falsches Passwort<span hidden="" id="ec">0</span></button>
+        </div>
+    </form>
+    <!--<form action="register.html" method="get">
+        <div class="form-group" style="color: rgb(255,255,255);"><button class="btn btn-outline-primary btn-block" type="submit">Sign Up</button></div>
+    </form>
+    <button class="btn btn-outline-primary btn-block sr-only forgot" style="color: rgb(255,255,255);" type="button">SignUp</button>
+    <button class="btn btn-block" type="button" style="padding: 0;color: #6f7a85;font-size: 12px;visibility:inherit" onClick="enableHelp();">Probleme beim Login?<br /></button>-->
+</div>
+<div class="login-dark" id="secondFactorDiv" style="visibility: hidden">
+    <h2 class="sr-only">Login Form</h2>
+    <form id="secondFactorTOTPForm" method="post">
+        <div class="form-group">
+            <input autocomplete="on" autofocus="" class="form-control" id="totpCode" maxlength="6" minlength="3" placeholder="Code" required="" type="number">
+        </div>
+        <div class="form-group" style="color: rgb(255,255,255);">
+            <button class="btn btn-primary btn-block" id="continueButton" onclick="getApiKey()" type="button">Confirm</button>
+        </div>
+        <div class="form-group" style="color: rgb(255,255,255);">
+            <button class="btn btn-danger btn-block" disabled id="secondFactorError" style="visibility: hidden" type="button">Invalid Key</button>
+        </div>
+    </form>
+</div>
+<div class="login-dark" id="helpDiv" style="visibility: hidden;">
+    <h2 class="sr-only">Login Form</h2>
+    <button class="btn btn-block" onClick="disableHelp();" style="height: 18;padding: 0;color: #6f7a85;font-size: 12px;visibility:inherit" type="button">Zurück zum Login<br/></button>
+</div>
 
 </body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="/assets/js/databaseConnector.js"></script>
-<script src="/assets/js/apiConnector.js"></script>
-<script src="/assets/js/login.js"></script>
+<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utilities/serviceWorkerConnector.js"></script>
+<script src="/assets/js/utilities/apiConnector.js"></script>
+<script src="/assets/js/backgroundFunctions/login.js"></script>
+<script src="/assets/js/presentation/login.js"></script>
 
 </html>

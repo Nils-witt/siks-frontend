@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset</title>
+</head>
+<body>
+    <script>
+        window.localStorage.removeItem("token");
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister()
+            } })
+    </script>
+Reset erfolgt
+</body>
+</html>

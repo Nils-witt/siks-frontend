@@ -8,3 +8,6 @@ _notes/
 *.js
 *.js.map
 *.json
+
+*.css
+*.css.map

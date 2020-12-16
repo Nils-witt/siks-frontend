@@ -4,9 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
-    <title>S-Plan</title>
+    <title>S-Plan Admin - Users</title>
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
     <link href="/manifest.json" rel="manifest">
+    <link href="/assets/css/Navigation-with-Button.scss" rel="stylesheet">
+    <link href="/assets/css/admin-users.scss" rel="stylesheet">
+    <script crossorigin="anonymous" integrity="sha384-pHnCJ3bbzJ+LzI19wAdyBvGAjJ5vNAC59uxeRpw5WpgkSlZUQstEADxkSbBnI95q" src="https://browser.sentry-cdn.com/5.7.0/bundle.min.js">
+    </script>
 </head>
 
 <body>
@@ -20,37 +24,26 @@
             </button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav mr-auto">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="#">Klausuren</a></li>
-                    <li class="dropdown nav-item"><a aria-expanded="false" class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Weitere Dienste</a>
-                        <div class="dropdown-menu" role="menu">
-                            <a class="dropdown-item" href="https://moodle.paeda.biz" role="presentation" target="_blank">Moodle</a>
-                            <a class="dropdown-item" href="https://www.otto-kuehne-schule.de" role="presentation" target="_blank">Schulhompage</a>
-                            <a class="dropdown-item" href="https://paeda.nfs-cloud.org:8443" role="presentation" target="_blank">Netman Online</a>
-                            <a class="dropdown-item" onClick="window.location.reload(true)" role="presentation">Seite Aktualisieren</a>
-                        </div>
-                    </li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="stundenplan.html">Stundenplan</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="vertretungen.html">Vertretungsplan</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="aushang.html">Aushang</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="users.html">Benutzerverwaltung</a></li>
                 </ul>
                 <span class="navbar-text actions"></span>
             </div>
-            <a class="btn btn-light action-button" href="settings.html" role="button">Einstellungen</a>
+            <button class="btn btn-light action-button" onclick="goToMainPage()">Administration verlassen</button>
+            <button class="btn btn-light action-button" onclick="logout()">Logout</button>
         </div>
     </nav>
-</div>
-<div id="mainFrame">
-    <ul class="list-group" id="mainUL">
-    </ul>
 </div>
 
 <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="/assets/js/utilities/databaseConnector.js"></script>
-<script src="/assets/js/utilities/apiConnector.js"></script>
-<script src="/assets/js/utilities/serviceWorkerConnector.js"></script>
-<script src="/assets/js/main.js"></script>
-<script src="/assets/js/presentation/klausuren.js"></script>
-
+<script src="/assets/js/main.ts"></script>
+<script src="/assets/js/utilities/databaseConnector.ts"></script>
+<script src="/assets/js/utilities/apiConnector.ts"></script>
+<script src="/assets/js/presentation/admin/apiconnector.ts"></script>
 </body>
 
 </html>

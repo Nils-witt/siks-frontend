@@ -3,10 +3,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="/S-Plan.png">
 <meta name="apple-mobile-web-app-title" content="S-Plan">
-<link rel="stylesheet" href="/assets/css/global.css">
+<link rel="stylesheet" href="/assets/css/global.scss">
 <script>
 
-    window.location = '/pages/login.html'
+    if(window.localStorage.getItem("token") !== null){
+        let userType = window.localStorage.getItem('userType');
+        window.location.href = "/pages/" + userType + "/timeTable.html"
+    }else {
+        window.location = '/pages/login.html'
+    }
+
+
+
     /*
     navigator.serviceWorker.register('/serviceworker.js', {scope: '/'}).then(function (reg) {
         console.log('Registrierung erfolgreich. Scope ist ' + reg.scope);

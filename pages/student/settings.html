@@ -3,228 +3,252 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
     <title>S-Plan Settings</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="/S-Plan.png">
-    <meta name="apple-mobile-web-app-title" content="S-Plan">
-    <link rel="stylesheet" href="/assets/css/global.css">
-    <link rel="stylesheet" href="/assets/css/settings.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link href="/manifest.json" rel="manifest">
+    <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+    <link href="/S-Plan.png" rel="apple-touch-icon">
+    <meta content="S-Plan" name="apple-mobile-web-app-title">
+    <link href="/assets/css/global.scss" rel="stylesheet">
+    <link href="/assets/css/settings.scss" rel="stylesheet">
 </head>
 
 <body>
-    <div id="navBarContainer">
-        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
-            <div class="container">
-                <a class="navbar-brand" href="index.html">S-Plan</a>
-                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navcol-1">
-                    <ul class="nav navbar-nav mr-auto">
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
-                        <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">Weitere Dienste</a>
-                            <div class="dropdown-menu" role="menu">
-								<a class="dropdown-item" role="presentation" href="https://moodle.paeda.biz" target="_blank">Moodle</a>
-								<a class="dropdown-item" role="presentation" href="https://www.otto-kuehne-schule.de" target="_blank">Schulhompage</a>
-                                <a class="dropdown-item" role="presentation" href="https://paeda.nfs-cloud.org:8443" target="_blank">Netman Online</a>
-								<a class="dropdown-item" role="presentation" onClick="window.location.reload(true)">Seite Aktualisieren</a>
-                            </div>
-                        </li>
-                    </ul>
-                    <span class="navbar-text actions"></span>
+<div id="navBarContainer">
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">S-Plan</a>
+            <button class="navbar-toggler" data-target="#navcol-1" data-toggle="collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
+                    <li class="dropdown nav-item"><a aria-expanded="false" class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Weitere Dienste</a>
+                        <div class="dropdown-menu" role="menu">
+                            <a class="dropdown-item" href="https://moodle.paeda.biz" role="presentation" target="_blank">Moodle</a>
+                            <a class="dropdown-item" href="https://www.otto-kuehne-schule.de" role="presentation" target="_blank">Schulhompage</a>
+                            <a class="dropdown-item" href="https://paeda.nfs-cloud.org:8443" role="presentation" target="_blank">Netman Online</a>
+                            <a class="dropdown-item" onClick="window.location.reload(true)" role="presentation">Seite Aktualisieren</a>
+                        </div>
+                    </li>
+                </ul>
+                <span class="navbar-text actions"></span>
+            </div>
+            <button class="btn btn-dark action-button" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+</div>
+
+<div class="container" style="max-width: 900px;">
+    <button class="btn btn-danger" onclick="console.log('Test');serviceworkerConnector.reInit();">Seite neu initialisieren</button>
+    <div class="row">
+        <div class="col">
+            <h5>Login</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" onclick="openTwoFactorFrame()">Zwei Schritte Login</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <h5>Benutzerprofil</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Name
+        </div>
+        <div class="col">
+            <input class="form-control" disabled id="profileFirstName" type="text">
+        </div>
+        <div class="col">
+            <input class="form-control" disabled id="profileLastName" type="text">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            Mail
+        </div>
+        <div class="col">
+            <input class="form-control" disabled id="profileMailAddress" type="email">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"><br>
+            Kurse
+        </div>
+        <div class="col"><br>
+            <button class="btn" onclick="openCourseView()">Liste öffnen</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h5>Integrationen</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-info">Moodle</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h5>Dark Mode</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-success" id="themeAutomode" onclick="settings.toggleDarkModeAuto()">Auto</button>
+        </div>
+        <div class="col">
+            <label class="switch">
+                <input id="toggleDarkModeButton" onchange="settings.darkModeToggleSwitch(this)" type="checkbox">
+                <div class="slider round">
+                    <span class="on">AN</span>
+                    <span class="off">AUS</span>
+                    <span class="notavilable">Disabled</span>
                 </div>
-                <button class="btn btn-dark action-button" onclick="logout()">Logout</button>
-            </div>
-        </nav>
+            </label>
+        </div>
     </div>
-
-	<div class="container" style="max-width: 900px;">
-        <div class="row">
-            <div class="col">
-                <h5>Multi-Factor Login</h5>
-            </div>
+    <div class="row">
+        <div class="col">
+            <h5>Benachrichtigungen</h5>
         </div>
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-primary" onclick="openTwoFactorFrame()">Manage</button>
-            </div>
-        </div><br>
-        <div class="row">
-            <div class="col">
-                <h5>Profil</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                Mail
-            </div>
-            <div class="col">
-                <input id="profileMailAddress" type="email" class="form-control" disabled>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col"><br>
-                Kurse
-            </div>
-            <div class="col"><br>
-                <button class="btn" onclick="openCourseView()">Liste öffnen</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h5>Moodle</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-info">Konto aktivieren / DA</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h5>Benachrichtigungen</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label class="switch">
-                    <input type="checkbox" id="togBtn" onchange="pushSlider(this)">
-                    <div class="slider round">
-                        <span class="on">AN</span>
-                        <span class="off">AUS</span>
-                        <span class="notavilable">Error</span>
-                    </div>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h5>Dark Mode</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label class="switch">
-                    <input type="checkbox" id="toggleDarkModeButton" onchange="toggleDarkMode(this)">
-                    <div class="slider round">
-                        <span class="on">AN</span>
-                        <span class="off">AUS</span>
-                        <span class="notavilable">Error</span>
-                    </div>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h5>Geräte / Dienste</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-danger" onClick="removeAllDevicesConfirm();">Alle Entfernen</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <br>
-                <table class="table" style="max-width: 100%">
-                    <tr>
-                        <th>Type</th>
-                        <th>Connected</th>
-                        <th>Id</th>
-                        <th></th>
-                    </tr>
-                    <tbody id="devicesTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
-    <div id="confirmBox" class="confirmBox" onclick="closeAllView()"></div>
-	<div class="confirmFrame" id="deleteDevicesConfirmView">
-		<button class="btn btn-danger" onclick="closeAllView()">Abbrechen</button>
-		<button class="btn btn-success">Bestätigen</button>
-	</div>
-    <div class="confirmFrame" id="userCoursesFrame">
-        <button class="btn btn-danger" onclick="closeAllView()">Schließen</button>
-        <div class="container" id='datacourseContainer'>
-            <table class="table">
-                <thead>
+    <div class="row">
+        <div class="col">
+            <label class="switch">
+                <input id="togBtn" onchange="settings.sliderPushNotification(this)" type="checkbox">
+                <div class="slider round">
+                    <span class="on">AN</span>
+                    <span class="off">AUS</span>
+                    <span class="notavilable">Error</span>
+                </div>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-danger" onClick="removeAllDevicesConfirm();">Alle Entfernen</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-success" onClick="window.location='https://t.me/SPlanBot'">Telegram</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <br>
+            <table class="table" style="max-width: 100%">
                 <tr>
-                    <th scope="col">Stufe</th>
-                    <th scope="col">Fach</th>
-                    <th scope="col">Gruppe</th>
+                    <th>Type</th>
+                    <th>Connected</th>
+                    <th>Info</th>
+                    <th>Aktionen</th>
                 </tr>
-                </thead>
-                <tbody id="tableBodyCoursesUser">
+                <tbody id="devicesTableBody">
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="confirmFrame" id="twoFactorFrame">
-        <button class="btn btn-danger" onclick="closeAllView()">Schließen</button>
-        <button id="addTOTPButton" class="btn btn-success" onclick="createNewTwoFactor()"> Add...</button>
-        <div class="container" id='twoFactorContainer'>
-            <div class="row" id="addDeviceContainer" style="visibility: hidden">
-                <div class="col">
-                    <div class="row">
-                        <div class="col" id="qrCodeContainer">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control" placeholder="Name...." id="tokenName" style="">
-                            <input type="password" class="form-control" placeholder="Password..." id="confirmPassword" style="">
+</div>
+<div class="confirmBox" id="confirmBox" onclick="closeAllView()"></div>
+<div class="confirmFrame" id="deleteDevicesConfirmView">
+    <button class="btn btn-danger" onclick="closeAllView()">Abbrechen</button>
+    <button class="btn btn-success">Bestätigen</button>
+</div>
+<div class="confirmFrame" id="userCoursesFrame">
+    <button class="btn btn-danger" onclick="closeAllView()">Schließen</button>
+    <button class="btn btn-success" onclick="window.location.href = '/pages/student/editCourses.html'">Bearbeiten</button>
+    <div class="container" id='datacourseContainer'>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Stufe</th>
+                <th scope="col">Fach</th>
+                <th scope="col">Gruppe</th>
+            </tr>
+            </thead>
+            <tbody id="tableBodyCoursesUser">
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-success" id="confirmScanned">Gescannt</button>
-                        </div>
+<div class="confirmFrame" id="twoFactorFrame">
+    <button class="btn btn-danger" onclick="closeAllView()">Schließen</button>
+    <button class="btn btn-success" id="addTOTPButton" onclick="createNewTwoFactor()"> Add...</button>
+    <div class="container" id='twoFactorContainer'>
+        <div class="row" id="addDeviceContainer" style="visibility: hidden">
+            <div class="col">
+                <div class="row">
+                    <div class="col" id="qrCodeContainer">
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <input type="number" class="form-control" maxlength="6" placeholder="123456" id="confirmCode" style="visibility: hidden;">
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-success" id="submitConfirmCode" style="visibility:collapse;">Confirm</button>
-                        </div>
-                    </div>
-
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" id="tokenName" placeholder="Name...." style="" type="text">
+                        <input class="form-control" id="confirmPassword" placeholder="Password..." style="" type="password">
+
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success" id="confirmScanned">Gescannt</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input class="form-control" id="confirmCode" maxlength="6" placeholder="123456" style="visibility: hidden;" type="number">
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success" id="submitConfirmCode" style="visibility:collapse;">Confirm</button>
+                    </div>
+                </div>
+
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Aktion</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tableBodyTwoFactorDevices">
-                        </tbody>
-                    </table>
-                </div>
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Aktion</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableBodyTwoFactorDevices">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/gh/emn178/hi-base32/build/base32.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.rawgit.com/lrsjng/jquery-qrcode/v0.17.0/dist/jquery-qrcode.min.js" integrity="sha384-J7DIscqSIBfb9e7vk6Z6HUs+iizZghD0pZKKjwu6eoh1GR9dLMlMXNJLfGUNpN/z" crossorigin="anonymous"></script>    <script src="/assets/js/databaseConnector.js"></script>
-    <script src="/assets/js/apiConnector.js"></script>
-    <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/settings.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/emn178/hi-base32/build/base32.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-J7DIscqSIBfb9e7vk6Z6HUs+iizZghD0pZKKjwu6eoh1GR9dLMlMXNJLfGUNpN/z" src="https://cdn.rawgit.com/lrsjng/jquery-qrcode/v0.17.0/dist/jquery-qrcode.min.js"></script>
+<script src="/assets/js/utilities/databaseConnector.ts"></script>
 
+<script src="/assets/js/backgroundFunctions/main.js"></script>
+<script src="/assets/js/utilities/serviceWorkerConnector.js"></script>
+<script src="/assets/js/utilities/apiConnector.js"></script>
+<script src="/assets/js/utilities/databaseConnector.js"></script>
+<script src="/assets/js/utilities/Utilities.js"></script>
+<script src="/assets/js/backgroundFunctions/settings.js"></script>
+<script src="/assets/js/presentation/student/settings.js"></script>
 </body>
 
 </html>

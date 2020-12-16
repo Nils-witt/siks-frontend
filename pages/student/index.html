@@ -4,61 +4,60 @@
 <head>
     <meta charset="utf-8">
     <title>S-Plan</title>
-    <meta name="viewport"   content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
 
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="/S-Plan.png">
-    <meta name="apple-mobile-web-app-title" content="S-Plan">
-    <link rel="stylesheet" href="/assets/css/global.css">
+    <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+    <link href="/S-Plan.png" rel="apple-touch-icon">
+    <meta content="S-Plan" name="apple-mobile-web-app-title">
+    <link href="/assets/css/global.scss" rel="stylesheet">
 
-    <link rel="manifest"    href="/manifest.json">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="/manifest.json" rel="manifest">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 </head>
 
 <body>
-    <div id="navBarContainer">
-        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
-            <div class="container">
-                <a class="navbar-brand" href="#">S-Plan</a>
-                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navcol-1">
-                    <ul class="nav navbar-nav mr-auto">
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
-                        <li class="dropdown nav-item"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">Weitere Dienste</a>
-                            <div class="dropdown-menu" role="menu">
-								<a class="dropdown-item" role="presentation" href="https://moodle.paeda.biz" target="_blank">Moodle</a>
-								<a class="dropdown-item" role="presentation" href="https://www.otto-kuehne-schule.de" target="_blank">Schulhompage</a>
-                                <a class="dropdown-item" role="presentation" href="https://paeda.nfs-cloud.org:8443" target="_blank">Netman Online</a>
-								<a class="dropdown-item" role="presentation" onClick="window.location.reload(true)">Seite Aktualisieren</a>
-                            </div>
-                        </li>
-                    </ul>
-                    <span class="navbar-text actions"></span>
-                </div>
-                <button class="btn btn-light action-button" onclick="logout()">Logout</button>
-            </div>
-        </nav>
-    </div>
-    <div>
+<div id="navBarContainer">
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
         <div class="container">
-            <div class="row">
-                <div id="cardsContainer" class="col-md-8">
-                </div>
-                <div class="col">
-                    <div class="card">Sidebar</div>
-                </div>
+            <a class="navbar-brand" href="#">S-Plan</a>
+            <button class="navbar-toggler" data-target="#navcol-1" data-toggle="collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
+                    <li class="dropdown nav-item"><a aria-expanded="false" class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Weitere Dienste</a>
+                        <div class="dropdown-menu" role="menu">
+                            <a class="dropdown-item" href="https://moodle.paeda.biz" role="presentation" target="_blank">Moodle</a>
+                            <a class="dropdown-item" href="https://www.otto-kuehne-schule.de" role="presentation" target="_blank">Schulhompage</a>
+                            <a class="dropdown-item" href="https://paeda.nfs-cloud.org:8443" role="presentation" target="_blank">Netman Online</a>
+                            <a class="dropdown-item" onClick="window.location.reload(true)" role="presentation">Seite Aktualisieren</a>
+                        </div>
+                    </li>
+                </ul>
+                <span class="navbar-text actions"></span>
+            </div>
+        </div>
+    </nav>
+</div>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8" id="cardsContainer">
+            </div>
+            <div class="col">
+                <div class="card">Sidebar</div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="/assets/js/main.js"></script>
+<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="/assets/js/main.ts"></script>
 </body>
 
 </html>
