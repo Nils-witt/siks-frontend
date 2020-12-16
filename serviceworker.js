@@ -1,115 +1,86 @@
-/*
-const precacheResources = [
-    '/assets/css/global.css',
-    '/assets/css/loginForm.css',
-    '/assets/css/Navigation-with-Button.css',
-    '/assets/css/stundenplan.css',
-    '/assets/icons/S-Plan-192.png',
-    '/assets/icons/S-Plan-512.png',
-    'https://fonts.googleapis.com/icon?family=Material+Icons',
-    'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
-    'https://browser.sentry-cdn.com/5.7.0/bundle.min.js',
-    'https://code.jquery.com/jquery-3.3.1.slim.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',
-    'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js',
-    '/assets/js/databaseConnector.js',
-    '/assets/js/apiConnector.js',
-    '/assets/js/main.js',
-    '/assets/js/student/stundenplan.js',
-    '/manifest.json'
-
-];*/
-
-const precacheResources = [];
-
-const dynamicCacheName = 'ApplicationCache';
 const staticCacheName = 'StaticCache'
 
 let apiKey;
 let username;
 
-let cacheOn = true;
+let cacheVersion = "";
+let disableCache = false;
 
+//Event to install and initialise the service worker
 self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(staticCacheName)
-            .then(cache => {
-                return cache.addAll(precacheResources);
-            })
-    );
-    setTimeout(function () {
-        refreshClients();
-    },500);
+    self.skipWaiting();
 });
 
-self.addEventListener('fetch', event => {
-    //caches.open(staticCacheName).then(function(cache) {
-    event.respondWith(
-        fetch(event.request)
-            .then(response => {
-                //cache.put(event.request, response.clone());
 
-                return response;
-            })
-            .catch(function() {
-                return caches.match(event.request);
-            })
-    );
-    //});
-});
 
+//Event for the control takeover
 self.addEventListener('activate', async (event) => {
     setTimeout(function () {
         refreshClients();
     },500);
-
-    console.log('Service worker activate event!');
 });
 
+//Event if a site requests a file from the server
+self.addEventListener('fetch', function(event) {
+    try {
+        event.respondWith(
+            caches.match(event.request).then(function(response) {
+                return response || fetch(event.request);
+            })
+        );
+    }catch (e) {
+        console.log(e)
+    }
+});
 
-self.addEventListener("message", (evt) => {
-    const client = evt.source;
-    let data = evt.data;
+//Messages between sites ---> worker
+self.addEventListener("message", (event) => {
+    let data = event.data;
+
     if(data.hasOwnProperty("command")){
-        if(data.command == "getApiKey"){
-            client.postMessage({"success":true,"Type":"apiKey","Key":apiKey})
-        }else if (data.command == "setApiKey"){
+        if(data.command === "getApiKey"){
+            event.ports[0].postMessage(apiKey);
+        }else if (data.command === "setApiKey"){
             apiKey = data.key;
-            client.postMessage({"set":true});
-        }else if (data.command == "logout"){
+            event.ports[0].postMessage({"set":true});
+        }else if (data.command === "logout"){
             logout();
-            client.postMessage({"set":true});
-        }else if (data.command == "setUsername"){
+            event.ports[0].postMessage({"set":true});
+        }else if (data.command === "setUsername"){
             username = data.Username;
-            client.postMessage({"set":true});
-        }else if (data.command == "getUsername"){
-            client.postMessage({"success":true,"Type":"username","Username":username});
-        }else if (data.command == "refreshClients"){
-            refreshClients();
-            client.postMessage({});
-        }else if (data.command == "toggleCache"){
-            refreshClients();
-            client.postMessage({"cache":cacheOn});
-        }else if (data.command == "push"){
+            event.ports[0].postMessage({"set":true});
+        }else if (data.command === "getUsername"){
+            event.ports[0].postMessage({"success":true,"Type":"username","Username":username});
+        }else if (data.command === "push"){
             initPush();
-            client.postMessage({"psuh":"done"});
+            event.ports[0].postMessage({"push":"done"});
+        }else if (data.command === "disableCache"){
+            caches.delete(staticCacheName);
+            disableCache = true;
+            event.ports[0].postMessage({"cache":"disabled"});
+        }else if (data.command === "enableCache"){
+            loadCacheManifest()
+            disableCache = false;
+            event.ports[0].postMessage({"cache":"enabled"});
+        }else if (data.command === "updateCache"){
+            loadCacheManifest();
+        }else if (data.command === "forceUpdateCache"){
+            forceCacheUpdate();
         }
     }
 });
 
+//TODO 2 times the same event listener????
 self.addEventListener('push', event => {
     const data = event.data.json();
 
-    self.registration.showNotification(data.title, {
-        body: data.body,
-    });
+    self.registration.showNotification(data.title, {body: data.body,});
 });
 
-
+//Called when a user performs logout and cleans all stored data that need authorisation
 function logout() {
     apiKey = null;
     username = null;
-    let db;
     if (indexedDB) {
         indexedDB.deleteDatabase('sPlan')
     }
@@ -123,7 +94,7 @@ function logout() {
         })
 }
 
-
+//refreshes the windows of all tabs / windows controlled by this instance
 function refreshClients(){
     self.clients.matchAll({type: 'window'})
         .then(clients => {
@@ -135,8 +106,7 @@ function refreshClients(){
             });
         })
 }
-
-
+//Enables push notifications
 async function initPush(){
     try {
         const applicationServerKey = urlB64ToUint8Array("BBDWHJkJr4mFzQwkNVWKG_Lj6NTXFx38XxBvUCHV9Sm_U4xlvMYapvImY8BBUSd6UI8NkzNygJRZ5J_MMgsSTek");
@@ -160,6 +130,7 @@ const urlB64ToUint8Array = base64String => {
     return outputArray
 }
 
+//TODO extend
 self.addEventListener("push", function(event) {
     if (event.data) {
         console.log("Push event!! ", event.data.text());
@@ -169,9 +140,76 @@ self.addEventListener("push", function(event) {
         console.log("Push event but no data");
     }
 });
+
+//TODO extend
 const showLocalNotification = (title, body, swRegistration) => {
     const options = {
         body
     };
     swRegistration.showNotification(title, options);
 };
+
+
+async function loadCacheManifest() {
+    try {
+        //For development purposes delete cache if there is one and dont create a new one
+        if(!disableCache){
+            //Load file containing Information about which files should be loaded for a cache version and retained until the the version increases
+            let res = await fetch( "/cache.json");
+            let cacheDetails = await res.json();
+            if(cacheDetails.files.length > 0){
+                if(cacheDetails.version !== cacheVersion){
+                    console.log("Updating cache");
+                    //clearing existing cache
+                    await caches.delete(staticCacheName);
+                    let cache = await caches.open(staticCacheName);
+                    for (const cacheDetailsKey in cacheDetails.files) {
+                        if(cacheDetails.files.hasOwnProperty(cacheDetailsKey)){
+                            //Load files from the list and save them into the cache
+                            let file = await fetch(cacheDetails.files[cacheDetailsKey]);
+                            await cache.put(cacheDetails.files[cacheDetailsKey], file);
+                        }
+                    }
+                    cacheVersion = cacheDetails.version;
+                }
+            }else {
+                console.log("Cache file may invalid");
+            }
+        }else {
+            await caches.delete(staticCacheName);
+        }
+    }catch (e) {
+        console.log(e)
+    }
+}
+
+async function forceCacheUpdate() {
+    try {
+        //For development purposes delete cache if there is one and dont create a new one
+        if(!disableCache){
+            //Load file containing Information about which files should be loaded for a cache version and retained until the the version increases
+            let res = await fetch( "/cache.json");
+            let cacheDetails = await res.json();
+            if(cacheDetails.files.length > 0){
+                //clearing existing cache
+                await caches.delete(staticCacheName);
+                let cache = await caches.open(staticCacheName);
+                for (const cacheDetailsKey in cacheDetails.files) {
+                    if(cacheDetails.files.hasOwnProperty(cacheDetailsKey)){
+                        //Load files from the list and save them into the cache
+                        let file = await fetch(cacheDetails.files[cacheDetailsKey]);
+                        await cache.put(cacheDetails.files[cacheDetailsKey], file);
+                    }
+                }
+                cacheVersion = cacheDetails.version;
+
+            }else {
+                console.log("Cache file may invalid");
+            }
+        }else {
+            await caches.delete(staticCacheName);
+        }
+    }catch (e) {
+        console.log(e)
+    }
+}
