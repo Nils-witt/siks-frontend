@@ -1,34 +1,37 @@
-body{
+body {
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
- }
+}
 
 .dark {
-    background-color: #1e2833;
-    color: #6f7a85;
+    background-color: #444;
+    color: #e4e4e4;
 }
 
-.dark *{
-    color: #6f7a85;
+.dark * {
+    color: #e4e4e4;
 }
-.dark button{
+
+.dark button {
     color: #dddddd;
 }
 
-.dark input{
-    background-color: #1e2833 !important;
-    border-color: #6f7a85 !important;
-    color: #6f7a85;
+.dark input {
+    background-color: #444 !important;
+    border-color: #e4e4e4 !important;
+    color: #e4e4e4;
 }
 
-.navbar-darkmode a{
+.navbar-darkmode a {
     color: #6f7a85 !important;
 }
-.navbar-lightmode a{
+
+.navbar-lightmode a {
     color: black !important;
 }
-.navbar-lightmode .navbar-toggler-icon{
+
+.navbar-lightmode .navbar-toggler-icon {
     border: 1px solid black;
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000…p='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }

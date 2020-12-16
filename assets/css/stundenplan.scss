@@ -1,4 +1,4 @@
-#detailBox{
+#detailBox {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -29,7 +29,7 @@
     visibility: hidden;
 }
 
-#detailCloseButton{
+#detailCloseButton {
     float: right;
 }
 
@@ -38,9 +38,11 @@
     padding: 0;
     height: 100%;
 }
+
 .dark .indicator-red {
     background-color: #801a00;
 }
+
 .indicator-red {
     background-color: red;
 }
