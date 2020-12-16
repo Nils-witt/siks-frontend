@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="Darwin (project level)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/node_modules" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="Main">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/pwa" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/pwa/node_modules" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

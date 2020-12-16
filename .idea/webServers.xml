@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e80b5fd6-e031-4a09-9723-12a37ad436d5" name="Darwin (project level)" url="http://darwin.nils-witt.de">
+        <fileTransfer rootFolder="/root/siks/frontend" accessType="SFTP" host="darwin.nils-witt.de" port="22" sshConfigId="882cca2e-76e5-48b1-9dda-85782ebbdcb2" sshConfig="root@darwin.nils-witt.de:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

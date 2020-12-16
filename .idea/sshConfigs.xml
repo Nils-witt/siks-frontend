@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="darwin.nils-witt.de" id="882cca2e-76e5-48b1-9dda-85782ebbdcb2" keyPath="$USER_HOME$/.ssh/id_rsa" port="22" nameFormat="DESCRIPTIVE" username="root" />
+      <sshConfig host="10.1.1.80" id="109ee133-0147-4719-ac04-6bb0755acb4e" keyPath="$USER_HOME$/.ssh/id_rsa" port="22" customName="main" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="main" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>
