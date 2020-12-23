@@ -31,10 +31,6 @@
 
 const baseURL = "http://localhost:3000";
 
-function triggerUpdateEvent() {
-    dispatchEvent(new Event('dataUpdate'));
-}
-
 async function authErr() {
     console.log("JWT invalid");
     localStorage.clear();
@@ -55,7 +51,6 @@ class ApiConnector {
         let databaseConnector = this.databaseConnector;
         return new Promise(async function (resolve, reject) {
             try {
-                console.log("Load Lessons")
                 let response = await fetch(baseURL + "/user/lessons", {
                     method: 'GET',
                     headers: {
@@ -71,7 +66,6 @@ class ApiConnector {
                         await databaseConnector.saveLesson(data[i]);
                     }
                     resolve('loaded');
-                    triggerUpdateEvent();
                 }
                 if (response.status === 401) {
                     await authErr();
@@ -108,7 +102,6 @@ class ApiConnector {
                     await databaseConnector.saveReplacementLesson(data[i]);
                 }
                 resolve('loaded');
-                triggerUpdateEvent();
             }
             if (response.status === 401) {
                 await authErr();
@@ -142,7 +135,6 @@ class ApiConnector {
                         await databaseConnector.saveExam(data[i]);
                     }
                     resolve('loaded');
-                    triggerUpdateEvent();
                 }
 
                 if (response.status === 401) {
@@ -182,7 +174,6 @@ class ApiConnector {
                         await databaseConnector.saveUser(data[i]);
                     }
                     resolve('loaded');
-                    triggerUpdateEvent();
                 }
                 if (response.status === 401) {
                     await authErr();
@@ -222,7 +213,6 @@ class ApiConnector {
                         await databaseConnector.saveCourse(data[i]);
                     }
                     resolve('loaded');
-                    triggerUpdateEvent();
                 }
                 if (response.status === 401) {
                     await authErr();
@@ -262,7 +252,6 @@ class ApiConnector {
                         await databaseConnector.saveAnnouncement(data[i]);
                     }
                     resolve('loaded');
-                    triggerUpdateEvent();
                 }
                 if (response.status === 401) {
                     await authErr();
