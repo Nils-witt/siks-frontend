@@ -217,7 +217,7 @@ function setDateToday() {
 
 //Table actions
 
-document.addEventListener("DOMContentLoaded", async function (event) {
+document.addEventListener("DOMContentLoaded", async (event) => {
     setDateToday();
     await populateAnnouncementTable();
     await preloadCourses();
