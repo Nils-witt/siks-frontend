@@ -11,7 +11,7 @@ let serviceworkerConnector = {
                     }
                     serviceworkerConnector.registration = reg;
                     resolve()
-                }).catch(function (error) {
+                }).catch((error) => {
                     console.log('Registrierung fehlgeschlagen mit ' + error);
                     reject();
                 });
@@ -21,94 +21,78 @@ let serviceworkerConnector = {
     requestApiKey: () => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "getApiKey"}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "getApiKey"}, [messageChannel.port2]);
         });
     },
     setApiKey: (token) => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "setApiKey", 'key': token}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "setApiKey", 'key': token}, [messageChannel.port2]);
         });
     },
     sendMessage: (message) => {
         return new Promise(async (resolve, reject) => {
 
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage(message, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage(message, [messageChannel.port2]);
         });
     },
     updateCache: () => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "updateCache"}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "updateCache"}, [messageChannel.port2]);
         });
     },
     forceCacheUpdate: () => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "forceUpdateCache"}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "forceUpdateCache"}, [messageChannel.port2]);
         });
     },
     disableCache: () => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "disableCache"}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "disableCache"}, [messageChannel.port2]);
         });
     },
     enableCache: () => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "enableCache"}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "enableCache"}, [messageChannel.port2]);
         });
     },
     logout: () => {
         return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = replyHandler;
-            navigator.serviceWorker.controller.postMessage({"command": "logout"}, [messageChannel.port2]);
-
-            function replyHandler(event) {
+            messageChannel.port1.onmessage = (event) => {
                 resolve(event.data);
-            }
+            };
+            navigator.serviceWorker.controller.postMessage({"command": "logout"}, [messageChannel.port2]);
         });
     },
     reInit: async () => {
-        this.forceCacheUpdate();
+        await this.forceCacheUpdate();
         try {
             await caches.delete("StaticCache");
             window.localStorage.clear();
