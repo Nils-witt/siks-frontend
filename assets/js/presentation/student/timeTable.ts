@@ -28,6 +28,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+let timetable: TimeTable = null;
+
+//EventListener
+/**
+ * Triggers: Page fully loaded (HTML)
+ */
+addEventListener("DOMContentLoaded", async () => {
+    await initPage();
+});
+
+/**
+ * Triggers: User changes focus back on site
+ */
+addEventListener("visibilitychange", async () => {
+    await fetchData();
+});
+
+/**
+ * Triggers: When data in database is updated
+ */
+addEventListener("dataUpdate", async () => {
+    if (timetable != null) {
+        await timetable.updateTable();
+    }
+});
+
+// User Interaction
+
 function closeDetailView() {
     document.getElementById("detailFrame").style.visibility = "hidden";
     document.getElementById("detailBox").style.visibility = "hidden";
@@ -72,35 +100,19 @@ async function openDetailView(lesson) {
     document.getElementById("detailBox").style.visibility = "visible";
 }
 
-document.addEventListener("DOMContentLoaded", async function (event) {
-    await initPage();
-});
-
-document.addEventListener("dataUpdate", async function (event) {
-    console.log("DATAUPDATE")
-});
-
-addEventListener("visibilitychange", visibilityChange, false);
-
-async function visibilityChange() {
-    await fetchData();
-}
 
 async function initPage() {
     try {
-        let timetable: TimeTable;
         let databaseConnector = new DatabaseConnector();
         await databaseConnector.initDB();
-        timetable = new TimeTable(databaseConnector);
-        timetable.userType = "student";
-        timetable.initPagination();
-        TimeTable.updatePagination(timetable, 0);
-        await timetable.fetchData();
-        await timetable.prepareData();
-        await timetable.generateTable();
-        addEventListener('dataUpdate', () => {
-            timetable.updateTable();
-        }, false);
+        this.timetable = new TimeTable(databaseConnector);
+        this.timetable.userType = "student";
+        this.timetable.initPagination();
+        TimeTable.updatePagination(this.timetable, 0);
+        await this.timetable.fetchData();
+        await this.timetable.prepareData();
+        await this.timetable.generateTable();
+
         //await serviceworkerConnector.updateCache();
         await fetchData();
     } catch (e) {
@@ -113,11 +125,13 @@ async function fetchData() {
     let databaseConnector: DatabaseConnector = new DatabaseConnector();
     await databaseConnector.initDB();
     let apiConnector = new ApiConnector(token, databaseConnector);
-    apiConnector.loadLessons(token);
-    apiConnector.loadReplacementLessons(token);
-    apiConnector.loadExams(token);
-    apiConnector.loadAnnouncements(token);
-    //Promise.all()
+    await Promise.all([
+        apiConnector.loadLessons(token),
+        apiConnector.loadReplacementLessons(token),
+        apiConnector.loadExams(token),
+        apiConnector.loadAnnouncements(token)]
+    );
+    dispatchEvent(new Event('dataUpdate'));
 }
 
 
