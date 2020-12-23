@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 if (localStorage.getItem("theme") !== "dark" && localStorage.getItem("theme") !== "light") {
     let prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     toggleDarkTheme(prefersDark.matches);
+    //TODO replace with current Listener Issue #1
     prefersDark.addListener((mediaQuery) => toggleDarkTheme(mediaQuery.matches));
 }
 
