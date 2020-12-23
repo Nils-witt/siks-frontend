@@ -121,9 +121,7 @@ input:disabled + .slider .on {
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 
-    border-color: black;
-    border: 1px;
-    border-style: solid;
+    border: 1px solid black;
     border-radius: 5px;
     background-color: white;
     visibility: hidden;
@@ -142,9 +140,7 @@ input:disabled + .slider .on {
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 
-    border-color: black;
-    border: 1px;
-    border-style: solid;
+    border: 1px solid black;
     border-radius: 5px;
     background-color: #1e2833;
     visibility: hidden;
