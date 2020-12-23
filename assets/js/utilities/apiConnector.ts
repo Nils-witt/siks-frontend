@@ -40,7 +40,7 @@ async function authErr() {
 
 class ApiConnector {
     private readonly token: string;
-    private databaseConnector: DatabaseConnector;
+    private readonly databaseConnector: DatabaseConnector;
 
     constructor(token: string, databaseConnector: DatabaseConnector) {
         this.token = token;
@@ -49,7 +49,7 @@ class ApiConnector {
 
     loadLessons(token) {
         let databaseConnector = this.databaseConnector;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(baseURL + "/user/lessons", {
                     method: 'GET',
@@ -85,7 +85,7 @@ class ApiConnector {
 
     loadReplacementLessons(token) {
         let databaseConnector = this.databaseConnector;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/user/replacementLessons", {
                 method: 'GET',
                 headers: {
@@ -117,7 +117,7 @@ class ApiConnector {
     loadExams(token) {
         let databaseConnector = this.databaseConnector;
 
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(baseURL + "/user/exams", {
                     method: 'GET',
@@ -157,7 +157,7 @@ class ApiConnector {
 
     loadUserApi(token) {
         let databaseConnector = this.databaseConnector;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(baseURL + "/users/", {
                     method: 'GET',
@@ -194,7 +194,7 @@ class ApiConnector {
     loadCourses(token) {
         let databaseConnector = this.databaseConnector;
 
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(baseURL + "/timeTable/courses/", {
                     method: 'GET',
@@ -233,7 +233,7 @@ class ApiConnector {
     loadAnnouncements(token) {
         let databaseConnector = this.databaseConnector;
 
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(baseURL + "/user/announcements/", {
                     method: 'GET',
@@ -269,7 +269,7 @@ class ApiConnector {
     }
 
     revokeJWT(token): Promise<void> {
-        return new Promise<void>(async function (resolve, reject) {
+        return new Promise<void>(async (resolve, reject) => {
             let res = await fetch(baseURL + "/user/jwt", {
                 method: 'DELETE',
                 headers: {
@@ -282,7 +282,7 @@ class ApiConnector {
     }
 
     sendPushSubscription(subscription, token): Promise<void> {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/user/devices", {
                 method: 'POST',
                 headers: {
@@ -312,7 +312,7 @@ class ApiConnector {
     }
 
     linkTelegramAccount(telegramID, token): Promise<void> {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/telegram/confirm/" + telegramID, {
                 method: 'GET',
                 headers: {
@@ -336,7 +336,7 @@ class ApiConnector {
     }
 
     async loadUserProfile(): Promise<void> {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/user/", {
                 method: 'GET',
                 headers: {
@@ -361,7 +361,7 @@ class ApiConnector {
      */
     deleteAnnouncement(id): Promise<void> {
         let token = this.token;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
 
             let response = await fetch(baseURL + "/announcements/id/" + id.toString(), {
                 method: 'DELETE',
@@ -375,7 +375,7 @@ class ApiConnector {
 
     loadAnnouncementsAdmin(): Promise<any[]> {
         let token = this.token;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/announcements/", {
                 method: 'GET',
                 headers: {
@@ -409,7 +409,7 @@ class ApiConnector {
 
     saveAnnouncement(announcement): Promise<void> {
         let token = this.token;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/announcements/", {
                 method: 'POST',
                 headers: {
@@ -435,7 +435,7 @@ class ApiConnector {
 
     loadUserById(id): Promise<any[]> {
         let token = this.token;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/users/id/" + id, {
                 method: 'GET',
                 headers: {

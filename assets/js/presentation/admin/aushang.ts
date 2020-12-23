@@ -104,7 +104,7 @@ function selectUpdate() {
 }
 
 function preloadCourses(): Promise<void> {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
         //courses = await DatabaseConnector.getCourses();
 
         for (let i = 0; i < courses.length; i++) {
@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async function (event) {
     //await loadCourses(window.localStorage.getItem("token"));
 });
 
-addEventListener('dataUpdate', async function () {
+addEventListener('dataUpdate', async () => {
     console.log("DU");
     try {
         await preloadCourses();

@@ -109,7 +109,6 @@ async function initPage() {
 }
 
 async function fetchData() {
-    console.log("Fetcj")
     let token = window.localStorage.getItem("token");
     let databaseConnector: DatabaseConnector = new DatabaseConnector();
     await databaseConnector.initDB();
@@ -140,5 +139,4 @@ async function updateDetailView(courseName, lesson, room, status, date, announce
         outer.append(inner);
         announcementContainer.append(outer);
     }
-
 }

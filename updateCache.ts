@@ -29,15 +29,15 @@ let staticCacheFiles = [
 
 async function print(path) {
     const dir = await fs.promises.opendir(path);
-    for await (const dirent of dir) {
-        if (!dirent.name.startsWith('.')) {
-            if (dirent.isDirectory()) {
-                if (!excludeDirs.includes(dirent.name)) {
-                    await print(path + dirent.name + '/');
+    for await (const dirEntry of dir) {
+        if (!dirEntry.name.startsWith('.')) {
+            if (dirEntry.isDirectory()) {
+                if (!excludeDirs.includes(dirEntry.name)) {
+                    await print(path + dirEntry.name + '/');
                 }
             } else {
-                if (!excludeFiles.includes(path + dirent.name)) {
-                    files.push((path + dirent.name).substr(1));
+                if (!excludeFiles.includes(path + dirEntry.name)) {
+                    files.push((path + dirEntry.name).substr(1));
                 }
             }
         }

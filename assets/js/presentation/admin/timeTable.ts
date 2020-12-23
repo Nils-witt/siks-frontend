@@ -15,8 +15,7 @@ function xmlToTable(xmlString) {
                 let className;
                 if (nodes.length == 1) {
                     className = nodes[0].textContent;
-                    let lessons = parseClass(classes[k]);
-                    timeTable[className] = lessons;
+                    timeTable[className] = parseClass(classes[k]);
                 }
             }
         }

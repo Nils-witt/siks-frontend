@@ -3,7 +3,7 @@ let userType = window.localStorage.getItem("userType");
 let examsDbc: DatabaseConnector;
 
 async function createExamsTable(): Promise<void> {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
         try {
             let exams = await examsDbc.getExams();
             let mainUL = document.getElementById("mainUL");
@@ -49,7 +49,7 @@ function compare(a, b) {
     return 0;
 }
 
-document.addEventListener("DOMContentLoaded", async function (event) {
+document.addEventListener("DOMContentLoaded", async (event) => {
     examsDbc = new DatabaseConnector();
     let apc = new ApiConnector(window.localStorage.getItem("token"), examsDbc);
     await examsDbc.initDB();
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async function (event) {
 
 });
 
-addEventListener('dataUpdate', async function () {
+addEventListener('dataUpdate', async () => {
     try {
         //await createKlausurenTable();
     } catch (e) {

@@ -15,16 +15,16 @@ self.addEventListener('install', event => {
 
 //Event for the control takeover
 self.addEventListener('activate', async (event) => {
-    setTimeout(function () {
+    setTimeout( ()=> {
         refreshClients();
     },500);
 });
 
 //Event if a site requests a file from the server
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', (event) =>{
     try {
         event.respondWith(
-            caches.match(event.request).then(function(response) {
+            caches.match(event.request).then((response) =>{
                 return response || fetch(event.request);
             })
         );
@@ -131,7 +131,7 @@ const urlB64ToUint8Array = base64String => {
 }
 
 //TODO extend
-self.addEventListener("push", function(event) {
+self.addEventListener("push", (event) =>{
     if (event.data) {
         console.log("Push event!! ", event.data.text());
         let data = JSON.parse(event.data.text());
@@ -166,8 +166,7 @@ async function loadCacheManifest() {
                     for (const cacheDetailsKey in cacheDetails.files) {
                         if(cacheDetails.files.hasOwnProperty(cacheDetailsKey)){
                             //Load files from the list and save them into the cache
-                            let file = await fetch(cacheDetails.files[cacheDetailsKey]);
-                            await cache.put(cacheDetails.files[cacheDetailsKey], file);
+                            await cache.put(cacheDetails.files[cacheDetailsKey], await fetch(cacheDetails.files[cacheDetailsKey]));
                         }
                     }
                     cacheVersion = cacheDetails.version;
@@ -197,8 +196,7 @@ async function forceCacheUpdate() {
                 for (const cacheDetailsKey in cacheDetails.files) {
                     if(cacheDetails.files.hasOwnProperty(cacheDetailsKey)){
                         //Load files from the list and save them into the cache
-                        let file = await fetch(cacheDetails.files[cacheDetailsKey]);
-                        await cache.put(cacheDetails.files[cacheDetailsKey], file);
+                        await cache.put(cacheDetails.files[cacheDetailsKey], await fetch(cacheDetails.files[cacheDetailsKey]));
                     }
                 }
                 cacheVersion = cacheDetails.version;

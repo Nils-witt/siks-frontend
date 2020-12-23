@@ -84,7 +84,7 @@ class Login {
     }
 
     isLoggedIn() {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
 
             let key = await serviceworkerConnector.requestApiKey();
             let localKey = window.localStorage.getItem('token');

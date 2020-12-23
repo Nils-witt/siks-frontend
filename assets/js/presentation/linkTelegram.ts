@@ -15,7 +15,7 @@ navigator.serviceWorker.addEventListener("message", (evt) => {
 });
 
 
-document.addEventListener("DOMContentLoaded", async function (event) {
+document.addEventListener("DOMContentLoaded", async (event) => {
     await serviceworkerConnector.register();
 
 

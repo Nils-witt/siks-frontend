@@ -50,7 +50,7 @@ addEventListener("keydown", async (event) => {
     }
 });
 
-addEventListener("DOMContentLoaded", async function (event) {
+addEventListener("DOMContentLoaded", async (event) => {
     login = new Login();
     let regs = await navigator.serviceWorker.getRegistrations();
     console.log("Regs: " + regs.length)

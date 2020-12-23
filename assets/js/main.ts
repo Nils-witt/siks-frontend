@@ -7,14 +7,14 @@ let swReg;
 messageToServiceWorker({"command": "updateCache"});
 
 if ('serviceWorker' in window.navigator) {
-    navigator.serviceWorker.register('/serviceworker.js', {}).then(function (reg) {
+    navigator.serviceWorker.register('/serviceworker.js', {}).then((reg) => {
         console.log('Registrierung erfolgreich. Scope ist ' + reg.scope);
         if (!reg.active) {
             console.log('SW not active');
             location.reload();
         }
         swReg = reg;
-    }).catch(function (error) {
+    }).catch((error) => {
         console.log('Registrierung fehlgeschlagen mit ' + error);
     });
 }

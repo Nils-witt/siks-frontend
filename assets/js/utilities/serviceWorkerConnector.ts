@@ -1,9 +1,9 @@
 let serviceworkerConnector = {
     registration: undefined,
     register: () => {
-        return new Promise<void>(async function (resolve, reject) {
+        return new Promise<void>(async (resolve, reject) => {
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/serviceworker.js', {}).then(function (reg) {
+                navigator.serviceWorker.register('/serviceworker.js', {}).then((reg) => {
                     console.log('Registrierung erfolgreich. Scope ist ' + reg.scope);
                     if (!reg.active) {
                         console.log('SW not active');
@@ -19,7 +19,7 @@ let serviceworkerConnector = {
         });
     },
     requestApiKey: () => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "getApiKey"}, [messageChannel.port2]);
@@ -30,7 +30,7 @@ let serviceworkerConnector = {
         });
     },
     setApiKey: (token) => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "setApiKey", 'key': token}, [messageChannel.port2]);
@@ -41,7 +41,7 @@ let serviceworkerConnector = {
         });
     },
     sendMessage: (message) => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
 
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
@@ -53,7 +53,7 @@ let serviceworkerConnector = {
         });
     },
     updateCache: () => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "updateCache"}, [messageChannel.port2]);
@@ -64,7 +64,7 @@ let serviceworkerConnector = {
         });
     },
     forceCacheUpdate: () => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "forceUpdateCache"}, [messageChannel.port2]);
@@ -75,7 +75,7 @@ let serviceworkerConnector = {
         });
     },
     disableCache: () => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "disableCache"}, [messageChannel.port2]);
@@ -86,7 +86,7 @@ let serviceworkerConnector = {
         });
     },
     enableCache: () => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "enableCache"}, [messageChannel.port2]);
@@ -97,7 +97,7 @@ let serviceworkerConnector = {
         });
     },
     logout: () => {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let messageChannel = new MessageChannel();
             messageChannel.port1.onmessage = replyHandler;
             navigator.serviceWorker.controller.postMessage({"command": "logout"}, [messageChannel.port2]);
@@ -114,7 +114,7 @@ let serviceworkerConnector = {
             window.localStorage.clear();
             indexedDB.deleteDatabase("sPlan");
             navigator.serviceWorker.getRegistrations()
-                .then(function (registrations) {
+                .then((registrations) => {
                     for (let registration of registrations) {
                         registration.unregister();
                     }

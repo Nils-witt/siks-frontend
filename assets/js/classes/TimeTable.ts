@@ -5,8 +5,8 @@ class TimeTable implements Pagination {
     databaseConnector: DatabaseConnector;
     timeTable: TimeTable;
     private data: TimeTableData;
-    private weekdays: { "1": string; "2": string; "3": string; "4": string; "5": string; "6": string; "7": string };
-    private timeLessons: number[][] = [[28200, 30900], [30900, 33600], [34800, 37500], [37800, 40500], [41700, 44400], [44400, 47100]];
+    private readonly weekdays: { "1": string; "2": string; "3": string; "4": string; "5": string; "6": string; "7": string };
+    private readonly timeLessons: number[][] = [[28200, 30900], [30900, 33600], [34800, 37500], [37800, 40500], [41700, 44400], [44400, 47100]];
 
     constructor(databaseConnector: DatabaseConnector) {
         this.databaseConnector = databaseConnector
@@ -240,7 +240,7 @@ class TimeTable implements Pagination {
         });
 
         this.data.announcements.forEach(announcement => {
-            let weekday = announcement.weekday;
+            let weekday = announcement.date;
 
             if (!announcements.hasOwnProperty(weekday)) {
                 announcements[weekday] = {};
@@ -288,7 +288,7 @@ class TimeTable implements Pagination {
 
     async fetchData() {
         this.weekStart = new Date(Date.now());
-        this.data.announcements = await this.databaseConnector.getAnnoucementsByWeek(this.weekStart);
+        this.data.announcements = await this.databaseConnector.getAnnouncementsByWeek(this.weekStart);
         this.data.exams = await this.databaseConnector.getExamsByWeek(this.weekStart)
         this.data.lessons = await this.databaseConnector.getLessons()
         this.data.replacementLessons = await this.databaseConnector.getReplacementLessonsByWeek(this.weekStart);

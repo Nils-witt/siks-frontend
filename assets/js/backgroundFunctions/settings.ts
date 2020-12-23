@@ -62,11 +62,11 @@ class Settings {
                 //TODO Fix
                 try {
                     await serviceworkerConnector.register();
-                    serviceworkerConnector.registration.pushManager.getSubscription().then(function (subscription) {
-                        subscription.unsubscribe().then(function (successful) {
+                    serviceworkerConnector.registration.pushManager.getSubscription().then((subscription) => {
+                        subscription.unsubscribe().then((successful) => {
                             console.log("PUSH deactivated")
                             //TODO remove from server
-                        }).catch(function (e) {
+                        }).catch((e) => {
                             // Unsubscription failed
                         });
                     });
@@ -89,7 +89,7 @@ class Settings {
     }
 
     requestNotificationsPerms(): Promise<void> {
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             const permission = await window.Notification.requestPermission();
             if (permission !== 'granted') {
                 reject();
