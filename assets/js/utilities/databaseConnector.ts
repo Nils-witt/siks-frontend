@@ -372,7 +372,7 @@ class DatabaseConnector {
         });
     }
 
-    getExamsByWeek(dateStart) {
+    getExamsByWeek(dateStart): Promise<Exam[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let date = new Date(dateStart);

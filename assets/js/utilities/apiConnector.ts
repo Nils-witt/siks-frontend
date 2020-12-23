@@ -385,7 +385,7 @@ class ApiConnector {
 
             if (response.status === 200) {
 
-                let data = <any[]><unknown>response.json();
+                let data = <Announcement[]><unknown>await response.json();
 
                 for (let i = 0; i < data.length; i++) {
                     data[i]["epochSec"] = new Date(data[i]["date"]).getTime();
@@ -433,7 +433,7 @@ class ApiConnector {
         });
     }
 
-    loadUserById(id): Promise<any[]> {
+    loadUserById(id): Promise<User[]> {
         let token = this.token;
         return new Promise(async (resolve, reject) => {
             let response = await fetch(baseURL + "/users/id/" + id, {

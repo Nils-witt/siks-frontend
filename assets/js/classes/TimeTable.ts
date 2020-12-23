@@ -315,10 +315,10 @@ class TimeTable implements Pagination {
 }
 
 class TimeTableData {
-    announcements: any;
-    exams: any;
-    lessons: any;
-    replacementLessons: any;
+    announcements: Announcement[];
+    exams: Exam[];
+    lessons: Lesson[];
+    replacementLessons: ReplacementLesson[];
     preparedData: {};
 
 }
