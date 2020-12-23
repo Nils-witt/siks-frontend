@@ -74,7 +74,7 @@ class ApiConnector {
                     triggerUpdateEvent();
                 }
                 if (response.status === 401) {
-                    authErr();
+                    await authErr();
                     reject('err');
                 }
                 if (response.status === 604) {
@@ -111,7 +111,7 @@ class ApiConnector {
                 triggerUpdateEvent();
             }
             if (response.status === 401) {
-                authErr();
+                await authErr();
                 reject('err');
             }
             if (response.status === 604) {
@@ -146,7 +146,7 @@ class ApiConnector {
                 }
 
                 if (response.status === 401) {
-                    authErr();
+                    await authErr();
                     reject('err');
                 }
 
@@ -185,7 +185,7 @@ class ApiConnector {
                     triggerUpdateEvent();
                 }
                 if (response.status === 401) {
-                    authErr();
+                    await authErr();
                     reject('err');
                 }
                 if (response.status === 604) {
@@ -225,7 +225,7 @@ class ApiConnector {
                     triggerUpdateEvent();
                 }
                 if (response.status === 401) {
-                    authErr();
+                    await authErr();
                     reject('err');
                 }
                 if (response.status === 604) {
@@ -265,7 +265,7 @@ class ApiConnector {
                     triggerUpdateEvent();
                 }
                 if (response.status === 401) {
-                    authErr();
+                    await authErr();
                     reject('err');
                 }
                 if (response.status === 604) {
@@ -313,7 +313,7 @@ class ApiConnector {
                 resolve();
                 localStorage.setItem("push", "true")
             } else if (response.status === 401) {
-                authErr();
+                await authErr();
                 reject('err');
             } else {
                 reject(response.status);
@@ -337,7 +337,7 @@ class ApiConnector {
                 resolve();
                 localStorage.setItem("push", "true");
             } else if (response.status === 401) {
-                authErr();
+                await authErr();
                 reject('err');
             } else {
                 reject();
@@ -455,15 +455,13 @@ class ApiConnector {
                 }
             });
             if (response.status === 200) {
-
-                let json = this.responseText;
+                let json = await response.json();
                 let data = JSON.parse(json);
 
-                console.log(data);
                 resolve(data);
             }
             if (response.status === 401) {
-                authErr();
+                await authErr();
                 reject('err');
             }
             if (response.status === 604) {
