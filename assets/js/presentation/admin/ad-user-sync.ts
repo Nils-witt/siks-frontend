@@ -32,7 +32,7 @@ async function loadLocalUsers() {
         }
 
     } else if (response.status === 401) {
-        authErr();
+        await authErr();
     } else if (response.status === 604) {
         console.log("err");
     }
@@ -48,7 +48,7 @@ async function loadRemoteUsers() {
     });
 
     if (response.status === 200) {
-        let data = <any[]><unknown>await response.json();
+        let data = <User[]><unknown>await response.json();
 
         clearRemoteUsersTable();
 
@@ -67,7 +67,7 @@ async function loadRemoteUsers() {
             usersRemoteTable.append(row);
         }
     } else if (response.status === 401) {
-        authErr();
+        await authErr();
     } else if (response.status === 604) {
         console.log("err");
     }
@@ -83,10 +83,10 @@ function clearRemoteUsersTable() {
 }
 
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async () => {
     usersLocalTable = document.getElementById("tableBodyLocal");
     usersRemoteTable = document.getElementById("tableBodyRemote");
 
-    loadLocalUsers();
-    loadRemoteUsers();
+    await loadLocalUsers();
+    await loadRemoteUsers();
 });
