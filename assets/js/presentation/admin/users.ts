@@ -24,16 +24,16 @@ class AdminUserView {
             } else if (this.selectedOptions["type"] === 2 && user.type !== 2) {
                 add = false;
             }
-            if (this.selectedOptions["active"] === 0 && user.active !== 0) {
+            if (this.selectedOptions["active"] === 0 && user.active !== false) {
                 add = false;
-            } else if (this.selectedOptions["active"] === 1 && user.active !== 1) {
+            } else if (this.selectedOptions["active"] === 1 && user.active !== true) {
                 add = false;
             }
 
-            if (this.selectedOptions["firstname"] !== "" && !user.firstname.toLowerCase().includes(this.selectedOptions["firstname"])) {
+            if (this.selectedOptions["firstname"] !== "" && !user.firstName.toLowerCase().includes(this.selectedOptions["firstname"])) {
                 add = false;
             }
-            if (this.selectedOptions["lastname"] !== "" && !user.lastname.toLowerCase().includes(this.selectedOptions["lastname"])) {
+            if (this.selectedOptions["lastname"] !== "" && !user.lastName.toLowerCase().includes(this.selectedOptions["lastname"])) {
                 add = false;
             }
 
@@ -129,15 +129,15 @@ class AdminUserView {
         document.getElementById("confirmBox").style.visibility = "visible";
         document.getElementById("userDetailFrame").style.visibility = "visible";
 
-        let user = await this.apiConnector.loadUserById(id);
-        if (user.length === 1) {
+        let users: User[] = await this.apiConnector.loadUserById(id);
+        if (users.length === 1) {
             let usernameField = <HTMLInputElement>document.getElementById('ProfileDetailusername');
             let firstnameField = <HTMLInputElement>document.getElementById('ProfileDetailFirstname');
             let lastnameField = <HTMLInputElement>document.getElementById('ProfileDetailLastname');
             let mailAddressField = <HTMLInputElement>document.getElementById('ProfileDetailMail');
             let buttonCourseView = <HTMLInputElement>document.getElementById('buttonOpenCourseFrame');
-            console.log(user[0]);
-            user = user[0];
+            console.log(users[0]);
+            let user = users[0];
 
             usernameField.value = user["username"];
             firstnameField.value = user["firstName"];
@@ -209,7 +209,7 @@ class AdminUserView {
 }
 
 let adminUserView: AdminUserView;
-document.addEventListener("DOMContentLoaded", async function (event) {
+document.addEventListener("DOMContentLoaded", async () => {
     let databaseConnector = new DatabaseConnector();
     await databaseConnector.initDB();
     let apiConnector = new ApiConnector(window.localStorage.getItem('token'), databaseConnector);
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", async function (event) {
     await apiConnector.loadUserApi(localStorage.getItem("token"));
 });
 
-addEventListener('dataUpdate', async function () {
+addEventListener('dataUpdate', async () => {
     try {
         await adminUserView.loadUsersIntoTable();
     } catch (rejectedValue) {
