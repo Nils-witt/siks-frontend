@@ -28,166 +28,207 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+/**
+ * Checks if IndexedBD is supported in the browser / window
+ */
 if (!window.indexedDB) {
     console.log("DB not supported")
 }
 
+/**
+ * Provides easier interaction with the IndexDB
+ */
 class DatabaseConnector {
-    database;
+    private database;
 
+    /**
+     * Initials a DatabaseConnector object
+     */
+    constructor() {
+    }
+
+    /**
+     * Runs all functions to make the database ready for connections
+     */
     public async initDB() {
         this.database = await this.updateObjectStore();
     }
 
-//Save
-    saveLesson(lesson): Promise<void> {
+    /**
+     * Saves a Lesson object to the database
+     * @param lesson
+     */
+    saveLesson(lesson: Lesson): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("lessons", "readwrite");
-            transaction.oncomplete = function (event) {
+            transaction.oncomplete = (event) => {
             };
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.log(event)
             };
 
             let objectStore = transaction.objectStore("lessons");
 
             let request = objectStore.add(lesson);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
 
     }
 
-    saveReplacementLesson(replacementLesson): Promise<void> {
+    /**
+     * Saves a ReplacementLesson object to the database
+     * @param replacementLesson
+     */
+    saveReplacementLesson(replacementLesson: ReplacementLesson): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("replacementLessons", "readwrite");
-            transaction.oncomplete = function (event) {
+            transaction.oncomplete = (event) => {
             };
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
             };
 
             let objectStore = transaction.objectStore("replacementLessons");
 
             let request = objectStore.add(replacementLesson);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
 
     }
 
-    saveExam(exam): Promise<void> {
+    /**
+     * Saves a Exam object to the database
+     * @param exam
+     */
+    saveExam(exam: Exam): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("exams", "readwrite");
-            transaction.oncomplete = function (event) {
+            transaction.oncomplete = (event) => {
             };
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
             };
 
             let objectStore = transaction.objectStore("exams");
 
             let request = objectStore.add(exam);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
     }
 
-    saveAnnouncement(announcement): Promise<void> {
+    /**
+     * Saves a Announcement object to the database
+     * @param announcement
+     */
+    saveAnnouncement(announcement: Announcement): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("announcements", "readwrite");
 
             let objectStore = transaction.objectStore("announcements");
 
             let request = objectStore.add(announcement);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
     }
 
-    saveUser(user): Promise<void> {
+    /**
+     * Saves a User object to the database
+     * @param user
+     */
+    saveUser(user: User): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("users", "readwrite");
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.log(event)
             };
 
             let objectStore = transaction.objectStore("users");
 
             let request = objectStore.add(user);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
 
     }
 
-    saveCourse(course): Promise<void> {
+    /**
+     * Saves a Course object to the database
+     * @param course
+     */
+    saveCourse(course: Course): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("courses", "readwrite");
-            transaction.oncomplete = function (event) {
+            transaction.oncomplete = (event) => {
             };
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.log(event)
             };
 
             let objectStore = transaction.objectStore("courses");
 
             let request = objectStore.add(course);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
     }
 
-    saveDevice(device): Promise<void> {
+    /**
+     * Saves a Device object to the database
+     * @param device
+     */
+    saveDevice(device: Device): Promise<void> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             let transaction = db.transaction("devices", "readwrite");
-            transaction.oncomplete = function (event) {
+            transaction.oncomplete = (event) => {
             };
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.log(event)
             };
 
             let objectStore = transaction.objectStore("devices");
 
             let request = objectStore.add(device);
-            request.onsuccess = function (event) {
+            request.onsuccess = (event) => {
                 resolve();
             };
         });
     }
 
 //GET
-    getUsers(): Promise<any[]> {
+    getUsers(): Promise<User[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("users").objectStore("users");
             let users = [];
 
-            objectStore.index("username").openCursor().onsuccess = function (event) {
+            objectStore.index("username").openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     users.push(cursor.value);
@@ -199,13 +240,13 @@ class DatabaseConnector {
         });
     }
 
-    getLessons() {
+    getLessons(): Promise<Lesson[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("lessons").objectStore("lessons");
             let lessons = [];
 
-            objectStore.openCursor().onsuccess = function (event) {
+            objectStore.openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     lessons.push(cursor.value);
@@ -217,13 +258,13 @@ class DatabaseConnector {
         });
     }
 
-    getReplacementLessons() {
+    getReplacementLessons(): Promise<ReplacementLesson[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("replacementLessons").objectStore("replacementLessons");
             let lessons = [];
 
-            objectStore.openCursor().onsuccess = function (event) {
+            objectStore.openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     lessons.push(cursor.value);
@@ -235,9 +276,9 @@ class DatabaseConnector {
         });
     }
 
-    getReplacementLessonsByWeek(dateStart) {
+    getReplacementLessonsByWeek(dateStart): Promise<ReplacementLesson[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let date = new Date(dateStart);
             let objectStore = db.transaction("replacementLessons").objectStore("replacementLessons");
             let lessons = [];
@@ -249,7 +290,7 @@ class DatabaseConnector {
 
             let index = objectStore.index("epochSec");
 
-            index.openCursor(range).onsuccess = function (event) {
+            index.openCursor(range).onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     lessons.push(cursor.value);
@@ -261,9 +302,9 @@ class DatabaseConnector {
         });
     }
 
-    getAnnoucementsByWeek(dateStart) {
+    getAnnouncementsByWeek(dateStart): Promise<Announcement[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let date = new Date(dateStart);
             let objectStore = db.transaction("announcements").objectStore("announcements");
             let lessons = [];
@@ -275,7 +316,7 @@ class DatabaseConnector {
 
             let index = objectStore.index("epochSec");
 
-            index.openCursor(range).onsuccess = function (event) {
+            index.openCursor(range).onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     lessons.push(cursor.value);
@@ -287,39 +328,39 @@ class DatabaseConnector {
         });
     }
 
-    getLesson(weekday, lesson) {
+    getLesson(weekday, lesson): Promise<Lesson> {
         let db = this.database;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let transaction = db.transaction('lessons', 'readonly');
             let store = transaction.objectStore('lessons');
             let index = store.index('lessonDay');
             let request = await index.get(IDBKeyRange.only([weekday, lesson]));
-            request.onsuccess = function () {
+            request.onsuccess = () => {
                 resolve(request.result);
             }
         });
     }
 
-    getReplacementLesson(weekday, lesson) {
+    getReplacementLesson(weekday, lesson): Promise<ReplacementLesson[]> {
         let db = this.database;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             let transaction = db.transaction('replacementLessons', 'readonly');
             let store = transaction.objectStore('replacementLessons');
             let index = store.index('lessonDay');
             let request = await index.get(IDBKeyRange.only([weekday, lesson]));
-            request.onsuccess = function () {
+            request.onsuccess = () => {
                 resolve(request.result);
             }
         });
     }
 
-    getExams(): Promise<any[]> {
+    getExams(): Promise<Exam[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("exams").objectStore("exams");
             let exams = [];
 
-            objectStore.openCursor().onsuccess = function (event) {
+            objectStore.openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     exams.push(cursor.value);
@@ -333,7 +374,7 @@ class DatabaseConnector {
 
     getExamsByWeek(dateStart) {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let date = new Date(dateStart);
             let firstday = date.getTime();
             date.setDate(date.getDate() + 7);
@@ -346,7 +387,7 @@ class DatabaseConnector {
 
             let index = objectStore.index("epochSec");
 
-            index.openCursor(range).onsuccess = function (event) {
+            index.openCursor(range).onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     exams.push(cursor.value);
@@ -358,12 +399,12 @@ class DatabaseConnector {
         });
     }
 
-    getCourses() {
+    getCourses(): Promise<Course[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("courses").objectStore("courses");
             let courses = [];
-            objectStore.openCursor().onsuccess = function (event) {
+            objectStore.openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     courses.push(cursor.value);
@@ -375,12 +416,12 @@ class DatabaseConnector {
         });
     }
 
-    getAnnouncements() {
+    getAnnouncements(): Promise<Announcement[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("announcements").objectStore("announcements");
             let announcements = [];
-            objectStore.openCursor().onsuccess = function (event) {
+            objectStore.openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     announcements.push(cursor.value);
@@ -392,12 +433,12 @@ class DatabaseConnector {
         });
     }
 
-    getDevices() {
+    getDevices(): Promise<Device[]> {
         let db = this.database;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let objectStore = db.transaction("devices").objectStore("devices");
             let devices = [];
-            objectStore.openCursor().onsuccess = function (event) {
+            objectStore.openCursor().onsuccess = (event) => {
                 let cursor = event.target.result;
                 if (cursor) {
                     devices.push(cursor.value);
@@ -409,45 +450,70 @@ class DatabaseConnector {
         });
     }
 
+    /**
+     * Clears the Announcement table
+     */
     clearLessons() {
         this.database.transaction("lessons", "readwrite").objectStore("lessons").clear();
     }
 
+    /**
+     * Clears the Device table
+     */
     clearDevices() {
         this.database.transaction("devices", "readwrite").objectStore("devices").clear();
     }
 
+    /**
+     * Clears the ReplacementLesson table
+     */
     clearReplacementLessons = () => {
         this.database.transaction("replacementLessons", "readwrite").objectStore("replacementLessons").clear();
     }
 
+    /**
+     * Clears the Exam table
+     */
     clearExams() {
         this.database.transaction("exams", "readwrite").objectStore("exams").clear();
     }
 
+    /**
+     * Clears the User table
+     */
     clearUsers() {
         this.database.transaction("users", "readwrite").objectStore("users").clear();
     }
 
+    /**
+     * Clears the Course table
+     */
     clearCourses() {
         this.database.transaction("courses", "readwrite").objectStore("courses").clear();
     }
 
+    /**
+     * Clears the Announcement table
+     */
     clearAnnouncement() {
         this.database.transaction("announcements", "readwrite").objectStore("announcements").clear();
     }
 
+    /**
+     * Gets a database instance and upgrades to the current schema
+     * @private
+     */
     private updateObjectStore() {
         let db = this.database;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async (resolve, reject) => {
             if (db !== undefined) {
                 resolve(false);
                 return;
             }
             let request = indexedDB.open('sPlan', 13);
 
-            request.onupgradeneeded = function () {
-                db = this.result;
+            request.onupgradeneeded = () => {
+                db = request.result;
                 if (db.objectStoreNames.contains('lessons')) {
                     db.deleteObjectStore('lessons')
                 }
@@ -529,13 +595,13 @@ class DatabaseConnector {
                 });
             };
 
-            request.onerror = function (err) {
+            request.onerror = (err) => {
                 console.log(err);
                 reject('err');
             };
 
-            request.onsuccess = function () {
-                resolve(this.result);
+            request.onsuccess = () => {
+                resolve(request.result);
             }
         });
     }
