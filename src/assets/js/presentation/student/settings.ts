@@ -115,11 +115,13 @@ function closeAllView() {
     document.getElementById("addDeviceContainer").style.visibility = "hidden";
     document.getElementById("qrCodeContainer").innerHTML = "";
 }
-
+/*
 function openCourseView() {
     document.getElementById("confirmBox").style.visibility = "visible";
     document.getElementById("userCoursesFrame").style.visibility = "visible";
 }
+
+ */
 
 function openTwoFactorFrame() {
     document.getElementById("confirmBox").style.visibility = "visible";

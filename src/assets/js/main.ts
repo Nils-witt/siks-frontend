@@ -51,14 +51,12 @@ function toggleDarkTheme(isEnabled) {
 }
 
 
-document.addEventListener("DOMContentLoaded", async (event) => {
-
+addEventListener("DOMContentLoaded", async (event) => {
     if (localStorage.getItem("theme") === "dark") {
         toggleDarkTheme(true);
     } else if (localStorage.getItem("theme") === "light") {
         toggleDarkTheme(false);
     }
-
 });
 
 if (localStorage.getItem("theme") !== "dark" && localStorage.getItem("theme") !== "light") {

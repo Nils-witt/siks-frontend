@@ -1,0 +1,2 @@
+let presentation = {};
+presentation.global = {};

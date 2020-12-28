@@ -18,5 +18,6 @@
     <orderEntry type="library" name="base32" level="application" />
     <orderEntry type="library" name="base32" level="application" />
     <orderEntry type="library" name="jquery-qrcode" level="application" />
+    <orderEntry type="library" name="bundle" level="application" />
   </component>
 </module>
