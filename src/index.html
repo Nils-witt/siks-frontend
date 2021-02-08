@@ -35,10 +35,9 @@
 <script>
 
     if(window.localStorage.getItem("token") !== null){
-        let userType = window.localStorage.getItem('userType');
-        window.location.href = "/pages/" + userType + "/timeTable.html"
+        window.location.href = "/pages/timeTable.html";
     }else {
-        window.location = '/pages/login.html'
+        window.location = '/pages/login.html';
     }
 
 
