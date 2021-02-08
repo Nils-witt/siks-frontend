@@ -1,3 +1,31 @@
+<!--
+  ~ S-Plan
+  ~ Copyright (c) 2021 Nils Witt
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without
+  ~ modification, are permitted provided that the following conditions are met:
+  ~   * Redistributions of source code must retain the above copyright notice, this
+  ~     list of conditions and the following disclaimer.
+  ~   * Redistributions in binary form must reproduce the above copyright notice,
+  ~     this list of conditions and the following disclaimer in the documentation
+  ~     and/or other materials provided with the distribution.
+  ~   * Neither the name of the author nor the names of its
+  ~     contributors may be used to endorse or promote products derived from
+  ~     this software without specific prior written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  ~ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  ~ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  ~ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  ~ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  ~ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  ~ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  ~ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  ~ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -10,15 +38,15 @@
     <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
     <link href="/S-Plan.png" rel="apple-touch-icon">
     <meta content="S-Plan" name="apple-mobile-web-app-title">
-    <link href="/assets/css/global.scss" rel="stylesheet">
-    <link href="/assets/css/settings.scss" rel="stylesheet">
+    <link href="/assets/css/global.css" rel="stylesheet">
+    <link href="/assets/css/settings.css" rel="stylesheet">
 </head>
 
 <body>
 <div id="navBarContainer">
     <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
         <div class="container">
-            <a class="navbar-brand" href="index.html">S-Plan</a>
+            <a class="navbar-brand" href="student/index.html">S-Plan</a>
             <button class="navbar-toggler" data-target="#navcol-1" data-toggle="collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon"></span>
@@ -26,7 +54,7 @@
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav mr-auto">
                     <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="student/exams.html">Klausuren</a></li>
                     <li class="dropdown nav-item"><a aria-expanded="false" class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Weitere Dienste</a>
                         <div class="dropdown-menu" role="menu">
                             <a class="dropdown-item" href="https://moodle.paeda.biz" role="presentation" target="_blank">Moodle</a>
@@ -38,13 +66,13 @@
                 </ul>
                 <span class="navbar-text actions"></span>
             </div>
-            <button class="btn btn-dark action-button" onclick="logout()">Logout</button>
+            <button class="btn btn-dark action-button" onclick="Global.logout()">Logout</button>
         </div>
     </nav>
 </div>
 
 <div class="container" style="max-width: 900px;">
-    <button class="btn btn-danger" onclick="console.log('Test');serviceworkerConnector.reInit();">Seite neu initialisieren</button>
+    <button class="btn btn-danger" onclick="ServiceworkerConnector.reInit();">Seite neu initialisieren</button>
     <div class="row">
         <div class="col">
             <h5>Login</h5>
@@ -66,10 +94,10 @@
             Name
         </div>
         <div class="col">
-            <input class="form-control" disabled id="profileFirstName" type="text">
+            <input class="form-control" disabled id="fieldFirstname" type="text">
         </div>
         <div class="col">
-            <input class="form-control" disabled id="profileLastName" type="text">
+            <input class="form-control" disabled id="fieldLastname" type="text">
         </div>
     </div>
     <br>
@@ -78,7 +106,7 @@
             Mail
         </div>
         <div class="col">
-            <input class="form-control" disabled id="profileMailAddress" type="email">
+            <input class="form-control" disabled id="fieldEmail" type="email">
         </div>
     </div>
     <div class="row">
@@ -106,11 +134,11 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-success" id="themeAutomode" onclick="settings.toggleDarkModeAuto()">Auto</button>
+            <button class="btn btn-success" id="buttonThemeAuto" onclick="settings.toggleDarkModeAuto()">Auto</button>
         </div>
         <div class="col">
             <label class="switch">
-                <input id="toggleDarkModeButton" onchange="settings.darkModeToggleSwitch(this)" type="checkbox">
+                <input id="sliderTheme" onchange="settings.darkModeToggleSwitch(this)" type="checkbox">
                 <div class="slider round">
                     <span class="on">AN</span>
                     <span class="off">AUS</span>
@@ -127,7 +155,7 @@
     <div class="row">
         <div class="col">
             <label class="switch">
-                <input id="togBtn" onchange="settings.sliderPushNotification(this)" type="checkbox">
+                <input id="sliderPush" onchange="settings.sliderPushNotification(this)" type="checkbox">
                 <div class="slider round">
                     <span class="on">AN</span>
                     <span class="off">AUS</span>
@@ -171,7 +199,7 @@
 </div>
 <div class="confirmFrame" id="userCoursesFrame">
     <button class="btn btn-danger" onclick="closeAllView()">Schließen</button>
-    <button class="btn btn-success" onclick="window.location.href = '/pages/student/editCourses.html'">Bearbeiten</button>
+    <!--<button class="btn btn-success" onclick="window.location.href = '/pages/student/editCourses.html'">Bearbeiten</button>-->
     <div class="container" id='datacourseContainer'>
         <table class="table">
             <thead>
@@ -235,20 +263,22 @@
         </div>
     </div>
 </div>
+<!-- CDN -->
 <script src="https://cdn.jsdelivr.net/gh/emn178/hi-base32/build/base32.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-J7DIscqSIBfb9e7vk6Z6HUs+iizZghD0pZKKjwu6eoh1GR9dLMlMXNJLfGUNpN/z" src="https://cdn.rawgit.com/lrsjng/jquery-qrcode/v0.17.0/dist/jquery-qrcode.min.js"></script>
-<script src="/assets/js/utilities/databaseConnector.ts"></script>
 
-<script src="/assets/js/backgroundFunctions/main.js"></script>
-<script src="/assets/js/utilities/serviceWorkerConnector.js"></script>
-<script src="/assets/js/utilities/apiConnector.js"></script>
-<script src="/assets/js/utilities/databaseConnector.js"></script>
-<script src="/assets/js/utilities/Utilities.js"></script>
-<script src="/assets/js/backgroundFunctions/settings.js"></script>
-<script src="/assets/js/presentation/student/settings.js"></script>
+<!-- SELF -->
+<script src="/assets/scripts/ServiceworkerConnector.js"></script>
+<script src="/assets/scripts/ApiConntector.js"></script>
+<script src="/assets/scripts/User.js"></script>
+<script src="/assets/scripts/DatabaseConnector.js"></script>
+<script src="/assets/scripts/Utilities.js"></script>
+<script src="/assets/scripts/Global.js"></script>
+<script src="/assets/scripts/settings/Settings.js"></script>
+<script src="/assets/scripts/settings/settingsPage.js"></script>
 </body>
 
 </html>
