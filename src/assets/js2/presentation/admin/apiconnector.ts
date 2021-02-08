@@ -26,11 +26,3 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-interface Course {
-    grade: any;
-    subject: any;
-    group: any;
-    exams: boolean;
-    id: number | null;
-    teacherId: number | null;
-}

@@ -1,17 +1,15 @@
-/* S-Plan
- * Copyright (c) 2020 Nils Witt
+/*
+ * S-Plan
+ * Copyright (c) 2021 Nils Witt
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
  *   * Redistributions of source code must retain the above copyright notice, this
  *     list of conditions and the following disclaimer.
- *
  *   * Redistributions in binary form must reproduce the above copyright notice,
  *     this list of conditions and the following disclaimer in the documentation
  *     and/or other materials provided with the distribution.
- *
  *   * Neither the name of the author nor the names of its
  *     contributors may be used to endorse or promote products derived from
  *     this software without specific prior written permission.
@@ -28,6 +26,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 /**
  * Checks if IndexedBD is supported in the browser / window
  */
@@ -39,26 +38,20 @@ if (!window.indexedDB) {
  * Provides easier interaction with the IndexDB
  */
 class DatabaseConnector {
-    private database;
-
-    /**
-     * Initials a DatabaseConnector object
-     */
-    constructor() {
-    }
+    static database: any;
 
     /**
      * Runs all functions to make the database ready for connections
      */
-    public async initDB() {
-        this.database = await this.updateObjectStore();
+    static async initDB() {
+        await DatabaseConnector.updateObjectStore();
     }
 
     /**
      * Saves a Lesson object to the database
      * @param lesson
      */
-    saveLesson(lesson: Lesson): Promise<void> {
+    static saveLesson(lesson: Lesson): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -84,7 +77,7 @@ class DatabaseConnector {
      * Saves a ReplacementLesson object to the database
      * @param replacementLesson
      */
-    saveReplacementLesson(replacementLesson: ReplacementLesson): Promise<void> {
+    static saveReplacementLesson(replacementLesson: ReplacementLesson): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -108,7 +101,7 @@ class DatabaseConnector {
      * Saves a Exam object to the database
      * @param exam
      */
-    saveExam(exam: Exam): Promise<void> {
+    static saveExam(exam: Exam): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -132,7 +125,7 @@ class DatabaseConnector {
      * Saves a Announcement object to the database
      * @param announcement
      */
-    saveAnnouncement(announcement: Announcement): Promise<void> {
+    static saveAnnouncement(announcement: Announcement): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -151,7 +144,7 @@ class DatabaseConnector {
      * Saves a User object to the database
      * @param user
      */
-    saveUser(user: User): Promise<void> {
+    static saveUser(user: User): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -175,7 +168,7 @@ class DatabaseConnector {
      * Saves a Course object to the database
      * @param course
      */
-    saveCourse(course: Course): Promise<void> {
+    static saveCourse(course: Course): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -200,7 +193,7 @@ class DatabaseConnector {
      * Saves a Device object to the database
      * @param device
      */
-    saveDevice(device: Device): Promise<void> {
+    static saveDevice(device: Device): Promise<void> {
         let db = this.database;
         return new Promise((resolve, reject) => {
 
@@ -222,7 +215,7 @@ class DatabaseConnector {
     }
 
 //GET
-    getUsers(): Promise<User[]> {
+    static getUsers(): Promise<User[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("users").objectStore("users");
@@ -240,7 +233,7 @@ class DatabaseConnector {
         });
     }
 
-    getLessons(): Promise<Lesson[]> {
+    static getLessons(): Promise<Lesson[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("lessons").objectStore("lessons");
@@ -258,7 +251,7 @@ class DatabaseConnector {
         });
     }
 
-    getReplacementLessons(): Promise<ReplacementLesson[]> {
+    static getReplacementLessons(): Promise<ReplacementLesson[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("replacementLessons").objectStore("replacementLessons");
@@ -276,7 +269,7 @@ class DatabaseConnector {
         });
     }
 
-    getReplacementLessonsByWeek(dateStart): Promise<ReplacementLesson[]> {
+    static getReplacementLessonsByWeek(dateStart): Promise<ReplacementLesson[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let date = new Date(dateStart);
@@ -302,7 +295,7 @@ class DatabaseConnector {
         });
     }
 
-    getAnnouncementsByWeek(dateStart): Promise<Announcement[]> {
+    static getAnnouncementsByWeek(dateStart): Promise<Announcement[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let date = new Date(dateStart);
@@ -328,7 +321,7 @@ class DatabaseConnector {
         });
     }
 
-    getLesson(weekday, lesson): Promise<Lesson> {
+    static getLesson(weekday, lesson): Promise<Lesson> {
         let db = this.database;
         return new Promise(async (resolve, reject) => {
             let transaction = db.transaction('lessons', 'readonly');
@@ -341,7 +334,7 @@ class DatabaseConnector {
         });
     }
 
-    getReplacementLesson(weekday, lesson): Promise<ReplacementLesson[]> {
+    static getReplacementLesson(weekday, lesson): Promise<ReplacementLesson[]> {
         let db = this.database;
         return new Promise(async (resolve, reject) => {
             let transaction = db.transaction('replacementLessons', 'readonly');
@@ -354,7 +347,7 @@ class DatabaseConnector {
         });
     }
 
-    getExams(): Promise<Exam[]> {
+    static getExams(): Promise<Exam[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("exams").objectStore("exams");
@@ -372,7 +365,7 @@ class DatabaseConnector {
         });
     }
 
-    getExamsByWeek(dateStart): Promise<Exam[]> {
+    static getExamsByWeek(dateStart): Promise<Exam[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let date = new Date(dateStart);
@@ -399,7 +392,7 @@ class DatabaseConnector {
         });
     }
 
-    getCourses(): Promise<Course[]> {
+    static getCourses(): Promise<Course[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("courses").objectStore("courses");
@@ -416,7 +409,7 @@ class DatabaseConnector {
         });
     }
 
-    getAnnouncements(): Promise<Announcement[]> {
+    static getAnnouncements(): Promise<Announcement[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("announcements").objectStore("announcements");
@@ -433,7 +426,7 @@ class DatabaseConnector {
         });
     }
 
-    getDevices(): Promise<Device[]> {
+    static getDevices(): Promise<Device[]> {
         let db = this.database;
         return new Promise((resolve, reject) => {
             let objectStore = db.transaction("devices").objectStore("devices");
@@ -453,49 +446,49 @@ class DatabaseConnector {
     /**
      * Clears the Announcement table
      */
-    clearLessons() {
+    static clearLessons() {
         this.database.transaction("lessons", "readwrite").objectStore("lessons").clear();
     }
 
     /**
      * Clears the Device table
      */
-    clearDevices() {
+    static clearDevices() {
         this.database.transaction("devices", "readwrite").objectStore("devices").clear();
     }
 
     /**
      * Clears the ReplacementLesson table
      */
-    clearReplacementLessons = () => {
+    static clearReplacementLessons() {
         this.database.transaction("replacementLessons", "readwrite").objectStore("replacementLessons").clear();
     }
 
     /**
      * Clears the Exam table
      */
-    clearExams() {
+    static clearExams() {
         this.database.transaction("exams", "readwrite").objectStore("exams").clear();
     }
 
     /**
      * Clears the User table
      */
-    clearUsers() {
+    static clearUsers() {
         this.database.transaction("users", "readwrite").objectStore("users").clear();
     }
 
     /**
      * Clears the Course table
      */
-    clearCourses() {
+    static clearCourses() {
         this.database.transaction("courses", "readwrite").objectStore("courses").clear();
     }
 
     /**
      * Clears the Announcement table
      */
-    clearAnnouncement() {
+    static clearAnnouncement() {
         this.database.transaction("announcements", "readwrite").objectStore("announcements").clear();
     }
 
@@ -503,9 +496,9 @@ class DatabaseConnector {
      * Gets a database instance and upgrades to the current schema
      * @private
      */
-    private updateObjectStore() {
-        let db = this.database;
+    static updateObjectStore() {
         return new Promise(async (resolve, reject) => {
+            let db = this.database;
             if (db !== undefined) {
                 resolve(false);
                 return;
@@ -514,6 +507,7 @@ class DatabaseConnector {
 
             request.onupgradeneeded = () => {
                 db = request.result;
+                DatabaseConnector.database = db;
                 if (db.objectStoreNames.contains('lessons')) {
                     db.deleteObjectStore('lessons')
                 }
@@ -602,6 +596,7 @@ class DatabaseConnector {
 
             request.onsuccess = () => {
                 resolve(request.result);
+                this.database = request.result;
             }
         });
     }

@@ -1,17 +1,46 @@
+/*
+ * S-Plan
+ * Copyright (c) 2021 Nils Witt
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *   * Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *   * Neither the name of the author nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 class Settings {
-    apiConnector: ApiConnector;
-
-
-    constructor(apiConnector: ApiConnector) {
-        this.apiConnector = apiConnector;
-    }
+    sliderPush: string;
+    sliderTheme: string;
+    buttonTheme: string;
+    fieldFirstname: HTMLInputElement;
+    fieldLastname: HTMLInputElement;
+    fieldEmail: HTMLInputElement;
 
     async populateFields() {
-        let firstName = localStorage.getItem('firstName');
-        let lastName = localStorage.getItem('lastName');
-        let mail = localStorage.getItem('mail');
-
-        //setFields(firstName, lastName, mail);
+        this.fieldFirstname.value = localStorage.getItem('firstName');
+        this.fieldLastname.value = localStorage.getItem('lastName');
+        this.fieldEmail.value = localStorage.getItem('mail');
+        //console.log(document.getElementById(this.fieldFirstname))
+        console.log(localStorage.getItem('firstName'))
+        console.log("D")
     }
 
     setSliders() {
@@ -24,13 +53,13 @@ class Settings {
         if (window.localStorage.getItem("theme") === "dark" || window.localStorage.getItem("theme") === "light") {
             setAppearanceSliders(window.localStorage.getItem("theme"));
         } else {
-            (<HTMLButtonElement>document.getElementById("toggleDarkModeButton")).disabled = true;
-            document.getElementById("themeAutomode").className = "btn btn-success";
+            (<HTMLButtonElement>document.getElementById(this.sliderTheme)).disabled = true;
+            document.getElementById(this.buttonTheme).className = "btn btn-success";
         }
     }
 
     setPushSlider(active: boolean) {
-
+        //TODO add context
     }
 
     toggleDarkModeAuto() {
@@ -43,31 +72,27 @@ class Settings {
     }
 
     async sliderPushNotification(element) {
-        console.log(element.checked);
         try {
             if (element.checked) {
                 try {
-                    await serviceworkerConnector.register();
-                    await this.requestNotificationsPerms();
+                    await Notifications.requestNotificationsPerms();
                     const applicationServerKey = Utilities.urlB64ToUint8Array("BBDWHJkJr4mFzQwkNVWKG_Lj6NTXFx38XxBvUCHV9Sm_U4xlvMYapvImY8BBUSd6UI8NkzNygJRZ5J_MMgsSTek");
                     const options = {applicationServerKey, userVisibleOnly: true};
-                    const subscription = await serviceworkerConnector.registration.pushManager.subscribe(options);
+                    const subscription = await ServiceworkerConnector.registration.pushManager.subscribe(options);
                     let json = JSON.stringify(subscription);
 
-                    await this.apiConnector.sendPushSubscription(json, window.localStorage.getItem("token"));
+                    await ApiConnector.sendPushSubscription(json);
                 } catch (e) {
                     console.log(e);
                 }
             } else {
-                //TODO Fix
                 try {
-                    await serviceworkerConnector.register();
-                    serviceworkerConnector.registration.pushManager.getSubscription().then((subscription) => {
+                    ServiceworkerConnector.registration.pushManager.getSubscription().then((subscription) => {
                         subscription.unsubscribe().then((successful) => {
                             console.log("PUSH deactivated")
                             //TODO remove from server
                         }).catch((e) => {
-                            // Unsubscription failed
+                            //TODO add error listener
                         });
                     });
                     window.localStorage.setItem("push", 'false');
@@ -88,23 +113,11 @@ class Settings {
         }
     }
 
-    requestNotificationsPerms(): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            const permission = await window.Notification.requestPermission();
-            if (permission !== 'granted') {
-                reject();
-                throw new Error('Permission not granted for Notification');
-            }
-            resolve();
-        });
-    }
-
     generateDevicesTable(devices) {
         let table = document.createElement('tbody');
 
         for (let deviceId in devices) {
             if (devices.hasOwnProperty(deviceId)) {
-                console.log(devices[deviceId])
                 let device = devices[deviceId];
                 let row = document.createElement("tr");
 
@@ -136,7 +149,6 @@ class Settings {
     }
 
     generateCoursesTable(courses) {
-        console.log(courses)
         let tableBodyBox = document.createElement('tbody');
 
         for (let i = 0; i < courses.length; i++) {
@@ -158,13 +170,4 @@ class Settings {
         }
         return tableBodyBox;
     }
-
-    async logout() {
-        await this.apiConnector.revokeJWT(localStorage.getItem("token"));
-        localStorage.clear();
-        await serviceworkerConnector.logout();
-        messageToServiceWorker({"command": "logout"});
-        window.location.href = "/pages/login.html";
-    }
-
 }

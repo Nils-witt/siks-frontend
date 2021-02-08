@@ -1,6 +1,6 @@
 /*
  * S-Plan
- * Copyright (c) 2020 Nils Witt
+ * Copyright (c) 2021 Nils Witt
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

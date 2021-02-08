@@ -1,5 +1,68 @@
-//Helpers
+/*
+ * S-Plan
+ * Copyright (c) 2021 Nils Witt
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *   * Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *   * Neither the name of the author nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+VARs
+ */
 let settings;
+
+/*
+STARTUP
+ */
+addEventListener("DOMContentLoaded", async () => {
+    settings = new Settings();
+    /*
+        settings.setPushSlider = (active) => {
+            (<HTMLInputElement>document.getElementById("togBtn")).checked = active;
+        };
+
+     */
+
+    settings.sliderPush = document.getElementById("sliderPush");
+    settings.sliderTheme = <HTMLButtonElement>document.getElementById("sliderTheme");
+    settings.buttonTheme = <HTMLButtonElement>document.getElementById("buttonThemeAuto");
+    settings.fieldFirstname = <HTMLInputElement>document.getElementById("fieldFirstname");
+    settings.fieldLastname = <HTMLInputElement>document.getElementById("fieldLastname");
+    settings.fieldEmail = <HTMLInputElement>document.getElementById("fieldEmail");
+
+    settings.populateFields();
+
+    //await settings.setSliders();
+    //await settings.populateFields();
+    //await setDevicesTable();
+    //await setCoursesTable();
+});
+
+addEventListener('dataUpdate', async () => {
+    await settings.setSliders();
+    await settings.populateFields();
+    await setDevicesTable();
+    await setCoursesTable();
+})
 
 async function setDevicesTable() {
     let table = await settings.generateDevicesTable();
@@ -7,8 +70,7 @@ async function setDevicesTable() {
 }
 
 async function setCoursesTable() {
-    let table = await settings.generateCoursesTable();
-    console.log(table)
+    let table = await settings.generateCoursesTable([]);
     document.getElementById("tableBodyCoursesUser").innerHTML = table.innerHTML;
 }
 
@@ -18,7 +80,7 @@ async function createNewTwoFactor() {
     let secret = base32.encode(Utilities.prototype.randomString(52));
     secret = secret.substr(0, secret.length - 4);
 
-    let url = "otpauth://totp/" + username + "?secret=" + secret + "&issuer=S-Plan";
+    let url = "otpauth://totp/" + User.username + "?secret=" + secret + "&issuer=S-Plan";
 
     // @ts-ignore
     $("#qrCodeContainer").qrcode({text: url});
@@ -68,6 +130,7 @@ async function submitSF(token) {
 }
 
 async function confirmNewTwoFactor(keyId) {
+
     (<HTMLButtonElement>document.getElementById("submitConfirmCode")).disabled = true;
 
     try {
@@ -97,7 +160,6 @@ async function confirmNewTwoFactor(keyId) {
 
         console.log("err");
     }
-
 }
 
 
@@ -115,23 +177,15 @@ function closeAllView() {
     document.getElementById("addDeviceContainer").style.visibility = "hidden";
     document.getElementById("qrCodeContainer").innerHTML = "";
 }
-/*
+
 function openCourseView() {
     document.getElementById("confirmBox").style.visibility = "visible";
     document.getElementById("userCoursesFrame").style.visibility = "visible";
 }
 
- */
-
 function openTwoFactorFrame() {
     document.getElementById("confirmBox").style.visibility = "visible";
     document.getElementById("twoFactorFrame").style.visibility = "visible";
-}
-
-function setFields(firstName, lastName, mail, courseContainer) {
-    (<HTMLInputElement>document.getElementById('profileFirstName')).value = firstName;
-    (<HTMLInputElement>document.getElementById('profileLastName')).value = lastName;
-    (<HTMLInputElement>document.getElementById('profileMailAddress')).value = mail;
 }
 
 function setAppearanceSliders(mode) {
@@ -145,29 +199,3 @@ function setAppearanceSliders(mode) {
         (<HTMLInputElement>document.getElementById("toggleDarkModeButton")).disabled = false;
     }
 }
-
-async function logout() {
-    await serviceworkerConnector.logout();
-    localStorage.clear();
-}
-
-addEventListener("DOMContentLoaded", async () => {
-    let dbc = new DatabaseConnector();
-    settings = new Settings(new ApiConnector(window.localStorage.getItem('token'), dbc));
-
-    settings.setPushSlider = (active) => {
-        (<HTMLInputElement>document.getElementById("togBtn")).checked = active;
-    };
-
-    await settings.setSliders();
-    await settings.populateFields();
-    await setDevicesTable();
-    await setCoursesTable();
-});
-
-addEventListener('dataUpdate', async () => {
-    await settings.setSliders();
-    await settings.populateFields();
-    await setDevicesTable();
-    await setCoursesTable();
-})

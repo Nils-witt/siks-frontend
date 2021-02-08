@@ -26,11 +26,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-interface Course {
-    grade: any;
-    subject: any;
-    group: any;
-    exams: boolean;
-    id: number | null;
-    teacherId: number | null;
+class Notifications {
+
+    static requestNotificationsPerms(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            const permission = await window.Notification.requestPermission();
+            if (permission !== 'granted') {
+                reject();
+                throw new Error('Permission not granted for Notification');
+            }
+            resolve();
+        });
+    }
 }

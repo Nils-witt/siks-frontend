@@ -1,6 +1,6 @@
 /*
  * S-Plan
- * Copyright (c) 2020 Nils Witt
+ * Copyright (c) 2021 Nils Witt
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,18 +26,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-interface User {
-    displayName: string;
-    lastName: string;
-    active: boolean;
-    firstName: string;
-    username: string;
-    type: number;
-    devices: any;
-    mails: any;
-    id: number;
-    courses: Course[];
-    secondFactor: number | null;
-    permissions: Permissions;
-    moodleUID: number | null;
+class User {
+    static displayName: string;
+    static lastName: string;
+    static active: boolean;
+    static firstName: string;
+    static username: string;
+    static type: number;
+    static devices: any;
+    static mails: any;
+    static id: number;
+    static courses: Course[];
+    static secondFactor: number | null;
+    static permissions: Permissions;
+    static moodleUID: number | null;
 }

@@ -26,11 +26,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-interface Course {
-    grade: any;
-    subject: any;
-    group: any;
-    exams: boolean;
-    id: number | null;
-    teacherId: number | null;
+class Global {
+
+    /**
+     * Function to be called on each site load to set the runtime
+     */
+    public static async init(){
+        ApiConnector.token = localStorage.getItem("token");
+        User.type = parseInt(localStorage.getItem("type"));
+        await DatabaseConnector.initDB();
+        if(ApiConnector.token !== null){
+            await ApiConnector.updateStores();
+        }
+    }
+
+    public static logout() {
+        localStorage.clear();
+        ServiceworkerConnector.registration.unregister();
+        window.location.href = "/"
+        indexedDB.deleteDatabase("sPlan")
+    }
+
+    public static async serviceWorkerRegistered() {
+        try {
+            await ServiceworkerConnector.register();
+            return ServiceworkerConnector.registration.active != null;
+
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
 }
+
+Global.init();
