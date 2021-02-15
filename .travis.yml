@@ -10,7 +10,7 @@ before_install:
   - docker build -t docker.pkg.github.com/nils-witt/s-plan-pwa/splan-pwa:"$DOCKER_TAG" .
   - docker tag docker.pkg.github.com/nils-witt/s-plan-pwa/splan-pwa:"$DOCKER_TAG" docker.pkg.github.com/nils-witt/s-plan-pwa/splan-pwa:"$TRAVIS_COMMIT"
   - echo "$GITHUB_KEY" | docker login https://docker.pkg.github.com -u "$GITHUB_USER" --password-stdin
-  - docker push docker.pkg.github.com/nils-witt/s-plan-api/splan-backend
+  - docker push docker.pkg.github.com/nils-witt/s-plan-pwa/splan-pwa
 
 script:
   - docker ps
