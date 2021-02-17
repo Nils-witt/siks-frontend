@@ -96,7 +96,7 @@ async function submitSF(token) {
 
     try {
         let password: string = (<HTMLInputElement>document.getElementById("confirmPassword")).value
-        let response = await fetch(baseURL + "/user/auth/totp", {
+        let response = await fetch(localStorage.getItem("HOST_URL") + "/user/auth/totp", {
             method: 'POST',
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem("token"),
@@ -135,7 +135,7 @@ async function confirmNewTwoFactor(keyId) {
 
     try {
 
-        let response = await fetch(baseURL + "/user/auth/totp/verify", {
+        let response = await fetch(localStorage.getItem("HOST_URL") + "/user/auth/totp/verify", {
             method: 'POST',
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem("token"),
