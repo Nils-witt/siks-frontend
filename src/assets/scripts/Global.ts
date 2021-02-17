@@ -33,6 +33,7 @@ class Global {
      */
     public static async init(){
         ApiConnector.token = localStorage.getItem("token");
+        ApiConnector.api_host = localStorage.getItem("API_HOST");
         User.type = parseInt(localStorage.getItem("type"));
         await DatabaseConnector.initDB();
         if(ApiConnector.token !== null){
