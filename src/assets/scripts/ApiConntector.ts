@@ -26,9 +26,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-const baseURL = "http://localhost:3000";
-
 async function authErr() {
     console.log("JWT invalid");
     localStorage.clear();
@@ -38,6 +35,7 @@ async function authErr() {
 
 class ApiConnector {
     static token: string;
+    static api_host: string;
 
     static async updateStores() {
         await this.loadUserProfile();
@@ -53,7 +51,7 @@ class ApiConnector {
     static loadLessons() {
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(baseURL + "/user/lessons", {
+                let response = await fetch(this.api_host + "/user/lessons", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
@@ -85,7 +83,7 @@ class ApiConnector {
 
     static loadReplacementLessons() {
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/user/replacementLessons", {
+            let response = await fetch(this.api_host + "/user/replacementLessons", {
                 method: 'GET',
                 headers: {
                     'Authorization': "Bearer " + this.token
@@ -117,7 +115,7 @@ class ApiConnector {
 
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(baseURL + "/user/exams", {
+                let response = await fetch(this.api_host + "/user/exams", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
@@ -156,7 +154,7 @@ class ApiConnector {
     static loadUserApi() {
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(baseURL + "/users/", {
+                let response = await fetch(this.api_host + "/users/", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
@@ -190,7 +188,7 @@ class ApiConnector {
     static loadCourses() {
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(baseURL + "/user/courses/", {
+                let response = await fetch(this.api_host + "/user/courses/", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
@@ -227,7 +225,7 @@ class ApiConnector {
     static loadAnnouncements() {
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(baseURL + "/user/announcements/", {
+                let response = await fetch(this.api_host + "/user/announcements/", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
@@ -262,7 +260,7 @@ class ApiConnector {
 
     static revokeJWT(): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
-            let res = await fetch(baseURL + "/user/jwt", {
+            let res = await fetch(this.api_host + "/user/jwt", {
                 method: 'DELETE',
                 headers: {
                     'Authorization': "Bearer " + this.token
@@ -275,7 +273,7 @@ class ApiConnector {
 
     static sendPushSubscription(subscription): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/user/devices", {
+            let response = await fetch(this.api_host + "/user/devices", {
                 method: 'POST',
                 headers: {
                     'Authorization': "Bearer " + this.token,
@@ -305,7 +303,7 @@ class ApiConnector {
 
     static linkTelegramAccount(telegramID): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/telegram/confirm/" + telegramID, {
+            let response = await fetch(this.api_host + "/telegram/confirm/" + telegramID, {
                 method: 'GET',
                 headers: {
                     'Authorization': "Bearer " + this.token
@@ -329,7 +327,7 @@ class ApiConnector {
 
     static async loadUserProfile(): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/user/", {
+            let response = await fetch(this.api_host + "/user/", {
                 method: 'GET',
                 headers: {
                     'Authorization': "Bearer " + localStorage.getItem("token")
@@ -354,7 +352,7 @@ class ApiConnector {
         let token = this.token;
         return new Promise(async (resolve, reject) => {
 
-            let response = await fetch(baseURL + "/announcements/id/" + id.toString(), {
+            let response = await fetch(this.api_host + "/announcements/id/" + id.toString(), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': "Bearer " + token
@@ -367,7 +365,7 @@ class ApiConnector {
     static loadAnnouncementsAdmin(): Promise<any[]> {
         let token = this.token;
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/announcements/", {
+            let response = await fetch(this.api_host + "/announcements/", {
                 method: 'GET',
                 headers: {
                     'Authorization': "Bearer " + token
@@ -401,7 +399,7 @@ class ApiConnector {
     static saveAnnouncement(announcement): Promise<void> {
         let token = this.token;
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/announcements/", {
+            let response = await fetch(this.api_host + "/announcements/", {
                 method: 'POST',
                 headers: {
                     'Authorization': "Bearer " + token,
@@ -427,7 +425,7 @@ class ApiConnector {
     static loadUserById(id): Promise<User[]> {
         let token = this.token;
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(baseURL + "/users/id/" + id, {
+            let response = await fetch(this.api_host + "/users/id/" + id, {
                 method: 'GET',
                 headers: {
                     'Authorization': "Bearer " + token,

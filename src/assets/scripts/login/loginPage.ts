@@ -66,8 +66,15 @@ function initLgPage() {
             document.getElementById("secondFactorError").style.visibility = "hidden";
         }
     }
-    login.apiUrl = "http://localhost:3000"
+    login.apiUrl = localStorage.getItem("API_HOST");
 }
+async function loadPWAConfig() {
+    let res = await fetch("../../config.json");
+    let data = await res.json();
+    console.log("API_HOST: " + data["api"]);
+    localStorage.setItem("API_HOST",data["api"]);
+}
+
 
 addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
@@ -82,6 +89,7 @@ addEventListener("DOMContentLoaded", async (event) => {
     if (await login.isLoggedIn()) {
         login.navigateToMainPage();
     }
+    await loadPWAConfig();
     initLgPage();
     login.enableLogin();
     await ServiceworkerConnector.updateCache();
