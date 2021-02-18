@@ -6,7 +6,7 @@
       "ES2020",
       "DOM"
     ],
-    "sourceMap": true,
+    "sourceMap": false,
     "rootDir": "src"
   },
   "compileOnSave": true,
