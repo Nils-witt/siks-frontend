@@ -32,6 +32,11 @@ class Global {
      * Function to be called on each site load to set the runtime
      */
     public static async init(){
+        if (window.location.protocol === 'http:'){
+            console.log("Wrong Protocol");
+            window.location.protocol = 'https:';
+        }
+
         ApiConnector.token = localStorage.getItem("token");
         ApiConnector.api_host = localStorage.getItem("API_HOST");
         User.type = parseInt(localStorage.getItem("type"));
@@ -58,7 +63,6 @@ class Global {
             return false;
         }
     }
-
 }
 
 Global.init();
