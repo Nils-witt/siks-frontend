@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nils-witt/SIKS-PWA.git"
+    "url": "git+https://github.com/Nils-witt/S-Plan_PWA.git"
   },
   "author": "Nils Witt",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Nils-witt/SIKS-PWA/issues"
+    "url": "https://github.com/Nils-witt/S-Plan_PWA/issues"
   },
-  "homepage": "https://github.com/Nils-witt/SIKS-PWA#readme",
+  "homepage": "https://github.com/Nils-witt/S-Plan_PWA#readme",
   "dependencies": {
     "@types/jquery": "^3.5.5",
     "@types/node": "^14.14.25",
