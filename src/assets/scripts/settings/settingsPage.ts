@@ -35,12 +35,6 @@ STARTUP
  */
 addEventListener("DOMContentLoaded", async () => {
     settings = new Settings();
-    /*
-        settings.setPushSlider = (active) => {
-            (<HTMLInputElement>document.getElementById("togBtn")).checked = active;
-        };
-
-     */
 
     settings.sliderPush = document.getElementById("sliderPush");
     settings.sliderTheme = <HTMLButtonElement>document.getElementById("sliderTheme");
@@ -48,31 +42,16 @@ addEventListener("DOMContentLoaded", async () => {
     settings.fieldFirstname = <HTMLInputElement>document.getElementById("fieldFirstname");
     settings.fieldLastname = <HTMLInputElement>document.getElementById("fieldLastname");
     settings.fieldEmail = <HTMLInputElement>document.getElementById("fieldEmail");
+    settings.tableCourses = <HTMLTableElement>document.getElementById("tableBodyCoursesUser")
+    settings.tableDevices = <HTMLTableElement>document.getElementById("tableBodyDevicesUser")
 
-    settings.populateFields();
-
-    //await settings.setSliders();
-    //await settings.populateFields();
-    //await setDevicesTable();
-    //await setCoursesTable();
+    settings.populateSite();
 });
 
 addEventListener('dataUpdate', async () => {
     await settings.setSliders();
     await settings.populateFields();
-    await setDevicesTable();
-    await setCoursesTable();
 })
-
-async function setDevicesTable() {
-    let table = await settings.generateDevicesTable();
-    document.getElementById("devicesTableBody").innerHTML = table.innerHTML;
-}
-
-async function setCoursesTable() {
-    let table = await settings.generateCoursesTable([]);
-    document.getElementById("tableBodyCoursesUser").innerHTML = table.innerHTML;
-}
 
 async function createNewTwoFactor() {
 

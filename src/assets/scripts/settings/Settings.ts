@@ -26,6 +26,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+const PUSHPLATFROMS: string[] = ["Telegram", "APNS", "Firebase", "WebPush"]
+
 class Settings {
     sliderPush: string;
     sliderTheme: string;
@@ -33,14 +35,15 @@ class Settings {
     fieldFirstname: HTMLInputElement;
     fieldLastname: HTMLInputElement;
     fieldEmail: HTMLInputElement;
+    tableDevices: HTMLTableElement;
+    tableCourses: HTMLTableElement;
 
-    async populateFields() {
-        this.fieldFirstname.value = localStorage.getItem('firstName');
-        this.fieldLastname.value = localStorage.getItem('lastName');
-        this.fieldEmail.value = localStorage.getItem('mail');
-        //console.log(document.getElementById(this.fieldFirstname))
-        console.log(localStorage.getItem('firstName'))
-        console.log("D")
+    async populateSite() {
+        this.fieldFirstname.value = User.firstName;
+        this.fieldLastname.value = User.lastName;
+        this.fieldEmail.value = User.mails;
+        await this.generateCoursesTable();
+        await this.generateDevicesTable();
     }
 
     setSliders() {
@@ -113,61 +116,70 @@ class Settings {
         }
     }
 
-    generateDevicesTable(devices) {
-        let table = document.createElement('tbody');
+    generateDevicesTable() {
+        return new Promise(async (resolve, reject) => {
+            let devices: Device[] = await ApiConnector.loadDevices();
+            let container = document.createElement('tbody');
 
-        for (let deviceId in devices) {
-            if (devices.hasOwnProperty(deviceId)) {
-                let device = devices[deviceId];
-                let row = document.createElement("tr");
+            for (let deviceId in devices) {
+                if (devices.hasOwnProperty(deviceId)) {
+                    let device = devices[deviceId];
+                    console.log(device)
+                    let row = document.createElement("tr");
 
-                let type = document.createElement("td");
-                let connectedSince = document.createElement("td");
-                let info = document.createElement("td");
-                let actions = document.createElement("td");
+                    let type = document.createElement("td");
+                    let connectedSince = document.createElement("td");
+                    let info = document.createElement("td");
+                    let actions = document.createElement("td");
 
-                type.innerText = device["_platform"];
-                connectedSince.innerText = "N/A";
-                if (device["_platform"] === "WP") {
-                    let deviceData = JSON.parse(device["_id"]);
-                    info.innerText = "WebPush Platform"
-                } else if (device["_platform"] === "TG") {
-                    info.innerText = "ID: " + device['_id'];
-                } else {
-                    info.innerText = device["_id"];
+                    type.innerText = PUSHPLATFROMS[device["platform"]];
+                    connectedSince.innerText = device["timeAdded"];
+                    if (device["platform"] === 3) {
+                        info.innerText = "WebPush Platform"
+                    } else if (device["platform"] === 0) {
+                        info.innerText = "ID: " + device['id'];
+                    } else {
+                        info.innerText = device["id"];
+                    }
+
+                    row.append(type);
+                    row.append(connectedSince);
+                    row.append(info);
+                    row.append(actions);
+
+                    container.append(row);
                 }
-
-                row.append(type);
-                row.append(connectedSince);
-                row.append(info);
-                row.append(actions);
-
-                table.append(row);
             }
-        }
-        return table;
+            this.tableDevices.innerHTML = container.innerHTML;
+            resolve(container)
+        });
     }
 
-    generateCoursesTable(courses) {
-        let tableBodyBox = document.createElement('tbody');
+    generateCoursesTable(): Promise<HTMLTableSectionElement> {
+        return new Promise(async (resolve, reject) => {
 
-        for (let i = 0; i < courses.length; i++) {
-            let course = courses[i];
-            let rowElement = document.createElement('tr');
-            let gradeTd = document.createElement('td');
-            let subjectTd = document.createElement('td');
-            let groupTd = document.createElement('td');
+            let courses: Course[] = await ApiConnector.loadCourses();
+            let tableBodyBox = document.createElement('tbody');
 
-            gradeTd.innerText = course["grade"];
-            subjectTd.innerText = course["subject"];
-            groupTd.innerText = course["group"];
+            for (let i = 0; i < courses.length; i++) {
+                let course = courses[i];
+                let rowElement = document.createElement('tr');
+                let gradeTd = document.createElement('td');
+                let subjectTd = document.createElement('td');
+                let groupTd = document.createElement('td');
 
-            rowElement.append(gradeTd);
-            rowElement.append(subjectTd);
-            rowElement.append(groupTd);
+                gradeTd.innerText = course["grade"];
+                subjectTd.innerText = course["subject"];
+                groupTd.innerText = course["group"];
 
-            tableBodyBox.append(rowElement);
-        }
-        return tableBodyBox;
+                rowElement.append(gradeTd);
+                rowElement.append(subjectTd);
+                rowElement.append(groupTd);
+
+                tableBodyBox.append(rowElement);
+            }
+            this.tableCourses.innerHTML = tableBodyBox.innerHTML;
+            resolve(tableBodyBox);
+        });
     }
 }

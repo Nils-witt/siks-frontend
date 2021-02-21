@@ -218,7 +218,42 @@ class ApiConnector {
                 console.log(e);
                 reject("NC")
             }
+        });
+    }
 
+    static loadDevices(): Promise<Device[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/devices", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+
+                    let data: Device[] = await response.json();
+
+                    await DatabaseConnector.clearCourses();
+
+                    for (let i = 0; i < data.length; i++) {
+                        await DatabaseConnector.saveDevice(data[i]);
+                    }
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    //await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
         });
     }
 
@@ -335,6 +370,15 @@ class ApiConnector {
             });
             if (response.status === 200) {
                 let data = await response.json();
+
+                User.firstName = data["firstName"];
+                User.lastName = data["lastName"];
+                User.displayName = data["displayName"];
+                User.type = data["type"];
+                User.id = data["id"];
+
+                User.saveUser()
+
                 resolve(data);
             } else if (response.status === 401) {
                 window.location.href = "/pages/login.html"
