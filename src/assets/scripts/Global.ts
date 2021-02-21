@@ -53,16 +53,6 @@ class Global {
         indexedDB.deleteDatabase("sPlan")
     }
 
-    public static async serviceWorkerRegistered() {
-        try {
-            await ServiceworkerConnector.register();
-            return ServiceworkerConnector.registration.active != null;
-
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    }
 }
 
 Global.init();
