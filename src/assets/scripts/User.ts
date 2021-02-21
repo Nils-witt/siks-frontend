@@ -40,4 +40,20 @@ class User {
     static secondFactor: number | null;
     static permissions: Permissions;
     static moodleUID: number | null;
+
+    static loadUser(){
+        this.displayName = localStorage.getItem("USER_DISPLAYNAME");
+        this.firstName = localStorage.getItem("USER_FIRSTNAME");
+        this.lastName = localStorage.getItem("USER_LASTNAME");
+        this.type = parseInt(localStorage.getItem("USER_TYPE"));
+        this.id = parseInt(localStorage.getItem("USER_ID"));
+    }
+
+    static saveUser(){
+        localStorage.setItem("USER_DISPLAYNAME", this.displayName);
+        localStorage.setItem("USER_FIRSTNAME", this.firstName);
+        localStorage.setItem("USER_LASTNAME", this.lastName);
+        localStorage.setItem("USER_TYPE", this.type.toString());
+        localStorage.setItem("USER_ID", this.id.toString());
+    }
 }

@@ -122,13 +122,12 @@ class Login {
             })
             if (response.status === 200) {
                 let responseBody = await response.json();
-                window.localStorage.setItem('token', responseBody.token);
-                window.localStorage.setItem('userType', responseBody.userType);
+                window.localStorage.setItem('API_TOKEN', responseBody.token);
                 let type = 0;
                 if (responseBody.userType === "teacher"){
                     type = 2;
                 }
-                window.localStorage.setItem('type', type.toString());
+                window.localStorage.setItem('USER_TYPE', type.toString());
                 await ServiceworkerConnector.setApiKey(responseBody.token);
                 this.navigateToMainPage();
             } else if (response.status === 602) {
@@ -161,7 +160,7 @@ class Login {
                 }
             } else {
                 if (typeof key === "string") {
-                    window.localStorage.setItem('token', key);
+                    window.localStorage.setItem('API_TOKEN', key);
                 }
                 resolve(true)
             }

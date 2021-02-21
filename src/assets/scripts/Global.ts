@@ -36,10 +36,10 @@ class Global {
             console.log("Wrong Protocol");
             window.location.protocol = 'https:';
         }
-
-        ApiConnector.token = localStorage.getItem("token");
+        User.loadUser();
         ApiConnector.api_host = localStorage.getItem("API_HOST");
-        User.type = parseInt(localStorage.getItem("type"));
+        ApiConnector.token = localStorage.getItem("API_TOKEN");
+
         await DatabaseConnector.initDB();
         if(ApiConnector.token !== null){
             await ApiConnector.updateStores();
