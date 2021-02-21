@@ -94,8 +94,8 @@ class TimeTable implements Pagination {
 
         if (lesson.hasOwnProperty("exam")) {
             status = "Klausur";
-            courseName = lesson["exam"]["subject"] + "-" + lesson["exam"]["group"];
-            room = "--";
+            courseName = lesson["exam"]["course"]["subject"] + "-" + lesson["exam"]["course"]["group"];
+            room = lesson["exam"]["roomLink"]["room"];
         }
 
         if (lesson.hasOwnProperty("announcement")) {
@@ -249,7 +249,7 @@ class TimeTable implements Pagination {
             if (lesson.hasOwnProperty("announcement")) notification = true;
 
             if (lesson.hasOwnProperty("exam")) {
-                text.innerText = lesson["exam"]["subject"];
+                text.innerText = lesson["exam"]["course"]["subject"];
                 indicatorColor = "blue";
             } else if (lesson.hasOwnProperty("replacementLesson")) {
                 text.innerText = lesson["replacementLesson"]["subject"];
@@ -352,6 +352,7 @@ class TimeTable implements Pagination {
             }
 
 
+
             if (lastLesson != null && firstLesson != null) {
                 for (let i = firstLesson; i <= lastLesson; i++) {
                     if (!exams.hasOwnProperty(day)) {
@@ -408,6 +409,18 @@ class TimeTable implements Pagination {
                     data[day][lesson] = {}
                 }
                 data[day][lesson]["announcement"] = announcements[day][lesson];
+            })
+        });
+
+        Object.keys(exams).forEach(day => {
+            Object.keys(exams[day]).forEach(lesson => {
+                if (!data.hasOwnProperty(day)) {
+                    data[day] = {};
+                }
+                if (!data[day].hasOwnProperty(lesson)) {
+                    data[day][lesson] = {}
+                }
+                data[day][lesson]["exam"] = exams[day][lesson];
             })
         });
 
