@@ -37,6 +37,9 @@ class ApiConnector {
     static token: string;
     static api_host: string;
 
+    /**
+     * Updates all data from the api and fires an event when finished.
+     */
     static async updateStores() {
         await this.loadUserProfile();
         await this.loadCourses();
@@ -47,8 +50,10 @@ class ApiConnector {
         dispatchEvent(new Event("storesUpdated"));
     }
 
-
-    static loadLessons() {
+    /**
+     * Loads the user lessons from the api saves and returns them.
+     */
+    static loadLessons(): Promise<Lesson[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/lessons", {
@@ -64,7 +69,7 @@ class ApiConnector {
                     for (let i = 0; i < data.length; i++) {
                         await DatabaseConnector.saveLesson(data[i]);
                     }
-                    resolve('loaded');
+                    resolve(await DatabaseConnector.getLessons());
                 }
                 if (response.status === 401) {
                     await authErr();
@@ -81,7 +86,10 @@ class ApiConnector {
         });
     }
 
-    static loadReplacementLessons() {
+    /**
+     * Loads the user replacement lessons from the api saves and returns them.
+     */
+    static loadReplacementLessons(): Promise<ReplacementLesson[]> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/replacementLessons", {
                 method: 'GET',
@@ -98,7 +106,8 @@ class ApiConnector {
                     data[i]["epochSec"] = new Date(data[i]["date"]).getTime();
                     await DatabaseConnector.saveReplacementLesson(data[i]);
                 }
-                resolve('loaded');
+
+                resolve(await DatabaseConnector.getReplacementLessons());
             }
             if (response.status === 401) {
                 await authErr();
@@ -111,8 +120,10 @@ class ApiConnector {
         });
     }
 
-    static loadExams() {
-
+    /**
+     * Loads the user exams from the api saves and returns them.
+     */
+    static loadExams(): Promise<Exam[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/exams", {
@@ -130,7 +141,7 @@ class ApiConnector {
                         data[i]["epochSec"] = new Date(data[i]["date"]).getTime();
                         await DatabaseConnector.saveExam(data[i]);
                     }
-                    resolve('loaded');
+                    resolve(await DatabaseConnector.getExams());
                 }
 
                 if (response.status === 401) {
@@ -151,7 +162,11 @@ class ApiConnector {
         });
     }
 
-    static loadUserApi() {
+    /**
+     * Loads all users from the api saves and returns them.
+     * - Admin functionality
+     */
+    static loadUsers(): Promise<User[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/users/", {
@@ -167,7 +182,7 @@ class ApiConnector {
                     for (let i = 0; i < data.length; i++) {
                         await DatabaseConnector.saveUser(data[i]);
                     }
-                    resolve('loaded');
+                    resolve(await DatabaseConnector.getUsers());
                 }
                 if (response.status === 401) {
                     await authErr();
@@ -185,7 +200,10 @@ class ApiConnector {
         });
     }
 
-    static loadCourses() {
+    /**
+     * Loads the user courses from the api saves and returns them.
+     */
+    static loadCourses(): Promise<Course[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/courses/", {
@@ -196,15 +214,14 @@ class ApiConnector {
                 })
 
                 if (response.status === 200) {
-
-                    let data = await response.json();
+                    let data: Course[] = await response.json();
 
                     await DatabaseConnector.clearCourses();
-
                     for (let i = 0; i < data.length; i++) {
                         await DatabaseConnector.saveCourse(data[i]);
                     }
-                    resolve('loaded');
+
+                    resolve(await DatabaseConnector.getCourses());
                 }
                 if (response.status === 401) {
                     //await authErr();
@@ -221,6 +238,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Loads the user devices from the api saves and returns them.
+     */
     static loadDevices(): Promise<Device[]> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -232,15 +252,14 @@ class ApiConnector {
                 })
 
                 if (response.status === 200) {
-
                     let data: Device[] = await response.json();
 
                     await DatabaseConnector.clearCourses();
-
                     for (let i = 0; i < data.length; i++) {
                         await DatabaseConnector.saveDevice(data[i]);
                     }
-                    resolve(data);
+
+                    resolve(await DatabaseConnector.getDevices());
                 }
                 if (response.status === 401) {
                     //await authErr();
@@ -257,7 +276,10 @@ class ApiConnector {
         });
     }
 
-    static loadAnnouncements() {
+    /**
+     * Loads the user announcements from the api saves and returns them.
+     */
+    static loadAnnouncements(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/announcements/", {
@@ -276,7 +298,8 @@ class ApiConnector {
                         data[i]["weekday"] = new Date(data[i]["date"]).getDay();
                         await DatabaseConnector.saveAnnouncement(data[i]);
                     }
-                    resolve('loaded');
+
+                    resolve(await DatabaseConnector.getAnnouncements());
                 }
                 if (response.status === 401) {
                     await authErr();
@@ -293,6 +316,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Revokes the current used JWT.
+     */
     static revokeJWT(): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             let res = await fetch(this.api_host + "/user/jwt", {
@@ -301,11 +327,13 @@ class ApiConnector {
                     'Authorization': "Bearer " + this.token
                 },
             });
-            console.log(res);
             resolve();
         });
     }
 
+    /**
+     * Sends the push sub to the Server.
+     */
     static sendPushSubscription(subscription): Promise<void> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/devices", {
@@ -336,6 +364,9 @@ class ApiConnector {
 
     }
 
+    /**
+     * Sends a link request to the api for an telegram account.
+     */
     static linkTelegramAccount(telegramID): Promise<void> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/telegram/confirm/" + telegramID, {
@@ -346,10 +377,8 @@ class ApiConnector {
             })
             if (response.status === 200) {
                 resolve();
-                window.localStorage.setItem("push", "true");
             } else if (response.status === 604) {
                 resolve();
-                localStorage.setItem("push", "true");
             } else if (response.status === 401) {
                 await authErr();
                 reject('err');
@@ -360,12 +389,15 @@ class ApiConnector {
         });
     }
 
-    static async loadUserProfile(): Promise<void> {
+    /**
+     * Loads the user profile from the api saves and returns them.
+     */
+    static loadUserProfile(): Promise<void> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/", {
                 method: 'GET',
                 headers: {
-                    'Authorization': "Bearer " + localStorage.getItem("token")
+                    'Authorization': "Bearer " + this.token
                 },
             });
             if (response.status === 200) {
@@ -388,31 +420,27 @@ class ApiConnector {
         });
     }
 
-    /**
-     *
-     * @param id {int}
-     */
+    //TODO jDoc
     static deleteAnnouncement(id): Promise<void> {
-        let token = this.token;
         return new Promise(async (resolve, reject) => {
 
             let response = await fetch(this.api_host + "/announcements/id/" + id.toString(), {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': "Bearer " + token
+                    'Authorization': "Bearer " + this.token
                 },
             });
             resolve();
         });
     }
 
-    static loadAnnouncementsAdmin(): Promise<any[]> {
-        let token = this.token;
+    //TODO jDoc
+    static loadAnnouncementsAdmin(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/announcements/", {
                 method: 'GET',
                 headers: {
-                    'Authorization': "Bearer " + token
+                    'Authorization': "Bearer " + this.token
                 },
             });
 
@@ -440,13 +468,13 @@ class ApiConnector {
         });
     }
 
+    //TODO jDoc
     static saveAnnouncement(announcement): Promise<void> {
-        let token = this.token;
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/announcements/", {
                 method: 'POST',
                 headers: {
-                    'Authorization': "Bearer " + token,
+                    'Authorization': "Bearer " + this.token,
                     'Content-type': 'application/json; charset=utf-8'
                 },
                 body: JSON.stringify(announcement)
@@ -466,13 +494,13 @@ class ApiConnector {
         });
     }
 
-    static loadUserById(id): Promise<User[]> {
-        let token = this.token;
+    //TODO jDoc
+    static loadUserById(id): Promise<User> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/users/id/" + id, {
                 method: 'GET',
                 headers: {
-                    'Authorization': "Bearer " + token,
+                    'Authorization': "Bearer " + this.token,
                     'Content-type': 'application/json; charset=utf-8'
                 }
             });
