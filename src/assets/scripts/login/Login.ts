@@ -148,9 +148,7 @@ class Login {
         return new Promise(async (resolve, reject) => {
 
             let key = await ServiceworkerConnector.requestApiKey();
-            let localKey = window.localStorage.getItem('token');
-            console.log(key);
-            console.log(localKey);
+            let localKey = window.localStorage.getItem('API_TOKEN');
             if (key == null) {
                 if (localKey != null) {
                     await ServiceworkerConnector.setApiKey(localKey);
