@@ -43,6 +43,7 @@ self.addEventListener('install', event => {
 
 //Event for the control takeover
 self.addEventListener('activate', async (event) => {
+    forceCacheUpdate();
     setTimeout( ()=> {
         refreshClients();
     },500);
