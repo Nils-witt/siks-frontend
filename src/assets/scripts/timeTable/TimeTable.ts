@@ -61,7 +61,7 @@ class TimeTable implements Pagination {
             6: 'Samstag',
             7: 'Sonntag'
         };
-        this.userType = User.type;
+        this.userType = Global.user.type;
         this.timeTable = this;
     }
 
@@ -472,18 +472,6 @@ class TimeTableData {
      */
     preparedData: {};
 
-}
-
-class TimeTablePreparedData {
-    //Day
-    1: {
-        //Lesson
-        1: {
-            lesson: Lesson;
-            replacementLesson: ReplacementLesson;
-            exam: Exam;
-        }
-    }
 }
 
 interface Pagination {

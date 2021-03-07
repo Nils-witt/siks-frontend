@@ -405,13 +405,13 @@ class ApiConnector {
             if (response.status === 200) {
                 let data = await response.json();
 
-                User.firstName = data["firstName"];
-                User.lastName = data["lastName"];
-                User.displayName = data["displayName"];
-                User.type = data["type"];
-                User.id = data["id"];
+                Global.user.firstName = data["firstName"];
+                Global.user.lastName = data["lastName"];
+                Global.user.displayName = data["displayName"];
+                Global.user.type = data["type"];
+                Global.user.id = data["id"];
 
-                User.saveUser()
+                Global.user.saveLocal()
 
                 resolve(data);
             } else if (response.status === 401) {
