@@ -251,7 +251,12 @@ class TimeTable implements Pagination {
                 text.innerText = lesson["exam"]["course"]["subject"];
                 indicatorColor = "blue";
             } else if (lesson.hasOwnProperty("replacementLesson")) {
-                text.innerText = lesson["replacementLesson"]["subject"];
+                if (this.userType === UserType.TEACHER) {
+                    text.innerText = lesson["lesson"]["course"]["grade"] + " / " + lesson["lesson"]["course"]["subject"] + "-" + lesson["lesson"]["course"]["group"];
+                } else {
+                    text.innerText = lesson["lesson"]["course"]["subject"];
+                }
+
                 if (lesson["replacementLesson"]["room"] === "---") {
                     indicatorColor = "red";
                     text.innerText = "Freistunde";
@@ -261,7 +266,7 @@ class TimeTable implements Pagination {
                 }
             } else if (lesson.hasOwnProperty("lesson")) {
                 text.innerText = lesson;
-                if (this.userType === 2) {
+                if (this.userType === UserType.TEACHER) {
                     text.innerText = lesson["lesson"]["course"]["grade"] + " / " + lesson["lesson"]["course"]["subject"] + "-" + lesson["lesson"]["course"]["group"];
                 } else {
                     text.innerText = lesson["lesson"]["course"]["subject"];
