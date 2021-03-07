@@ -39,9 +39,10 @@ class Settings {
     tableCourses: HTMLTableElement;
 
     async populateSite() {
-        this.fieldFirstname.value = User.firstName;
-        this.fieldLastname.value = User.lastName;
-        this.fieldEmail.value = User.mails;
+        this.fieldFirstname.value = Global.user.firstName;
+        this.fieldLastname.value = Global.user.lastName;
+        //this.fieldEmail.value = User.mails;
+        this.fieldEmail.value = "Nicht gesetzt";
         await this.generateCoursesTable();
         await this.generateDevicesTable();
     }
