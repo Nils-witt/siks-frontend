@@ -50,9 +50,7 @@ let cacheFileTemplate = {
     files: []
 }
 
-let staticCacheFiles = [
-
-]
+let staticCacheFiles = []
 
 async function print(path) {
     const dir = await fs.promises.opendir(path);
@@ -64,7 +62,8 @@ async function print(path) {
                 }
             } else {
                 if (!excludeFiles.includes(path + dirEntry.name)) {
-                    files.push((path + dirEntry.name).substr(1));
+                    if (!dirEntry.name.endsWith(".scss") && !dirEntry.name.endsWith(".css.map") && !dirEntry.name.endsWith(".ts") && !dirEntry.name.endsWith(".js.map"))
+                        files.push((path + dirEntry.name).substr(1));
                 }
             }
         }
