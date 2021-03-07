@@ -44,18 +44,18 @@ class ApiConnector {
      */
     static async updateStores() {
         await this.loadUserProfile();
-        await this.loadCourses();
-        await this.loadLessons();
-        await this.loadReplacementLessons();
-        await this.loadAnnouncements();
-        await this.loadExams();
+        await this.loadUserCourses();
+        await this.loadUserLessons();
+        await this.loadUserReplacementLessons();
+        await this.loadUserAnnouncements();
+        await this.loadUserExams();
         dispatchEvent(new Event("storesUpdated"));
     }
 
     /**
      * Loads the user lessons from the api saves and returns them.
      */
-    static loadLessons(): Promise<Lesson[]> {
+    static loadUserLessons(): Promise<Lesson[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/lessons", {
@@ -91,7 +91,7 @@ class ApiConnector {
     /**
      * Loads the user replacement lessons from the api saves and returns them.
      */
-    static loadReplacementLessons(): Promise<ReplacementLesson[]> {
+    static loadUserReplacementLessons(): Promise<ReplacementLesson[]> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/replacementLessons", {
                 method: 'GET',
@@ -125,7 +125,7 @@ class ApiConnector {
     /**
      * Loads the user exams from the api saves and returns them.
      */
-    static loadExams(): Promise<Exam[]> {
+    static loadUserExams(): Promise<Exam[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/exams", {
@@ -205,7 +205,7 @@ class ApiConnector {
     /**
      * Loads the user courses from the api saves and returns them.
      */
-    static loadCourses(): Promise<Course[]> {
+    static loadUserCourses(): Promise<Course[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/courses/", {
@@ -243,7 +243,7 @@ class ApiConnector {
     /**
      * Loads the user devices from the api saves and returns them.
      */
-    static loadDevices(): Promise<Device[]> {
+    static loadUserDevices(): Promise<Device[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/devices", {
@@ -281,7 +281,7 @@ class ApiConnector {
     /**
      * Loads the user announcements from the api saves and returns them.
      */
-    static loadAnnouncements(): Promise<Announcement[]> {
+    static loadUserAnnouncements(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/announcements/", {
@@ -532,4 +532,65 @@ class ApiConnector {
             }
         });
     }
+
+    static loadAllCourses():Promise<Course[]>{
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/timeTable/courses/", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+                    let data: Course[] = await response.json();
+
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    static loadAllLessons():Promise<Lesson[]>{
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/timeTable/lessons/", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+                    let data: Lesson[] = await response.json();
+
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
 }
