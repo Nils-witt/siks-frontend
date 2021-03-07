@@ -30,7 +30,9 @@ async function authErr() {
     console.log("JWT invalid");
     localStorage.clear();
     await Global.logout();
-    window.location.href = "../../../pages/login.html";
+    if(!window.location.href.endsWith("login.html")){
+        window.location.href = "/pages/login.html";
+    }
 }
 
 class ApiConnector {
@@ -224,7 +226,7 @@ class ApiConnector {
                     resolve(await DatabaseConnector.getCourses());
                 }
                 if (response.status === 401) {
-                    //await authErr();
+                    await authErr();
                     reject('err');
                 }
                 if (response.status === 604) {
@@ -254,7 +256,7 @@ class ApiConnector {
                 if (response.status === 200) {
                     let data: Device[] = await response.json();
 
-                    await DatabaseConnector.clearCourses();
+                    await DatabaseConnector.clearDevices();
                     for (let i = 0; i < data.length; i++) {
                         await DatabaseConnector.saveDevice(data[i]);
                     }
@@ -343,8 +345,8 @@ class ApiConnector {
                     'Content-type': 'application/json; charset=utf-8'
                 },
                 body: JSON.stringify({
-                    "deviceId": subscription,
-                    "plattform": "WP"
+                    "deviceIdentifier": subscription,
+                    "platform": 3
                 })
             });
             console.log(response);
@@ -420,7 +422,10 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * Deletes a announcement by Id from the api.
+     * @param id
+     */
     static deleteAnnouncement(id): Promise<void> {
         return new Promise(async (resolve, reject) => {
 
@@ -434,7 +439,9 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * loads all announcements from the api.
+     */
     static loadAnnouncementsAdmin(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/announcements/", {
@@ -457,7 +464,7 @@ class ApiConnector {
                 dispatchEvent(event)
             }
             if (response.status === 401) {
-                //authErr();
+                authErr();
                 reject('err');
             }
             if (response.status === 604) {
@@ -468,7 +475,10 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * Submits a new announcement to the api.
+     * @param announcement
+     */
     static saveAnnouncement(announcement): Promise<void> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/announcements/", {
@@ -484,7 +494,7 @@ class ApiConnector {
                 resolve();
             }
             if (response.status === 401) {
-                //authErr();
+                authErr();
                 reject('err');
             }
             if (response.status === 604) {
@@ -494,7 +504,10 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * loads a user by UID.
+     * @param id
+     */
     static loadUserById(id): Promise<User> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/users/id/" + id, {

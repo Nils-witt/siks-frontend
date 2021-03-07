@@ -33,7 +33,7 @@ class TimeTable implements Pagination {
     timeTable: TimeTable;
     data: TimeTableData;
 
-    /* Page Objects*/
+    /* Page Object references*/
 
     buttonPreviousWeek: HTMLButtonElement;
     buttonCurrentWeek: HTMLButtonElement;
@@ -206,7 +206,6 @@ class TimeTable implements Pagination {
                         indicator.style.padding = ' 0;';
                         indicator.style.maxHeight = '100%;';
 
-
                         main.append(indicator);
 
                         let container = document.createElement('div');
@@ -307,7 +306,7 @@ class TimeTable implements Pagination {
         let indicatorLesson = document.createElement('div');
         indicatorLesson.className = "indicator indicator-" + lessonStatus;
         indicatorContainer.append(indicatorLesson);
-        return indicatorContainer
+        return indicatorContainer;
     }
 
     /**
@@ -392,7 +391,7 @@ class TimeTable implements Pagination {
                     data[day] = {};
                 }
                 if (!data[day].hasOwnProperty(lesson)) {
-                    data[day][lesson] = {}
+                    data[day][lesson] = {};
                 }
                 data[day][lesson]["lesson"] = lessons[day][lesson];
                 if (replacementLessons.hasOwnProperty(lessons[day][lesson]["id"])) {
@@ -406,7 +405,7 @@ class TimeTable implements Pagination {
                     data[day] = {};
                 }
                 if (!data[day].hasOwnProperty(lesson)) {
-                    data[day][lesson] = {}
+                    data[day][lesson] = {};
                 }
                 data[day][lesson]["announcement"] = announcements[day][lesson];
             })
@@ -418,7 +417,7 @@ class TimeTable implements Pagination {
                     data[day] = {};
                 }
                 if (!data[day].hasOwnProperty(lesson)) {
-                    data[day][lesson] = {}
+                    data[day][lesson] = {};
                 }
                 data[day][lesson]["exam"] = exams[day][lesson];
             })
@@ -433,8 +432,8 @@ class TimeTable implements Pagination {
      */
     async fetchData() {
         this.data.announcements = await DatabaseConnector.getAnnouncementsByWeek(this.weekStart);
-        this.data.exams = await DatabaseConnector.getExamsByWeek(this.weekStart)
-        this.data.lessons = await DatabaseConnector.getLessons()
+        this.data.exams = await DatabaseConnector.getExamsByWeek(this.weekStart);
+        this.data.lessons = await DatabaseConnector.getLessons();
         this.data.replacementLessons = await DatabaseConnector.getReplacementLessonsByWeek(this.weekStart);
     }
 
