@@ -118,7 +118,7 @@
         </select>
         </div>
         <div class="col">
-            <label for="activeSelect">Aktiv</label><br><select id="activeSelect" onchange="getSelectOptions();">
+            <label for="activeSelect">Aktiv</label><br><select id="activeSelect" onchange="AdminUsers.updateFilter();">
             <option selected value="-1">All</option>
             <option value="1">Aktiv</option>
             <option value="0">Inaktiv</option>
@@ -126,11 +126,11 @@
         </div>
         <div class="col">
             Vorname:<br>
-            <input class="form-control" id="firstnameSelect" onkeyup="getSelectOptions()" type="text">
+            <input class="form-control" id="firstnameSelect" onkeyup="AdminUsers.updateFilter()" type="text">
         </div>
         <div class="col">
             Nachname:<br>
-            <input class="form-control" id="lastnameSelect" onkeyup="getSelectOptions()" type="text">
+            <input class="form-control" id="lastnameSelect" onkeyup="AdminUsers.updateFilter    ()" type="text">
         </div>
     </div>
 </div>

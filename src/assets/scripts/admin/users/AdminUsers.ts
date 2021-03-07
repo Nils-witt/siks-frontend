@@ -64,9 +64,9 @@ class AdminUsers {
         }
         this.filter.active = this.selectFilterStatus.options.selectedIndex.valueOf();
 
-        // this.filter.firstname = this.inputFilterFirstname.value.toLowerCase();
-        // this.filter.lastname = this.inputFilterLastname.value.toLowerCase();
-
+        this.filter.firstname = this.inputFilterFirstname.value.toLowerCase();
+        this.filter.lastname = this.inputFilterLastname.value.toLowerCase();
+        console.log(this.filter)
         this.updateTable();
     }
 
@@ -77,6 +77,18 @@ class AdminUsers {
             let add = true;
             if (this.filter.type != null) {
                 if (user.type != this.filter.type) {
+                    add = false;
+                }
+            }
+
+            if(this.filter.lastname != null){
+                if (!user.lastName.toLowerCase().includes(this.filter.lastname)) {
+                    add = false;
+                }
+            }
+
+            if(this.filter.firstname != null){
+                if (!user.firstName.toLowerCase().includes(this.filter.firstname)) {
                     add = false;
                 }
             }
