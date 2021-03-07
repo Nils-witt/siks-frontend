@@ -45,7 +45,7 @@ addEventListener("DOMContentLoaded", async () => {
     settings.tableCourses = <HTMLTableElement>document.getElementById("tableBodyCoursesUser")
     settings.tableDevices = <HTMLTableElement>document.getElementById("tableBodyDevicesUser")
 
-    settings.populateSite();
+    await settings.populateSite();
 });
 
 addEventListener('dataUpdate', async () => {
@@ -55,16 +55,9 @@ addEventListener('dataUpdate', async () => {
 
 async function createNewTwoFactor() {
 
-    // @ts-ignore
-    let secret = base32.encode(Utilities.prototype.randomString(52));
-    secret = secret.substr(0, secret.length - 4);
-
-    let url = "otpauth://totp/" + User.username + "?secret=" + secret + "&issuer=S-Plan";
-
-    // @ts-ignore
-    $("#qrCodeContainer").qrcode({text: url});
+    //TODO implement
     document.getElementById("addDeviceContainer").style.visibility = "visible";
-    document.getElementById("confirmScanned").onclick = () => submitSF(secret);
+    document.getElementById("confirmScanned").onclick = () => {};
     document.getElementById("addTOTPButton").innerText = "Cancel";
     document.getElementById("addTOTPButton").onclick = null;
     document.getElementById("addTOTPButton").className = "btn btn-danger";
