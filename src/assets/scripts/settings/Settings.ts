@@ -119,7 +119,7 @@ class Settings {
 
     generateDevicesTable() {
         return new Promise(async (resolve, reject) => {
-            let devices: Device[] = await ApiConnector.loadDevices();
+            let devices: Device[] = await ApiConnector.loadUserDevices();
             let container = document.createElement('tbody');
 
             for (let deviceId in devices) {
@@ -159,7 +159,7 @@ class Settings {
     generateCoursesTable(): Promise<HTMLTableSectionElement> {
         return new Promise(async (resolve, reject) => {
 
-            let courses: Course[] = await ApiConnector.loadCourses();
+            let courses: Course[] = await ApiConnector.loadUserCourses();
             let tableBodyBox = document.createElement('tbody');
 
             for (let i = 0; i < courses.length; i++) {
