@@ -518,8 +518,7 @@ class ApiConnector {
                 }
             });
             if (response.status === 200) {
-                let json = await response.json();
-                let data = JSON.parse(json);
+                let data = await response.json();
 
                 resolve(data);
             }
