@@ -27,7 +27,7 @@
  */
 
 class Global {
-
+    static user: User;
     /**
      * Function to be called on each site load to set the runtime
      */
@@ -36,7 +36,8 @@ class Global {
             console.log("Wrong Protocol");
             window.location.protocol = 'https:';
         }
-        User.loadUser();
+        Global.user = new User();
+        await Global.user.loadUser();
         ApiConnector.api_host = localStorage.getItem("API_HOST");
         ApiConnector.token = localStorage.getItem("API_TOKEN");
 
@@ -56,3 +57,8 @@ class Global {
 }
 
 Global.init();
+
+enum UserType {
+    STUDENT,
+    TEACHER
+}

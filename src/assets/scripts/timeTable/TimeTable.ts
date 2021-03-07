@@ -29,11 +29,14 @@
 class TimeTable implements Pagination {
     offset: number;
     weekStart: Date;
-    userType: number;
+    userType: UserType;
     timeTable: TimeTable;
     data: TimeTableData;
+    withRessourceData: boolean = true;
+    tabbable: boolean = true;
+    displayAllInLesson: boolean = false;
 
-    /* Page Objects*/
+    /* Page Object references*/
 
     buttonPreviousWeek: HTMLButtonElement;
     buttonCurrentWeek: HTMLButtonElement;
@@ -46,8 +49,12 @@ class TimeTable implements Pagination {
     detailFrame: HTMLDivElement;
     detailBox: HTMLDivElement;
 
+    container: HTMLDivElement = <HTMLDivElement>document.getElementById('container');
+
     readonly weekdays: { "1": string; "2": string; "3": string; "4": string; "5": string; "6": string; "7": string };
     readonly timeLessons: number[][] = [[28200, 30900], [30900, 33600], [34800, 37500], [37800, 40500], [41700, 44400], [44400, 47100]];
+    maxLessons = 0;
+    maxDays = 0;
 
     constructor() {
         this.data = new TimeTableData();
@@ -61,7 +68,7 @@ class TimeTable implements Pagination {
             6: 'Samstag',
             7: 'Sonntag'
         };
-        this.userType = User.type;
+        this.userType = Global.user.type;
         this.timeTable = this;
     }
 
@@ -71,11 +78,13 @@ class TimeTable implements Pagination {
     }
 
     static async openDetailView(timeTable: TimeTable, lesson) {
+        console.log("DETAIL")
         let room = "";
         let status = "keine Änderung";
         let courseName = "";
         let lessonNumber = 0;
         let announcements = [];
+
 
         if (lesson.hasOwnProperty("lesson")) {
             room = lesson["lesson"]["room"];
@@ -107,11 +116,10 @@ class TimeTable implements Pagination {
         await timeTable.updateDetailView(courseName, lessonNumber, room, status, "", announcements);
         timeTable.detailFrame.style.visibility = "visible";
         timeTable.detailBox.style.visibility = "visible";
+        console.log(timeTable.detailFrame)
     }
 
-
     async updateDetailView(courseName, lesson, room, status, date, announcements) {
-
 
         this.detailViewCourseName.innerText = courseName;
         this.detailViewLesson.innerText = lesson;
@@ -132,15 +140,16 @@ class TimeTable implements Pagination {
         }
     }
 
-
     //SETUP
     initPagination() {
-        this.buttonPreviousWeek.onclick = () => {
-            TimeTable.updatePagination(this.timeTable, -1);
-        };
-        this.buttonNextWeek.onclick = () => {
-            TimeTable.updatePagination(this.timeTable, 1);
-        };
+        if (this.tabbable) {
+            this.buttonPreviousWeek.onclick = () => {
+                TimeTable.updatePagination(this.timeTable, -1);
+            };
+            this.buttonNextWeek.onclick = () => {
+                TimeTable.updatePagination(this.timeTable, 1);
+            };
+        }
     }
 
     //RUN TIME
@@ -157,78 +166,67 @@ class TimeTable implements Pagination {
      * Uses the this.data to create the table
      */
     generateTable() {
-        if (Object.keys(this.data.preparedData).length > 0) {
-            let daysContainer = document.createElement('div');
-            daysContainer.id = 'daysContainer';
-            daysContainer.className = 'row';
+        let data = this.data.preparedData;
+        this.maxDays = Object.keys(data).length;
 
-            for (let day in this.data.preparedData) {
-                let htmlDay = this.generateDay(this.data.preparedData[day], day);
-                daysContainer.append(htmlDay)
+        for (let day in this.data.preparedData) {
+            let locLessons = Object.keys(data[day]).length;
+            if (locLessons > this.maxLessons) {
+                this.maxLessons = locLessons;
             }
-
-            let container = document.getElementById('container');
-            container.innerHTML = "";
-            container.append(daysContainer);
-
-            return daysContainer;
         }
+
+        let container = document.createElement('div');
+
+        for (let i = 1; i <= this.maxLessons; i++) {
+            let lesson = this.generateTimeDayLesson(i);
+            container.append(lesson);
+        }
+        this.container.innerHTML = "";
+        this.container.append(container);
+
     }
 
-    /**
-     * Creates a Day Row
-     * @param dayObject
-     * @param dayInt
-     */
-    generateDay(dayObject, dayInt) {
-        let day = document.createElement('div');
-        day.className = 'col';
+    generateTimeDayLesson(lesson: number) {
+        let container = document.createElement('div');
+        container.id = 'daysContainer';
+        container.className = 'row';
 
-        let headline = document.createElement('h5');
-        headline.innerText = this.weekdays[dayInt];
-        day.append(headline);
-
-        let preKey = 1;
-        for (let key in dayObject) {
-            if (dayObject.hasOwnProperty(key)) {
-                if (parseInt(key) !== preKey) {
-                    let diff = parseInt(key) - preKey;
-                    for (let i = 0; i < diff; i++) {
-
-                        let main = <HTMLDivElement>document.createElement('div');
-                        main.className = 'row';
-                        main.style.paddingLeft = '24px';
-
-                        let indicator = document.createElement('div');
-                        indicator.className = 'col';
-                        indicator.style.maxWidth = '5px';
-                        indicator.style.backgroundColor = 'grey;';
-                        indicator.style.padding = ' 0;';
-                        indicator.style.maxHeight = '100%;';
-
-
-                        main.append(indicator);
-
-                        let container = document.createElement('div');
-                        container.className = 'col';
-
-                        let text = document.createElement('p');
-                        text.innerText = "Freistunde";
-
-                        container.append(text);
-                        main.append(container);
-                        day.append(main);
-
-                    }
+        for (let i = 1; i <= this.maxDays; i++) {
+            if (this.data.preparedData.hasOwnProperty(i)) {
+                if (this.data.preparedData[i].hasOwnProperty(lesson)) {
+                    container.append(this.generateTimeLesson(this.data.preparedData[i][lesson]))
+                } else {
+                    let placeholder = document.createElement('div');
+                    placeholder.innerHTML = "";
+                    placeholder.className = "col";
+                    container.append(placeholder);
                 }
-                const lesson = dayObject[key];
-                let htmlLesson = this.generateColumn(lesson);
-                day.append(htmlLesson);
-                preKey = parseInt(key) + 1;
             }
         }
 
-        return day;
+        return container;
+    }
+
+    generateTimeLesson(lessons: any) {
+        let main = document.createElement('div');
+        main.className = "col"
+        if (this.displayAllInLesson) {
+            main.style.borderBottomStyle = "solid"
+            main.style.borderBottomColor = "lightgrey"
+            if (lessons.hasOwnProperty("exam")) {
+
+            } else if (lessons.hasOwnProperty("lesson")) {
+                for (let i = 0; i < lessons.lesson.length; i++) {
+                    main.append(this.generateColumn({lesson: lessons.lesson[i]}))
+                }
+            }
+        } else {
+            let data = lessons;
+            data.lesson = lessons.lesson[0];
+            main.append(this.generateColumn(data));
+        }
+        return main;
     }
 
     /**
@@ -252,7 +250,12 @@ class TimeTable implements Pagination {
                 text.innerText = lesson["exam"]["course"]["subject"];
                 indicatorColor = "blue";
             } else if (lesson.hasOwnProperty("replacementLesson")) {
-                text.innerText = lesson["replacementLesson"]["subject"];
+                if (this.userType === UserType.TEACHER) {
+                    text.innerText = lesson["lesson"]["course"]["grade"] + " / " + lesson["lesson"]["course"]["subject"] + "-" + lesson["lesson"]["course"]["group"];
+                } else {
+                    text.innerText = lesson["lesson"]["course"]["subject"];
+                }
+
                 if (lesson["replacementLesson"]["room"] === "---") {
                     indicatorColor = "red";
                     text.innerText = "Freistunde";
@@ -262,7 +265,7 @@ class TimeTable implements Pagination {
                 }
             } else if (lesson.hasOwnProperty("lesson")) {
                 text.innerText = lesson;
-                if (this.userType === 2) {
+                if (this.userType === UserType.TEACHER) {
                     text.innerText = lesson["lesson"]["course"]["grade"] + " / " + lesson["lesson"]["course"]["subject"] + "-" + lesson["lesson"]["course"]["group"];
                 } else {
                     text.innerText = lesson["lesson"]["course"]["subject"];
@@ -271,7 +274,6 @@ class TimeTable implements Pagination {
 
 
             indicator = this.generateIndicator(0, indicatorColor);
-
             if (notification) {
                 notificationBell.innerHTML = '<i class="material-icons">notification_important</i>';
             }
@@ -281,13 +283,13 @@ class TimeTable implements Pagination {
             indicator.className = 'col';
             main.append(indicator);
             container.className = 'col';
-            container.onclick = () => {
-                TimeTable.openDetailView(this.timeTable, lesson)
-            };
             container.style.cursor = "pointer";
             container.append(text);
             main.append(container);
             main.className = 'row';
+            main.onclick = () => {
+                TimeTable.openDetailView(this, lesson);
+            }
             return main;
         }
     }
@@ -307,7 +309,7 @@ class TimeTable implements Pagination {
         let indicatorLesson = document.createElement('div');
         indicatorLesson.className = "indicator indicator-" + lessonStatus;
         indicatorContainer.append(indicatorLesson);
-        return indicatorContainer
+        return indicatorContainer;
     }
 
     /**
@@ -329,8 +331,10 @@ class TimeTable implements Pagination {
             if (!lessons.hasOwnProperty(day)) {
                 lessons[day] = {};
             }
-            lessons[day][hour] = lesson;
-
+            if (!lessons[day].hasOwnProperty(hour)) {
+                lessons[day][hour] = [];
+            }
+            lessons[day][hour].push(lesson);
         });
 
         this.data.exams.forEach(exam => {
@@ -350,7 +354,6 @@ class TimeTable implements Pagination {
                     lastLesson = i + 1;
                 }
             }
-
 
 
             if (lastLesson != null && firstLesson != null) {
@@ -392,11 +395,13 @@ class TimeTable implements Pagination {
                     data[day] = {};
                 }
                 if (!data[day].hasOwnProperty(lesson)) {
-                    data[day][lesson] = {}
+                    data[day][lesson] = {};
                 }
                 data[day][lesson]["lesson"] = lessons[day][lesson];
-                if (replacementLessons.hasOwnProperty(lessons[day][lesson]["id"])) {
-                    data[day][lesson]["replacementLesson"] = replacementLessons[lessons[day][lesson]["id"]];
+                for (let i = 0; i < data[day][lesson]["lesson"].length; i++) {
+                    if (replacementLessons.hasOwnProperty(lessons[day][lesson][i]["id"])) {
+                        data[day][lesson]["replacementLesson"] = replacementLessons[lessons[day][lesson][i]["id"]];
+                    }
                 }
             })
         });
@@ -406,7 +411,7 @@ class TimeTable implements Pagination {
                     data[day] = {};
                 }
                 if (!data[day].hasOwnProperty(lesson)) {
-                    data[day][lesson] = {}
+                    data[day][lesson] = {};
                 }
                 data[day][lesson]["announcement"] = announcements[day][lesson];
             })
@@ -418,7 +423,7 @@ class TimeTable implements Pagination {
                     data[day] = {};
                 }
                 if (!data[day].hasOwnProperty(lesson)) {
-                    data[day][lesson] = {}
+                    data[day][lesson] = {};
                 }
                 data[day][lesson]["exam"] = exams[day][lesson];
             })
@@ -432,10 +437,13 @@ class TimeTable implements Pagination {
      * Loads the data from the database
      */
     async fetchData() {
-        this.data.announcements = await DatabaseConnector.getAnnouncementsByWeek(this.weekStart);
-        this.data.exams = await DatabaseConnector.getExamsByWeek(this.weekStart)
-        this.data.lessons = await DatabaseConnector.getLessons()
-        this.data.replacementLessons = await DatabaseConnector.getReplacementLessonsByWeek(this.weekStart);
+        if (this.withRessourceData) {
+            this.data.announcements = await DatabaseConnector.getAnnouncementsByWeek(this.weekStart);
+            this.data.exams = await DatabaseConnector.getExamsByWeek(this.weekStart);
+            this.data.replacementLessons = await DatabaseConnector.getReplacementLessonsByWeek(this.weekStart);
+
+        }
+        this.data.lessons = await DatabaseConnector.getLessons();
     }
 
     /**
@@ -443,6 +451,9 @@ class TimeTable implements Pagination {
      * @param newOffset - number in weeks (+/-)
      */
     updatePagination(newOffset) {
+        if (!this.tabbable) {
+            return;
+        }
         this.offset = this.offset + newOffset;
         let date = new Date();
         date.setDate(date.getDate() - (date.getDay() - 1));
@@ -464,27 +475,15 @@ class TimeTable implements Pagination {
 }
 
 class TimeTableData {
-    announcements: Announcement[];
-    exams: Exam[];
-    lessons: Lesson[];
-    replacementLessons: ReplacementLesson[];
+    announcements: Announcement[] = [];
+    exams: Exam[] = [];
+    lessons: Lesson[] = [];
+    replacementLessons: ReplacementLesson[] = [];
     /**
      * Contains all of the above merged into one object
      */
     preparedData: {};
 
-}
-
-class TimeTablePreparedData {
-    //Day
-    1: {
-        //Lesson
-        1: {
-            lesson: Lesson;
-            replacementLesson: ReplacementLesson;
-            exam: Exam;
-        }
-    }
 }
 
 interface Pagination {

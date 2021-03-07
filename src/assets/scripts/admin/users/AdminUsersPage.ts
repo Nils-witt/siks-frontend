@@ -1,4 +1,4 @@
-/*!
+/*
  * S-Plan
  * Copyright (c) 2021 Nils Witt
  * All rights reserved.
@@ -26,73 +26,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#detailBox {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: black;
-    opacity: 0.6;
-    visibility: hidden;
-}
+//EventListener
+/**
+ * Triggers: Page fully loaded (HTML)
+ */
+addEventListener("DOMContentLoaded", async () => {
+    AdminUsers.usersTable = <HTMLTableSectionElement>document.getElementById('usersTableBody');
+    AdminUsers.selectFilterType = <HTMLSelectElement>document.getElementById('userTypeSelect')
+    AdminUsers.selectFilterStatus = <HTMLSelectElement>document.getElementById('activeSelect')
+    AdminUsers.inputFilterFirstname = <HTMLInputElement>document.getElementById('firstnameSelect');
+    AdminUsers.inputFilterLastname = <HTMLInputElement>document.getElementById('lastnameSelect');
 
-#detailFrame {
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    max-width: 1000px;
-    max-height: 700px;
-    bottom: 50px;
-    padding: 1em;
-
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: white;
-    visibility: hidden;
-}
-
-#detailCloseButton {
-    float: right;
-}
-
-.indicator {
-    width: 5px;
-    padding: 0;
-    height: 100%;
-}
-
-.dark .indicator-red {
-    background-color: #801a00;
-}
-
-.indicator-red {
-    background-color: red;
-}
-
-.indicator-green {
-    background-color: lime;
-}
-
-.dark .indicator-green {
-    background-color: #008000;
-}
-
-.indicator-blue {
-    background-color: blue;
-}
-
-.dark .indicator-blue {
-    background-color: #00009d;
-}
-
-.indicator-orange {
-    background-color: orange;
-}
-
-.dark .indicator-orange {
-    background-color: lightsalmon;
-}
+    AdminUsers.confirmBox = <HTMLDivElement>document.getElementById("confirmBox");
+    AdminUsers.confirmFrameDelete = <HTMLDivElement>document.getElementById("confirmDeleteFrame");
+    AdminUsers.userDetailFrame = <HTMLDivElement>document.getElementById("userDetailFrame");
+    AdminUsers.userCoursesTable = <HTMLDivElement>document.getElementById("tableBodyCoursesUser");
+    AdminUsers.userCoursesFrame = <HTMLDivElement>document.getElementById("userCoursesFrame");
+    await AdminUsers.load();
+});

@@ -27,21 +27,21 @@
  */
 
 class User {
-    static displayName: string;
-    static lastName: string;
-    static active: boolean;
-    static firstName: string;
-    static username: string;
-    static type: number;
-    static devices: any;
-    static mails: any;
-    static id: number;
-    static courses: Course[];
-    static secondFactor: number | null;
-    static permissions: Permissions;
-    static moodleUID: number | null;
+    displayName: string;
+    lastName: string;
+    active: boolean;
+    firstName: string;
+    username: string;
+    type: number;
+    devices: any;
+    mails: any;
+    id: number;
+    courses: Course[];
+    secondFactor: number | null;
+    permissions: Permissions;
+    moodleUID: number | null;
 
-    static loadUser(){
+    loadUser() {
         this.displayName = localStorage.getItem("USER_DISPLAYNAME");
         this.firstName = localStorage.getItem("USER_FIRSTNAME");
         this.lastName = localStorage.getItem("USER_LASTNAME");
@@ -49,7 +49,7 @@ class User {
         this.id = parseInt(localStorage.getItem("USER_ID"));
     }
 
-    static saveUser(){
+    saveLocal() {
         localStorage.setItem("USER_DISPLAYNAME", this.displayName);
         localStorage.setItem("USER_FIRSTNAME", this.firstName);
         localStorage.setItem("USER_LASTNAME", this.lastName);

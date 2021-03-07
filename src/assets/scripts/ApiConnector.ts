@@ -30,7 +30,9 @@ async function authErr() {
     console.log("JWT invalid");
     localStorage.clear();
     await Global.logout();
-    window.location.href = "../../../pages/login.html";
+    if(!window.location.href.endsWith("login.html")){
+        window.location.href = "/pages/login.html";
+    }
 }
 
 class ApiConnector {
@@ -42,18 +44,18 @@ class ApiConnector {
      */
     static async updateStores() {
         await this.loadUserProfile();
-        await this.loadCourses();
-        await this.loadLessons();
-        await this.loadReplacementLessons();
-        await this.loadAnnouncements();
-        await this.loadExams();
+        await this.loadUserCourses();
+        await this.loadUserLessons();
+        await this.loadUserReplacementLessons();
+        await this.loadUserAnnouncements();
+        await this.loadUserExams();
         dispatchEvent(new Event("storesUpdated"));
     }
 
     /**
      * Loads the user lessons from the api saves and returns them.
      */
-    static loadLessons(): Promise<Lesson[]> {
+    static loadUserLessons(): Promise<Lesson[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/lessons", {
@@ -89,7 +91,7 @@ class ApiConnector {
     /**
      * Loads the user replacement lessons from the api saves and returns them.
      */
-    static loadReplacementLessons(): Promise<ReplacementLesson[]> {
+    static loadUserReplacementLessons(): Promise<ReplacementLesson[]> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/replacementLessons", {
                 method: 'GET',
@@ -123,7 +125,7 @@ class ApiConnector {
     /**
      * Loads the user exams from the api saves and returns them.
      */
-    static loadExams(): Promise<Exam[]> {
+    static loadUserExams(): Promise<Exam[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/exams", {
@@ -203,7 +205,7 @@ class ApiConnector {
     /**
      * Loads the user courses from the api saves and returns them.
      */
-    static loadCourses(): Promise<Course[]> {
+    static loadUserCourses(): Promise<Course[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/courses/", {
@@ -224,7 +226,7 @@ class ApiConnector {
                     resolve(await DatabaseConnector.getCourses());
                 }
                 if (response.status === 401) {
-                    //await authErr();
+                    await authErr();
                     reject('err');
                 }
                 if (response.status === 604) {
@@ -241,7 +243,7 @@ class ApiConnector {
     /**
      * Loads the user devices from the api saves and returns them.
      */
-    static loadDevices(): Promise<Device[]> {
+    static loadUserDevices(): Promise<Device[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/devices", {
@@ -254,7 +256,7 @@ class ApiConnector {
                 if (response.status === 200) {
                     let data: Device[] = await response.json();
 
-                    await DatabaseConnector.clearCourses();
+                    await DatabaseConnector.clearDevices();
                     for (let i = 0; i < data.length; i++) {
                         await DatabaseConnector.saveDevice(data[i]);
                     }
@@ -279,7 +281,7 @@ class ApiConnector {
     /**
      * Loads the user announcements from the api saves and returns them.
      */
-    static loadAnnouncements(): Promise<Announcement[]> {
+    static loadUserAnnouncements(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/user/announcements/", {
@@ -343,8 +345,8 @@ class ApiConnector {
                     'Content-type': 'application/json; charset=utf-8'
                 },
                 body: JSON.stringify({
-                    "deviceId": subscription,
-                    "plattform": "WP"
+                    "deviceIdentifier": subscription,
+                    "platform": 3
                 })
             });
             console.log(response);
@@ -403,13 +405,13 @@ class ApiConnector {
             if (response.status === 200) {
                 let data = await response.json();
 
-                User.firstName = data["firstName"];
-                User.lastName = data["lastName"];
-                User.displayName = data["displayName"];
-                User.type = data["type"];
-                User.id = data["id"];
+                Global.user.firstName = data["firstName"];
+                Global.user.lastName = data["lastName"];
+                Global.user.displayName = data["displayName"];
+                Global.user.type = data["type"];
+                Global.user.id = data["id"];
 
-                User.saveUser()
+                Global.user.saveLocal()
 
                 resolve(data);
             } else if (response.status === 401) {
@@ -420,7 +422,10 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * Deletes a announcement by Id from the api.
+     * @param id
+     */
     static deleteAnnouncement(id): Promise<void> {
         return new Promise(async (resolve, reject) => {
 
@@ -434,7 +439,9 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * loads all announcements from the api.
+     */
     static loadAnnouncementsAdmin(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/announcements/", {
@@ -457,7 +464,7 @@ class ApiConnector {
                 dispatchEvent(event)
             }
             if (response.status === 401) {
-                //authErr();
+                authErr();
                 reject('err');
             }
             if (response.status === 604) {
@@ -468,7 +475,10 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * Submits a new announcement to the api.
+     * @param announcement
+     */
     static saveAnnouncement(announcement): Promise<void> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/announcements/", {
@@ -484,7 +494,7 @@ class ApiConnector {
                 resolve();
             }
             if (response.status === 401) {
-                //authErr();
+                authErr();
                 reject('err');
             }
             if (response.status === 604) {
@@ -494,7 +504,10 @@ class ApiConnector {
         });
     }
 
-    //TODO jDoc
+    /**
+     * loads a user by UID.
+     * @param id
+     */
     static loadUserById(id): Promise<User> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/users/id/" + id, {
@@ -505,8 +518,7 @@ class ApiConnector {
                 }
             });
             if (response.status === 200) {
-                let json = await response.json();
-                let data = JSON.parse(json);
+                let data = await response.json();
 
                 resolve(data);
             }
@@ -520,4 +532,65 @@ class ApiConnector {
             }
         });
     }
+
+    static loadAllCourses():Promise<Course[]>{
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/timeTable/courses/", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+                    let data: Course[] = await response.json();
+
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    static loadAllLessons():Promise<Lesson[]>{
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/timeTable/lessons/", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+                    let data: Lesson[] = await response.json();
+
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
 }
