@@ -34,11 +34,43 @@
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
     <title>S-Plan Admin - Users</title>
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
-    <link href="/manifest.json" rel="manifest">
+    <link href="/manifest.webmanifest" rel="manifest">
     <link href="/assets/css/Navigation-with-Button.scss" rel="stylesheet">
     <link href="/assets/css/admin-users.scss" rel="stylesheet">
 </head>
+<style>
+    .confirmBox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        opacity: 0.6;
+        visibility: hidden;
+        z-index: 3;
+    }
 
+    .confirmFrame {
+        position: fixed;
+        top: 50px;
+        left: 50%;
+        width: 1000px;
+        min-height: 700px;
+        padding: 1em;
+
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+
+        border-color: black;
+        border: 1px;
+        border-style: solid;
+        border-radius: 5px;
+        background-color: white;
+        visibility: hidden;
+        z-index: 4;
+    }
+</style>
 <body>
 <div id="navBarContainer">
     <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
@@ -74,26 +106,23 @@
 <div class="container" id='searchContainer'>
     <div class="row">
         <div class="col">
-            <button class="btn btn-info" onclick="window.location.href = '/pages/admin/ad-user-sync.html'">Active Directory Sync</button>
-            <button class="btn btn-info" onclick="window.location.href = '/pages/admin/ad-user-settings.html'">Active Directory Settings</button>
+            <button class="btn btn-info">Reload AD Users</button>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            Type :<br>
-            <select id="userTypeSelect" onchange="getSelectOptions();">
-                <option selected value="0">All</option>
-                <option value="1">Student</option>
-                <option value="2">Teacher</option>
-            </select>
+            <label for="userTypeSelect">Type:</label><br><select id="userTypeSelect" onchange="AdminUsers.updateFilter()">
+            <option selected value="-1">All</option>
+            <option value="0">Schüler</option>
+            <option value="1">Lehrer</option>
+        </select>
         </div>
         <div class="col">
-            Aktiv:<br>
-            <select id="activeSelect" onchange="getSelectOptions();">
-                <option selected value=null>All</option>
-                <option value="1">Ja</option>
-                <option value="0">Nein</option>
-            </select>
+            <label for="activeSelect">Aktiv</label><br><select id="activeSelect" onchange="getSelectOptions();">
+            <option selected value="-1">All</option>
+            <option value="1">Aktiv</option>
+            <option value="0">Inaktiv</option>
+        </select>
         </div>
         <div class="col">
             Vorname:<br>
@@ -113,21 +142,20 @@
             <th scope="col">Vorname</th>
             <th scope="col">Nachname</th>
             <th scope="col">Type</th>
-            <th scope="col">Aktiv</th>
             <th scope="col">Aktion</th>
         </tr>
         </thead>
-        <tbody id="tableBody">
+        <tbody id="usersTableBody">
         </tbody>
     </table>
 </div>
-<div class="confirmBox" id="confirmBox" onclick="closeConfirmViews()"></div>
+<div class="confirmBox" id="confirmBox" onclick="AdminUsers.closeAllPopups()"></div>
 <div class="confirmFrame" id="confirmDeleteFrame">
-    <button class="btn btn-danger" onclick="closeConfirmViews()">Abbrechen</button>
+    <button class="btn btn-danger" onclick="AdminUsers.closeAllPopups()">Abbrechen</button>
     <button class="btn btn-success">Bestätigen</button>
 </div>
 <div class="confirmFrame" id="userDetailFrame">
-    <button class="btn btn-danger" onclick="closeConfirmViews()">Schließen</button>
+    <button class="btn btn-danger" onclick="AdminUsers.closeAllPopups()">Schließen</button>
     <form>
         <div class="form-group">
             <label for="ProfileDetailusername">Username</label>
@@ -155,12 +183,12 @@
 </div>
 
 <div class="confirmFrame" id="userResetFrame">
-    <button class="btn btn-danger" onclick="closeConfirmViews()">Schließen</button>
+    <button class="btn btn-danger" onclick="AdminUsers.closeAllPopups()">Schließen</button>
     <button class="btn btn-success">Bestätigen</button>
 </div>
 
-<div class="confirmFrame" id="userCoursesFrame">
-    <button class="btn btn-danger" onclick="closeConfirmViews()">Schließen</button>
+<div class="confirmFrame" id="userCoursesFrame" style="">
+    <button class="btn btn-danger" onclick="AdminUsers.closeAllPopups()">Schließen</button>
     <div class="container" id='datacourseContainer'>
         <table class="table">
             <thead>
@@ -175,15 +203,23 @@
         </table>
     </div>
 </div>
-
+<!-- CDN
 <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="/assets/js/main.ts"></script>
-<script src="/assets/js/utilities/databaseConnector.ts"></script>
-<script src="/assets/js/utilities/apiConnector.ts"></script>
-<script src="/assets/js/presentation/admin/apiconnector.ts"></script>
-<script src="/assets/js/presentation/admin/users.ts"></script>
+-->
+<script src="/assets/ext/jquery-3.3.1.slim.min.js"></script>
+<script src="/assets/ext/popper.min.js"></script>
+<script src="/assets/ext/bootstrap.min.js"></script>
+<!-- SELF -->
+<script src="/assets/scripts/ServiceworkerConnector.js"></script>
+<script src="/assets/scripts/ApiConnector.js"></script>
+<script src="/assets/scripts/DatabaseConnector.js"></script>
+<script src="/assets/scripts/User.js"></script>
+<script src="/assets/scripts/Utilities.js"></script>
+<script src="/assets/scripts/Global.js"></script>
+<script src="/assets/scripts/admin/users/AdminUsers.js"></script>
+<script src="/assets/scripts/admin/users/AdminUsersPage.js"></script>
 </body>
 
 </html>
