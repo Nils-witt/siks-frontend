@@ -27,7 +27,7 @@
  */
 
 #detailBox {
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -38,7 +38,7 @@
 }
 
 #detailFrame {
-    position: absolute;
+    position: fixed;
     top: 50px;
     left: 50%;
     max-width: 1000px;
