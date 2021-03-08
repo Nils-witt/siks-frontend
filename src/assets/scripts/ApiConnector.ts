@@ -536,7 +536,7 @@ class ApiConnector {
     static loadAllCourses():Promise<Course[]>{
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(this.api_host + "/timeTable/courses/", {
+                let response = await fetch(this.api_host + "/courses/", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
@@ -566,7 +566,7 @@ class ApiConnector {
     static loadAllLessons():Promise<Lesson[]>{
         return new Promise(async (resolve, reject) => {
             try {
-                let response = await fetch(this.api_host + "/timeTable/lessons/", {
+                let response = await fetch(this.api_host + "/lessons/", {
                     method: 'GET',
                     headers: {
                         'Authorization': "Bearer " + this.token
