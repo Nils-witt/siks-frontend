@@ -27,6 +27,7 @@
 #
 
 #/bin/bash
+echo "New URL for PWA -> API_HOST:"
 echo "$API_URL"
 rm /usr/share/nginx/html/config.json
 cp /usr/share/nginx/html/config.json.default /usr/share/nginx/html/config.json
