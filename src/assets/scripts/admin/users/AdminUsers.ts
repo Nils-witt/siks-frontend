@@ -57,7 +57,6 @@ class AdminUsers {
     }
 
     static updateFilter() {
-        console.log("NF " + this.selectFilterType.options[this.selectFilterType.options.selectedIndex.valueOf()].value)
         this.filter.type = Number(this.selectFilterType.options[this.selectFilterType.options.selectedIndex.valueOf()].value);
         if (this.filter.type === -1) {
             this.filter.type = null;
@@ -66,7 +65,6 @@ class AdminUsers {
 
         this.filter.firstname = this.inputFilterFirstname.value.toLowerCase();
         this.filter.lastname = this.inputFilterLastname.value.toLowerCase();
-        console.log(this.filter)
         this.updateTable();
     }
 
@@ -101,14 +99,11 @@ class AdminUsers {
 
     static createRow(user: User) {
 
-        let id = user['id_users'];
-
         let row = document.createElement('tr');
         let usernameContainer = document.createElement('th');
 
         let containerActions = document.createElement('div');
         containerActions.className = 'btn-group';
-        //containerActions.role = 'group'
 
         let actionsColumn = document.createElement('td');
 
