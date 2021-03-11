@@ -37,14 +37,23 @@ class Settings {
     fieldEmail: HTMLInputElement;
     tableDevices: HTMLTableElement;
     tableCourses: HTMLTableElement;
+    buttonMoodle: HTMLButtonElement;
 
     async populateSite() {
+        let user: User = await ApiConnector.loadUserProfile();
+
         this.fieldFirstname.value = Global.user.firstName;
         this.fieldLastname.value = Global.user.lastName;
         //this.fieldEmail.value = User.mails;
         this.fieldEmail.value = "Nicht gesetzt";
         await this.generateCoursesTable();
         await this.generateDevicesTable();
+
+        if (user.moodleUID == null) {
+            this.setMoodleOptions(false);
+        } else {
+            this.setMoodleOptions(true);
+        }
     }
 
     setSliders() {
@@ -106,6 +115,22 @@ class Settings {
             }
         } catch (e) {
             element.checked = false;
+        }
+    }
+
+    setMoodleOptions(isActive: boolean) {
+        if (isActive) {
+            this.buttonMoodle.innerText = "Moodle: deaktivieren";
+            this.buttonMoodle.onclick = async () => {
+                await ApiConnector.disableMoodleAccount();
+                await this.populateSite();
+            };
+        } else {
+            this.buttonMoodle.innerText = "Moodle: aktiviren";
+            this.buttonMoodle.onclick = async () => {
+                await ApiConnector.enableMoodleAccount();
+                await this.populateSite();
+            };
         }
     }
 

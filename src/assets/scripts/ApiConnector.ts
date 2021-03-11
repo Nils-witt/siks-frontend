@@ -30,7 +30,7 @@ async function authErr() {
     console.log("JWT invalid");
     localStorage.clear();
     await Global.logout();
-    if(!window.location.href.endsWith("login.html")){
+    if (!window.location.href.endsWith("login.html")) {
         window.location.href = "/pages/login.html";
     }
 }
@@ -394,7 +394,7 @@ class ApiConnector {
     /**
      * Loads the user profile from the api saves and returns them.
      */
-    static loadUserProfile(): Promise<void> {
+    static loadUserProfile(): Promise<User> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/", {
                 method: 'GET',
@@ -403,7 +403,7 @@ class ApiConnector {
                 },
             });
             if (response.status === 200) {
-                let data = await response.json();
+                let data: User = await response.json();
 
                 Global.user.firstName = data["firstName"];
                 Global.user.lastName = data["lastName"];
@@ -533,7 +533,7 @@ class ApiConnector {
         });
     }
 
-    static loadAllCourses():Promise<Course[]>{
+    static loadAllCourses(): Promise<Course[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/courses/", {
@@ -563,7 +563,7 @@ class ApiConnector {
         });
     }
 
-    static loadAllLessons():Promise<Lesson[]>{
+    static loadAllLessons(): Promise<Lesson[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/lessons/", {
@@ -593,4 +593,59 @@ class ApiConnector {
         });
     }
 
+    static enableMoodleAccount(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/moodle/enable", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+                    resolve();
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    static disableMoodleAccount(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/moodle/disable", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                });
+
+                if (response.status === 200) {
+                    resolve();
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
 }

@@ -44,6 +44,7 @@ addEventListener("DOMContentLoaded", async () => {
     settings.fieldEmail = <HTMLInputElement>document.getElementById("fieldEmail");
     settings.tableCourses = <HTMLTableElement>document.getElementById("tableBodyCoursesUser")
     settings.tableDevices = <HTMLTableElement>document.getElementById("tableBodyDevicesUser")
+    settings.buttonMoodle = <HTMLButtonElement>document.getElementById("moodlebtn")
 
     await settings.populateSite();
 });
