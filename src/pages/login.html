@@ -59,7 +59,7 @@
             <input autocomplete="on" class="form-control" id="password" minlength="8" placeholder="Password" required="" type="password">
         </div>
         <div class="form-group" style="color: rgb(255,255,255);">
-            <button class="btn btn-primary btn-block" disabled id="loginButton" onclick="getApiKey()" type="button">Log In</button>
+            <button class="btn btn-primary btn-block" disabled id="loginButton" type="button">Log In</button>
         </div>
         <div class="form-group" style="color: rgb(255,255,255);">
             <button class="btn btn-primary btn-block" id="reloadButton" onclick="navigator.serviceWorker.getRegistrations().then(function(regs) {for(let reg of regs) {reg.unregister(); location.reload(true)}}).catch(function(err) {});" type="button">Neu laden</button>
@@ -76,7 +76,7 @@
             <input autocomplete="on" autofocus="" class="form-control" id="totpCode" maxlength="6" minlength="3" placeholder="Code" required="" type="number">
         </div>
         <div class="form-group" style="color: rgb(255,255,255);">
-            <button class="btn btn-primary btn-block" id="continueButton" onclick="getApiKey()" type="button">Confirm</button>
+            <button class="btn btn-primary btn-block" id="continueButton" type="button">Confirm</button>
         </div>
         <div class="form-group" style="color: rgb(255,255,255);">
             <button class="btn btn-danger btn-block" disabled id="secondFactorError" style="visibility: hidden" type="button">Invalid Key</button>

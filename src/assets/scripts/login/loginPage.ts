@@ -43,6 +43,7 @@ function initLgPage() {
     login.openSecondFactorEntry = () => {
         document.getElementById("secondFactorDiv").style.visibility = "visible";
         document.getElementById("loginDiv").style.visibility = "hidden";
+        (<HTMLButtonElement>document.getElementById('continueButton')).onclick = login.getApiKey;
     }
 
     login.getUsernameField = () => {
