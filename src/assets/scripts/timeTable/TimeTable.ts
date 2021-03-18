@@ -258,7 +258,7 @@ class TimeTable implements Pagination {
 
                 if (lesson["replacementLesson"]["room"] === "---") {
                     indicatorColor = "red";
-                    text.innerText = "Freistunde";
+                    text.innerText = "Frei";
                 } else {
                     indicatorColor = "orange";
                     text.innerText = lesson["replacementLesson"]["subject"];
