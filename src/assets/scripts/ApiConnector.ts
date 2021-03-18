@@ -648,4 +648,33 @@ class ApiConnector {
             }
         });
     }
+
+    static getNewTOTPRegistration(): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/totp/register", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                });
+
+                if (response.status === 200) {
+                    let data = response.json();
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
 }
