@@ -43,7 +43,7 @@ class Utilities {
         return (date[0] * 3600) + (date[1] * 60);
     }
 
-    randomString(length) {
+    static randomString(length) {
         let result = '';
         let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let charactersLength = characters.length;
@@ -51,5 +51,12 @@ class Utilities {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
+    }
+
+    static convertJSONDateToLocate(date: string) {
+        let out = date;
+        let parts = date.split("-");
+        out = parts[2] + "." + parts[1] + "." + parts[0];
+        return out;
     }
 }
