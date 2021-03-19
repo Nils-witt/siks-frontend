@@ -369,25 +369,26 @@ class ApiConnector {
     /**
      * Sends a link request to the api for an telegram account.
      */
-    static linkTelegramAccount(telegramID): Promise<void> {
+    static linkTelegramAccount(requestToken: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(this.api_host + "/telegram/confirm/" + telegramID, {
-                method: 'GET',
+            let response = await fetch(this.api_host + "/user/devices", {
+                method: 'POST',
                 headers: {
-                    'Authorization': "Bearer " + this.token
+                    'Authorization': "Bearer " + this.token,
+                    'Content-type': 'application/json; charset=utf-8'
                 },
-            })
+                body: JSON.stringify({
+                    "requestId": requestToken,
+                    "platform": 0
+                })
+            });
             if (response.status === 200) {
                 resolve();
-            } else if (response.status === 604) {
-                resolve();
             } else if (response.status === 401) {
-                await authErr();
-                reject('err');
+                reject('auth error');
             } else {
-                reject();
+                reject(response.status);
             }
-
         });
     }
 
