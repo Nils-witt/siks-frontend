@@ -440,7 +440,7 @@ class ApiConnector {
     }
 
     /**
-     * loads all announcements from the api.
+     * Loads all announcements from the api.
      */
     static loadAnnouncementsAdmin(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
@@ -533,6 +533,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Loads all courses from the api.
+     */
     static loadAllCourses(): Promise<Course[]> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -563,6 +566,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Loads all lessons from the api.
+     */
     static loadAllLessons(): Promise<Lesson[]> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -593,6 +599,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Enables the moodle account for the current user.
+     */
     static enableMoodleAccount(): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -621,6 +630,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Disables the moodle account for the current user.
+     */
     static disableMoodleAccount(): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -649,6 +661,9 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Retrieves a new TOTP registration request.
+     */
     static getNewTOTPRegistration(): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {

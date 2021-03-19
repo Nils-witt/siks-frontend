@@ -131,12 +131,9 @@ class Settings {
                     ServiceworkerConnector.registration.pushManager.getSubscription().then((subscription) => {
                         subscription.unsubscribe().then((successful) => {
                             console.log("PUSH deactivated")
-                            //TODO remove from server
-                        }).catch((e) => {
-                            //TODO add error listener
                         });
                     });
-                    window.localStorage.setItem("push", 'false');
+                    window.localStorage.setItem("PUSH_NOTIFICATIONS", 'false');
                 } catch (e) {
                     console.log(e);
                 }

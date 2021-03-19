@@ -154,12 +154,14 @@ class AdminUsers {
         document.getElementById("confirmBox").style.visibility = "visible";
         document.getElementById("confirmDeleteFrame").style.visibility = "visible";
         console.log("DELETE: " + id);
+        //TODO set actions to delete user from the api
     }
 
     static openUserReset(id: number) {
         console.log("UD:" + id);
         document.getElementById("confirmBox").style.visibility = "visible";
         document.getElementById("userResetFrame").style.visibility = "visible";
+        //TODO set actions to reset user
     }
 
     static async openDetailView(id: number) {
