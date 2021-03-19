@@ -74,6 +74,7 @@ async function loadPWAConfig() {
     let data = await res.json();
     console.log("API_HOST: " + data["api"]);
     localStorage.setItem("API_HOST",data["api"]);
+    localStorage.setItem("TG_BOT_URL",data["telegramBotUrl"]);
 }
 
 

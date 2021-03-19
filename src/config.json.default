@@ -1,3 +1,4 @@
 {
-  "api": "API_HOST"
+  "api": "API_HOST",
+  "telegramBotUrl": "TG_BOT_URL"
 }
