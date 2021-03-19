@@ -30,7 +30,7 @@ const PUSHPLATFROMS: string[] = ["Telegram", "APNS", "Firebase", "WebPush"]
 
 class Settings {
     static global: Settings;
-    sliderPush: string;
+    sliderPush: HTMLInputElement;
     fieldFirstname: HTMLInputElement;
     fieldLastname: HTMLInputElement;
     tableDevices: HTMLTableElement;
@@ -52,7 +52,6 @@ class Settings {
         await this.generateCoursesTable();
         await this.generateDevicesTable();
 
-        console.log(user.secondFactor)
         if (user.secondFactor == null) {
             this.buttonTwoFactor.innerText = "Fehler"
         } else if (user.secondFactor === 0) {
@@ -82,9 +81,7 @@ class Settings {
         } else {
             this.setMoodleOptions(true);
         }
-    }
 
-    setSliders() {
         if (window.localStorage.getItem("PUSH_NOTIFICATIONS") === "true") {
             this.setPushSlider(true);
         } else {
@@ -93,7 +90,7 @@ class Settings {
     }
 
     setPushSlider(active: boolean) {
-        //TODO add context
+        this.sliderPush.checked = active;
     }
 
     async obtainNewTOTP() {

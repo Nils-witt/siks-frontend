@@ -36,7 +36,7 @@ STARTUP
 addEventListener("DOMContentLoaded", async () => {
     settings = new Settings();
 
-    settings.sliderPush = document.getElementById("sliderPush");
+    settings.sliderPush = <HTMLInputElement>document.getElementById("sliderPush");
     settings.sliderTheme = <HTMLButtonElement>document.getElementById("sliderTheme");
     settings.buttonTheme = <HTMLButtonElement>document.getElementById("buttonThemeAuto");
     settings.fieldFirstname = <HTMLInputElement>document.getElementById("fieldFirstname");
