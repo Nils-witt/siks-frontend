@@ -29,7 +29,10 @@
 #/bin/bash
 echo "New URL for PWA -> API_HOST:"
 echo "$API_URL"
+echo "New URL for TGBot -> TG_BOT_URL:"
+echo "$TG_BOT_URL"
 rm /usr/share/nginx/html/config.json
 cp /usr/share/nginx/html/config.json.default /usr/share/nginx/html/config.json
 sed -i 's+API_HOST+'"$API_URL"'+g' /usr/share/nginx/html/config.json
+sed -i 's+TG_BOT_URL+'"$TG_BOT_URL"'+g' /usr/share/nginx/html/config.json
 nginx -g 'daemon off;'
