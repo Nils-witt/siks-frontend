@@ -153,15 +153,10 @@
             </label>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <button class="btn btn-danger" onClick="removeAllDevicesConfirm();">Alle Entfernen</button>
-        </div>
-    </div>
     <br>
     <div class="row">
         <div class="col">
-            <button class="btn btn-success" onClick="window.location='https://t.me/SPlanBot'">Telegram Bot</button>
+            <button class="btn btn-success" onClick="window.location=localStorage.getItem('TG_BOT_URL')">Telegram Bot</button>
         </div>
     </div>
     <div class="row">
