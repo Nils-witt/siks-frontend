@@ -352,10 +352,10 @@ class ApiConnector {
             console.log(response);
             if (response.status === 200) {
                 resolve();
-                localStorage.setItem("push", "true")
+                localStorage.setItem("PUSH_NOTIFICATIONS", "true")
             } else if (response.status === 604) {
                 resolve();
-                localStorage.setItem("push", "true")
+                localStorage.setItem("PUSH_NOTIFICATIONS", "true")
             } else if (response.status === 401) {
                 await authErr();
                 reject('err');
