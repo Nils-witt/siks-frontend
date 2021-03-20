@@ -1,4 +1,5 @@
 {
   "api": "API_HOST",
-  "telegramBotUrl": "TG_BOT_URL"
+  "telegramBotUrl": "TG_BOT_URL",
+  "moodleUrl": "MOODLE_URL"
 }
