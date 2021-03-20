@@ -29,50 +29,84 @@
 const PUSHPLATFROMS: string[] = ["Telegram", "APNS", "Firebase", "WebPush"]
 
 class Settings {
-    sliderPush: string;
-    sliderTheme: string;
-    buttonTheme: string;
+    static global: Settings;
+    sliderPush: HTMLInputElement;
     fieldFirstname: HTMLInputElement;
     fieldLastname: HTMLInputElement;
-    fieldEmail: HTMLInputElement;
     tableDevices: HTMLTableElement;
     tableCourses: HTMLTableElement;
+    buttonMoodle: HTMLButtonElement;
+    buttonTwoFactor: HTMLButtonElement;
+    textTwoFactorStatus: HTMLSpanElement;
+    totpAddContainer: HTMLDivElement;
+    imgQrCode: HTMLImageElement;
+    buttonTwoFactorAdd: HTMLButtonElement;
+    totpCOdeField: HTMLInputElement;
+
+    totpRequestId: string;
 
     async populateSite() {
+        let user: User = await ApiConnector.loadUserProfile();
         this.fieldFirstname.value = Global.user.firstName;
         this.fieldLastname.value = Global.user.lastName;
-        //this.fieldEmail.value = User.mails;
-        this.fieldEmail.value = "Nicht gesetzt";
         await this.generateCoursesTable();
         await this.generateDevicesTable();
-    }
 
-    setSliders() {
+        if (user.secondFactor == null) {
+            this.buttonTwoFactor.innerText = "Fehler"
+        } else if (user.secondFactor === 0) {
+            this.buttonTwoFactor.innerText = "Aktivieren";
+            this.buttonTwoFactor.disabled = false;
+            this.buttonTwoFactor.className = "btn btn-success";
+            this.buttonTwoFactor.onclick = () => {
+                Settings.global.obtainNewTOTP();
+                this.totpAddContainer.style.visibility = "visible";
+                this.totpAddContainer.style.height = "auto";
+                this.textTwoFactorStatus.innerText = "Warte auf Benutzereingabe";
+            }
+
+            this.textTwoFactorStatus.innerText = "Nicht aktiv"
+        } else if (user.secondFactor === 1) {
+            this.buttonTwoFactor.innerText = "Deaktivieren"
+            this.buttonTwoFactor.disabled = false;
+            this.buttonTwoFactor.className = "btn btn-danger";
+            this.buttonTwoFactor.onclick = () => {
+                Settings.global.disableTOTP();
+            }
+            this.textTwoFactorStatus.innerText = "Aktiv"
+        }
+
+        if (user.moodleUID == null) {
+            this.setMoodleOptions(false);
+        } else {
+            this.setMoodleOptions(true);
+        }
+
         if (window.localStorage.getItem("PUSH_NOTIFICATIONS") === "true") {
             this.setPushSlider(true);
         } else {
             this.setPushSlider(false);
         }
-
-        if (window.localStorage.getItem("theme") === "dark" || window.localStorage.getItem("theme") === "light") {
-            setAppearanceSliders(window.localStorage.getItem("theme"));
-        } else {
-            (<HTMLButtonElement>document.getElementById(this.sliderTheme)).disabled = true;
-            document.getElementById(this.buttonTheme).className = "btn btn-success";
-        }
     }
 
     setPushSlider(active: boolean) {
-        //TODO add context
+        this.sliderPush.checked = active;
     }
 
-    toggleDarkModeAuto() {
-        if (window.localStorage.getItem("theme") === "dark" || window.localStorage.getItem("theme") === "light") {
-            window.localStorage.setItem("theme", "auto");
-        } else {
-            window.localStorage.setItem("theme", "dark");
-        }
-        this.setSliders();
+    async obtainNewTOTP() {
+        console.log("Started");
+        let resourceData = await ApiConnector.getNewTOTPRegistration();
+        this.totpRequestId = resourceData.requestId;
+        this.imgQrCode.src = resourceData.qr;
+    }
+
+    async submitValidationCode() {
+        console.log("Validation");
+        console.log(this.totpCOdeField.value)
+    }
+
+    async disableTOTP() {
+
     }
 
     async sliderPushNotification(element) {
@@ -94,12 +128,9 @@ class Settings {
                     ServiceworkerConnector.registration.pushManager.getSubscription().then((subscription) => {
                         subscription.unsubscribe().then((successful) => {
                             console.log("PUSH deactivated")
-                            //TODO remove from server
-                        }).catch((e) => {
-                            //TODO add error listener
                         });
                     });
-                    window.localStorage.setItem("push", 'false');
+                    window.localStorage.setItem("PUSH_NOTIFICATIONS", 'false');
                 } catch (e) {
                     console.log(e);
                 }
@@ -109,11 +140,19 @@ class Settings {
         }
     }
 
-    darkModeToggleSwitch(element) {
-        if (element.checked === true) {
-            localStorage.setItem("theme", "dark");
+    setMoodleOptions(isActive: boolean) {
+        if (isActive) {
+            this.buttonMoodle.innerText = "Moodle: deaktivieren";
+            this.buttonMoodle.onclick = async () => {
+                await ApiConnector.disableMoodleAccount();
+                await this.populateSite();
+            };
         } else {
-            localStorage.setItem("theme", "light");
+            this.buttonMoodle.innerText = "Moodle: aktiviren";
+            this.buttonMoodle.onclick = async () => {
+                await ApiConnector.enableMoodleAccount();
+                await this.populateSite();
+            };
         }
     }
 

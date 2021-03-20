@@ -503,7 +503,7 @@ class DatabaseConnector {
                 resolve(false);
                 return;
             }
-            let request = indexedDB.open('sPlan', 13);
+            let request = indexedDB.open('sPlan', 20);
 
             request.onupgradeneeded = () => {
                 db = request.result;
@@ -511,7 +511,6 @@ class DatabaseConnector {
                 if (db.objectStoreNames.contains('lessons')) {
                     db.deleteObjectStore('lessons')
                 }
-
                 let store = db.createObjectStore('lessons', {
                     keyPath: 'key',
                     autoIncrement: true
@@ -519,6 +518,7 @@ class DatabaseConnector {
                 store.createIndex("weekday", "weekday", {unique: false});
                 store.createIndex("lesson", "lesson", {unique: false});
                 store.createIndex("lessonDay", ["weekday", "lesson"], {unique: false});
+                store.createIndex("id", "id", {unique: true});
 
                 if (db.objectStoreNames.contains('exams')) {
                     db.deleteObjectStore('exams')
@@ -529,7 +529,7 @@ class DatabaseConnector {
                 });
                 store.createIndex("date", "date", {unique: false});
                 store.createIndex("epochSec", "epochSec", {unique: false});
-
+                store.createIndex("id", "id", {unique: true});
 
                 if (db.objectStoreNames.contains('replacementLessons')) {
                     db.deleteObjectStore('replacementLessons')
@@ -544,7 +544,7 @@ class DatabaseConnector {
                 store.createIndex("kurs", "kurs", {unique: false});
                 store.createIndex("lessonDay", ["weekday", "lesson"], {unique: false});
                 store.createIndex("epochSec", "epochSec", {unique: false});
-
+                store.createIndex("id", "id", {unique: true});
 
                 if (db.objectStoreNames.contains('users')) {
                     db.deleteObjectStore('users')
@@ -555,6 +555,8 @@ class DatabaseConnector {
                     autoIncrement: true
                 });
                 store.createIndex("username", "username", {unique: true});
+                store.createIndex("id", "id", {unique: true});
+
                 if (db.objectStoreNames.contains('courses')) {
                     db.deleteObjectStore('courses')
                 }
@@ -567,6 +569,7 @@ class DatabaseConnector {
                 store.createIndex("grade", "grade", {unique: false});
                 store.createIndex("group", "group", {unique: false});
                 store.createIndex("subject", "subject", {unique: false});
+                store.createIndex("id", "id", {unique: true});
 
                 if (db.objectStoreNames.contains('announcements')) {
                     db.deleteObjectStore('announcements')
@@ -581,12 +584,17 @@ class DatabaseConnector {
                 store.createIndex("group", "group", {unique: false});
                 store.createIndex("subject", "subject", {unique: false});
                 store.createIndex("date", "date", {unique: false});
+                store.createIndex("id", "id", {unique: true});
 
+                if (db.objectStoreNames.contains('devices')) {
+                    db.deleteObjectStore('devices')
+                }
 
-                db.createObjectStore('devices', {
+                store = db.createObjectStore('devices', {
                     keyPath: 'key',
                     autoIncrement: true
                 });
+                store.createIndex("id", "id", {unique: true});
             };
 
             request.onerror = (err) => {

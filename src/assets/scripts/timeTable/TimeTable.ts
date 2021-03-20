@@ -170,9 +170,9 @@ class TimeTable implements Pagination {
         this.maxDays = Object.keys(data).length;
 
         for (let day in this.data.preparedData) {
-            let locLessons = Object.keys(data[day]).length;
-            if (locLessons > this.maxLessons) {
-                this.maxLessons = locLessons;
+            let locLessons = Object.keys(data[day])[Object.keys(data[day]).length - 1];
+            if (parseInt(locLessons) > this.maxLessons) {
+                this.maxLessons = parseInt(locLessons);
             }
         }
 
@@ -258,7 +258,7 @@ class TimeTable implements Pagination {
 
                 if (lesson["replacementLesson"]["room"] === "---") {
                     indicatorColor = "red";
-                    text.innerText = "Freistunde";
+                    text.innerText = "Frei";
                 } else {
                     indicatorColor = "orange";
                     text.innerText = lesson["replacementLesson"]["subject"];

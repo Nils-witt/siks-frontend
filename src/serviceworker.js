@@ -159,26 +159,6 @@ const urlB64ToUint8Array = base64String => {
     return outputArray
 }
 
-//TODO extend
-self.addEventListener("push", (event) =>{
-    if (event.data) {
-        console.log("Push event!! ", event.data.text());
-        let data = JSON.parse(event.data.text());
-        showLocalNotification(data.body, data.body, self.registration);
-    } else {
-        console.log("Push event but no data");
-    }
-});
-
-//TODO extend
-const showLocalNotification = (title, body, swRegistration) => {
-    const options = {
-        body
-    };
-    swRegistration.showNotification(title, options);
-};
-
-
 async function loadCacheManifest() {
     try {
         //For development purposes delete cache if there is one and dont create a new one

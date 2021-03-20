@@ -30,7 +30,7 @@ async function authErr() {
     console.log("JWT invalid");
     localStorage.clear();
     await Global.logout();
-    if(!window.location.href.endsWith("login.html")){
+    if (!window.location.href.endsWith("login.html")) {
         window.location.href = "/pages/login.html";
     }
 }
@@ -352,10 +352,10 @@ class ApiConnector {
             console.log(response);
             if (response.status === 200) {
                 resolve();
-                localStorage.setItem("push", "true")
+                localStorage.setItem("PUSH_NOTIFICATIONS", "true")
             } else if (response.status === 604) {
                 resolve();
-                localStorage.setItem("push", "true")
+                localStorage.setItem("PUSH_NOTIFICATIONS", "true")
             } else if (response.status === 401) {
                 await authErr();
                 reject('err');
@@ -369,32 +369,33 @@ class ApiConnector {
     /**
      * Sends a link request to the api for an telegram account.
      */
-    static linkTelegramAccount(telegramID): Promise<void> {
+    static linkTelegramAccount(requestToken: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            let response = await fetch(this.api_host + "/telegram/confirm/" + telegramID, {
-                method: 'GET',
+            let response = await fetch(this.api_host + "/user/devices", {
+                method: 'POST',
                 headers: {
-                    'Authorization': "Bearer " + this.token
+                    'Authorization': "Bearer " + this.token,
+                    'Content-type': 'application/json; charset=utf-8'
                 },
-            })
+                body: JSON.stringify({
+                    "requestId": requestToken,
+                    "platform": 0
+                })
+            });
             if (response.status === 200) {
                 resolve();
-            } else if (response.status === 604) {
-                resolve();
             } else if (response.status === 401) {
-                await authErr();
-                reject('err');
+                reject('auth error');
             } else {
-                reject();
+                reject(response.status);
             }
-
         });
     }
 
     /**
      * Loads the user profile from the api saves and returns them.
      */
-    static loadUserProfile(): Promise<void> {
+    static loadUserProfile(): Promise<User> {
         return new Promise(async (resolve, reject) => {
             let response = await fetch(this.api_host + "/user/", {
                 method: 'GET',
@@ -403,7 +404,7 @@ class ApiConnector {
                 },
             });
             if (response.status === 200) {
-                let data = await response.json();
+                let data: User = await response.json();
 
                 Global.user.firstName = data["firstName"];
                 Global.user.lastName = data["lastName"];
@@ -440,7 +441,7 @@ class ApiConnector {
     }
 
     /**
-     * loads all announcements from the api.
+     * Loads all announcements from the api.
      */
     static loadAnnouncementsAdmin(): Promise<Announcement[]> {
         return new Promise(async (resolve, reject) => {
@@ -533,7 +534,10 @@ class ApiConnector {
         });
     }
 
-    static loadAllCourses():Promise<Course[]>{
+    /**
+     * Loads all courses from the api.
+     */
+    static loadAllCourses(): Promise<Course[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/courses/", {
@@ -563,7 +567,10 @@ class ApiConnector {
         });
     }
 
-    static loadAllLessons():Promise<Lesson[]>{
+    /**
+     * Loads all lessons from the api.
+     */
+    static loadAllLessons(): Promise<Lesson[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await fetch(this.api_host + "/lessons/", {
@@ -593,4 +600,97 @@ class ApiConnector {
         });
     }
 
+    /**
+     * Enables the moodle account for the current user.
+     */
+    static enableMoodleAccount(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/moodle/enable", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                })
+
+                if (response.status === 200) {
+                    resolve();
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    /**
+     * Disables the moodle account for the current user.
+     */
+    static disableMoodleAccount(): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/moodle/disable", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                });
+
+                if (response.status === 200) {
+                    resolve();
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    /**
+     * Retrieves a new TOTP registration request.
+     */
+    static getNewTOTPRegistration(): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/totp/register", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': "Bearer " + this.token
+                    },
+                });
+
+                if (response.status === 200) {
+                    let data = response.json();
+                    resolve(data);
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+                if (response.status === 604) {
+                    console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
 }

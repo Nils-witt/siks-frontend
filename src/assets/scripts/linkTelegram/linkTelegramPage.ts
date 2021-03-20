@@ -26,37 +26,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-class Utilities {
-    static urlB64ToUint8Array(base64String) {
-        let padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-        let base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-        let rawData = atob(base64);
-        let outputArray = new Uint8Array(rawData.length);
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i)
-        }
-        return outputArray
-    };
+let requestToken: string;
 
-    static convertTimeToSeconds(time) {
-        let date = time.split(":");
-        return (date[0] * 3600) + (date[1] * 60);
+document.addEventListener("DOMContentLoaded", async (event) => {
+    let url = new URL(window.location.href);
+    requestToken = url.searchParams.get("token");
+    document.getElementById("waitingMessage").style.visibility = "hidden";
+    (<HTMLButtonElement>document.getElementById("submitButton")).disabled = false;
+});
+
+
+async function confirmTGLink() {
+    try {
+        await ApiConnector.linkTelegramAccount(requestToken);
+        console.log("DONE");
+        window.location.href = "../../../pages/login.html";
+    } catch (e) {
+        console.log(e);
     }
 
-    static randomString(length) {
-        let result = '';
-        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let charactersLength = characters.length;
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
 
-    static convertJSONDateToLocate(date: string) {
-        let out = date;
-        let parts = date.split("-");
-        out = parts[2] + "." + parts[1] + "." + parts[0];
-        return out;
-    }
 }

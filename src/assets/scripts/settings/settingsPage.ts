@@ -36,15 +36,21 @@ STARTUP
 addEventListener("DOMContentLoaded", async () => {
     settings = new Settings();
 
-    settings.sliderPush = document.getElementById("sliderPush");
+    settings.sliderPush = <HTMLInputElement>document.getElementById("sliderPush");
     settings.sliderTheme = <HTMLButtonElement>document.getElementById("sliderTheme");
     settings.buttonTheme = <HTMLButtonElement>document.getElementById("buttonThemeAuto");
     settings.fieldFirstname = <HTMLInputElement>document.getElementById("fieldFirstname");
     settings.fieldLastname = <HTMLInputElement>document.getElementById("fieldLastname");
-    settings.fieldEmail = <HTMLInputElement>document.getElementById("fieldEmail");
-    settings.tableCourses = <HTMLTableElement>document.getElementById("tableBodyCoursesUser")
-    settings.tableDevices = <HTMLTableElement>document.getElementById("tableBodyDevicesUser")
+    settings.tableCourses = <HTMLTableElement>document.getElementById("tableBodyCoursesUser");
+    settings.tableDevices = <HTMLTableElement>document.getElementById("tableBodyDevicesUser");
+    settings.buttonMoodle = <HTMLButtonElement>document.getElementById("moodlebtn");
+    settings.buttonTwoFactor = <HTMLButtonElement>document.getElementById("twoFactorButton");
+    settings.textTwoFactorStatus = <HTMLButtonElement>document.getElementById("spanTwoFactorStatus");
+    settings.totpAddContainer = <HTMLButtonElement>document.getElementById("twoFactorAddRow");
+    settings.totpCOdeField = <HTMLInputElement>document.getElementById("totpCode");
+    settings.imgQrCode = <HTMLInputElement>document.getElementById("qrCodeImg");
 
+    Settings.global = settings;
     await settings.populateSite();
 });
 
@@ -52,87 +58,6 @@ addEventListener('dataUpdate', async () => {
     await settings.setSliders();
     await settings.populateFields();
 })
-
-async function createNewTwoFactor() {
-
-    //TODO implement
-    document.getElementById("addDeviceContainer").style.visibility = "visible";
-    document.getElementById("confirmScanned").onclick = () => {};
-    document.getElementById("addTOTPButton").innerText = "Cancel";
-    document.getElementById("addTOTPButton").onclick = null;
-    document.getElementById("addTOTPButton").className = "btn btn-danger";
-}
-
-async function submitSF(token) {
-    (<HTMLButtonElement>document.getElementById("confirmScanned")).disabled = true;
-
-    try {
-        let password: string = (<HTMLInputElement>document.getElementById("confirmPassword")).value
-        let response = await fetch(localStorage.getItem("HOST_URL") + "/user/auth/totp", {
-            method: 'POST',
-            headers: {
-                'Authorization': "Bearer " + localStorage.getItem("token"),
-                'Content-type': 'application/json; charset=utf-8'
-            },
-            body: {
-                // @ts-ignore
-                "password": password,
-                "key": token,
-                // @ts-ignore
-                "alias": document.getElementById("tokenName").value
-            }
-        });
-
-        if (response.status === 200) {
-            let data = await response.json();
-            document.getElementById("confirmScanned").style.visibility = "collapse";
-            document.getElementById("submitConfirmCode").style.visibility = "visible";
-            document.getElementById("confirmCode").style.visibility = "visible";
-            document.getElementById("submitConfirmCode").onclick = () => confirmNewTwoFactor(data)
-        } else if (response.status !== 200) {
-            document.getElementById("confirmScanned").innerText = "FAILED";
-            document.getElementById("confirmScanned").className = "btn btn-danger";
-        }
-    } catch (e) {
-        document.getElementById("confirmScanned").innerText = "FAILED";
-        document.getElementById("confirmScanned").className = "btn btn-danger";
-
-        console.log("err: " + JSON.stringify(e));
-    }
-}
-
-async function confirmNewTwoFactor(keyId) {
-
-    (<HTMLButtonElement>document.getElementById("submitConfirmCode")).disabled = true;
-
-    try {
-
-        let response = await fetch(localStorage.getItem("HOST_URL") + "/user/auth/totp/verify", {
-            method: 'POST',
-            headers: {
-                'Authorization': "Bearer " + localStorage.getItem("token"),
-                'Content-type': 'application/json; charset=utf-8'
-            },
-            body: {
-                // @ts-ignore
-                "keyId": keyId,
-                // @ts-ignore
-                "code": document.getElementById("confirmCode").value
-            }
-        });
-        if (response.status === 200) {
-            document.getElementById("submitConfirmCode").innerText = "Success";
-        }
-
-    } catch (e) {
-        let submitCodeButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById('submitConfirmCode');
-        submitCodeButton.innerText = "Re Try...";
-        submitCodeButton.className = "btn btn-danger";
-        submitCodeButton.disabled = false;
-
-        console.log("err");
-    }
-}
 
 
 //Frontend Dialogs
@@ -158,16 +83,4 @@ function openCourseView() {
 function openTwoFactorFrame() {
     document.getElementById("confirmBox").style.visibility = "visible";
     document.getElementById("twoFactorFrame").style.visibility = "visible";
-}
-
-function setAppearanceSliders(mode) {
-    if (mode === "dark") {
-        (<HTMLInputElement>document.getElementById("toggleDarkModeButton")).checked = true;
-        document.getElementById("themeAutomode").className = "btn btn-danger";
-        (<HTMLInputElement>document.getElementById("toggleDarkModeButton")).disabled = false;
-    } else if (mode === "light") {
-        (<HTMLInputElement>document.getElementById("toggleDarkModeButton")).checked = false;
-        document.getElementById("themeAutomode").className = "btn btn-danger";
-        (<HTMLInputElement>document.getElementById("toggleDarkModeButton")).disabled = false;
-    }
 }

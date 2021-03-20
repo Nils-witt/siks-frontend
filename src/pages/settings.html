@@ -57,7 +57,7 @@
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav mr-auto">
                     <li class="nav-item" role="presentation"><a class="nav-link" href="timeTable.html">Stundenplan</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="student/exams.html">Klausuren</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="exams.html">Klausuren</a></li>
                     <li class="dropdown nav-item"><a aria-expanded="false" class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Weitere Dienste</a>
                         <div class="dropdown-menu" role="menu">
                             <a class="dropdown-item" href="https://moodle.paeda.biz" role="presentation" target="_blank">Moodle</a>
@@ -75,7 +75,6 @@
 </div>
 
 <div class="container" style="max-width: 900px;">
-    <button class="btn btn-danger" onclick="ServiceworkerConnector.reInit();">Seite neu initialisieren</button>
     <div class="row">
         <div class="col">
             <h5>Login</h5>
@@ -83,7 +82,22 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-primary" onclick="openTwoFactorFrame()">Zwei Schritte Login</button>
+            <button class="btn btn-light" id="twoFactorButton" disabled>Wird geladen...</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <span>Status: </span><span id="spanTwoFactorStatus">laden ...</span>
+        </div>
+    </div>
+    <div class="row" id="twoFactorAddRow" style="visibility: collapse; height: 0">
+        <div class="col">
+            <br>
+            <img id="qrCodeImg">
+            <br>
+            <br>
+            <input id="totpCode" placeholder="Hier den generierten Code eingeben (000 000)">
+            <button class="btn btn-success" onclick="Settings.global.submitValidationCode()">Weiter</button>
         </div>
     </div>
     <br>
@@ -105,14 +119,6 @@
     </div>
     <br>
     <div class="row">
-        <div class="col">
-            Mail
-        </div>
-        <div class="col">
-            <input class="form-control" disabled id="fieldEmail" type="email">
-        </div>
-    </div>
-    <div class="row">
         <div class="col"><br>
             Kurse
         </div>
@@ -127,27 +133,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-info">Moodle</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <h5>Dark Mode</h5>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button class="btn btn-success" id="buttonThemeAuto" onclick="settings.toggleDarkModeAuto()">Auto</button>
-        </div>
-        <div class="col">
-            <label class="switch">
-                <input id="sliderTheme" onchange="settings.darkModeToggleSwitch(this)" type="checkbox">
-                <div class="slider round">
-                    <span class="on">AN</span>
-                    <span class="off">AUS</span>
-                    <span class="notavilable">Disabled</span>
-                </div>
-            </label>
+            <button class="btn btn-info" id="moodlebtn">Moodle</button>
         </div>
     </div>
     <div class="row">
@@ -167,15 +153,10 @@
             </label>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <button class="btn btn-danger" onClick="removeAllDevicesConfirm();">Alle Entfernen</button>
-        </div>
-    </div>
     <br>
     <div class="row">
         <div class="col">
-            <button class="btn btn-success" onClick="window.location='https://t.me/SPlanBot'">Telegram</button>
+            <button class="btn btn-success" onClick="window.location=localStorage.getItem('TG_BOT_URL')">Telegram Bot</button>
         </div>
     </div>
     <div class="row">
@@ -202,7 +183,6 @@
 </div>
 <div class="confirmFrame" id="userCoursesFrame">
     <button class="btn btn-danger" onclick="closeAllView()">Schließen</button>
-    <!--<button class="btn btn-success" onclick="window.location.href = '/pages/student/editCourses.html'">Bearbeiten</button>-->
     <div class="container" id='datacourseContainer'>
         <table class="table">
             <thead>
