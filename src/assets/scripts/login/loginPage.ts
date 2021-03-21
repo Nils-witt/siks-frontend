@@ -69,12 +69,14 @@ function initLgPage() {
     }
     login.apiUrl = localStorage.getItem("API_HOST");
 }
+
 async function loadPWAConfig() {
     let res = await fetch("../../config.json");
     let data = await res.json();
     console.log("API_HOST: " + data["api"]);
-    localStorage.setItem("API_HOST",data["api"]);
-    localStorage.setItem("TG_BOT_URL",data["telegramBotUrl"]);
+    localStorage.setItem("API_HOST", data["api"]);
+    localStorage.setItem("TG_BOT_URL", data["telegramBotUrl"]);
+    localStorage.setItem("MOODLE_URL", data["moodleUrl"]);
 }
 
 
