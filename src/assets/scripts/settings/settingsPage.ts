@@ -49,6 +49,7 @@ addEventListener("DOMContentLoaded", async () => {
     settings.totpAddContainer = <HTMLButtonElement>document.getElementById("twoFactorAddRow");
     settings.totpCOdeField = <HTMLInputElement>document.getElementById("totpCode");
     settings.imgQrCode = <HTMLInputElement>document.getElementById("qrCodeImg");
+    settings.buttonTwoFactorCodeEntry = <HTMLButtonElement>document.getElementById("buttonTwoFactorCodeEntry");
 
     Settings.global = settings;
     await settings.populateSite();
