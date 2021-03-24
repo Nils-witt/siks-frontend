@@ -428,6 +428,7 @@ class ApiConnector {
      * @param id
      */
     static deleteAnnouncement(id): Promise<void> {
+        console.log(id);
         return new Promise(async (resolve, reject) => {
 
             let response = await fetch(this.api_host + "/announcements/id/" + id.toString(), {
@@ -715,7 +716,7 @@ class ApiConnector {
                     try {
                         let data: string = await response.text();
                         resolve(JSON.parse(data));
-                    }catch (e) {
+                    } catch (e) {
                         resolve({});
                     }
                 }
@@ -751,7 +752,7 @@ class ApiConnector {
                     try {
                         let data: string = await response.text();
                         resolve(JSON.parse(data));
-                    }catch (e) {
+                    } catch (e) {
                         resolve({});
                     }
 
