@@ -199,15 +199,16 @@ async function populateAnnouncementTable() {
 async function deleteAnnouncement(id) {
     await ApiConnector.deleteAnnouncement(id);
     await populateAnnouncementTable();
-
 }
 
 async function createAnnouncement() {
     (<HTMLButtonElement>document.getElementById("saveAnnouncement")).disabled = true;
-    (<HTMLButtonElement>document.getElementById("clearInput")).disabled = true;
     let gradeSelect = <HTMLSelectElement>document.getElementById("gradeSelect");
     let groupSelect = <HTMLSelectElement>document.getElementById("groupSelect");
     let subjectSelect = <HTMLSelectElement>document.getElementById("subjectSelect");
+    let onDisplay = <HTMLInputElement>document.getElementById("onDisplay");
+    console.log(onDisplay.checked)
+
 
     let date = (<HTMLInputElement>document.getElementById("dateInput")).value;
     let content = (<HTMLInputElement>document.getElementById("announcementContent")).value;
@@ -226,7 +227,6 @@ async function createAnnouncement() {
     await ApiConnector.saveAnnouncement(announcement);
     await populateAnnouncementTable();
     (<HTMLButtonElement>document.getElementById("saveAnnouncement")).disabled = false;
-    (<HTMLButtonElement>document.getElementById("clearInput")).disabled = false;
 }
 
 
@@ -247,11 +247,9 @@ document.addEventListener("DOMContentLoaded", async function (event) {
     await populateAnnouncementTable();
     await preloadCourses();
     populateGradeSelect();
-    //await loadCourses(window.localStorage.getItem("token"));
 });
 
 addEventListener('dataUpdate', async function () {
-    console.log("DU");
     try {
         await preloadCourses();
         populateGradeSelect();
