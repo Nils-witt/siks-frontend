@@ -85,7 +85,7 @@ class Settings {
         if (window.localStorage.getItem("PUSH_NOTIFICATIONS") === "true") {
             this.setPushSlider(true);
         } else {
-            this.setPushSlider(false);
+            this.setMoodleOptions(true);
         }
     }
 
