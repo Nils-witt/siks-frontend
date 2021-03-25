@@ -428,6 +428,7 @@ class ApiConnector {
      * @param id
      */
     static deleteAnnouncement(id): Promise<void> {
+        console.log(id);
         return new Promise(async (resolve, reject) => {
 
             let response = await fetch(this.api_host + "/announcements/id/" + id.toString(), {
@@ -685,6 +686,79 @@ class ApiConnector {
                 }
                 if (response.status === 604) {
                     console.log("err");
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    /**
+     * Sends a validation request.
+     */
+    static validateTOTPRegistration(code: number): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/totp/register", {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': "Bearer " + this.token,
+                        'Content-type': 'application/json; charset=utf-8'
+                    },
+                    body: JSON.stringify({
+                        "code": code.toString()
+                    })
+                });
+
+                if (response.status === 200) {
+                    try {
+                        let data: string = await response.text();
+                        resolve(JSON.parse(data));
+                    } catch (e) {
+                        resolve({});
+                    }
+                }
+                if (response.status === 401) {
+                    await authErr();
+                    reject('err');
+                }
+            } catch (e) {
+                console.log(e);
+                reject("NC")
+            }
+        });
+    }
+
+    /**
+     * Deactivates TOTP validation in login.
+     */
+    static deactivateTOTP(code: number): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let response = await fetch(this.api_host + "/user/totp/", {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': "Bearer " + this.token,
+                        'Content-type': 'application/json; charset=utf-8'
+                    },
+                    body: JSON.stringify({
+                        "code": code.toString()
+                    })
+                });
+
+                if (response.status === 200) {
+                    try {
+                        let data: string = await response.text();
+                        resolve(JSON.parse(data));
+                    } catch (e) {
+                        resolve({});
+                    }
+
+                }
+                if (response.status === 401) {
+                    await authErr();
                     reject('err');
                 }
             } catch (e) {

@@ -40,7 +40,7 @@ class Settings {
     textTwoFactorStatus: HTMLSpanElement;
     totpAddContainer: HTMLDivElement;
     imgQrCode: HTMLImageElement;
-    buttonTwoFactorAdd: HTMLButtonElement;
+    buttonTwoFactorCodeEntry: HTMLButtonElement;
     totpCOdeField: HTMLInputElement;
 
     totpRequestId: string;
@@ -62,7 +62,7 @@ class Settings {
                 Settings.global.obtainNewTOTP();
                 this.totpAddContainer.style.visibility = "visible";
                 this.totpAddContainer.style.height = "auto";
-                this.textTwoFactorStatus.innerText = "Warte auf Benutzereingabe";
+                this.textTwoFactorStatus.innerText = "Lade Daten.....";
             }
 
             this.textTwoFactorStatus.innerText = "Nicht aktiv"
@@ -85,7 +85,7 @@ class Settings {
         if (window.localStorage.getItem("PUSH_NOTIFICATIONS") === "true") {
             this.setPushSlider(true);
         } else {
-            this.setPushSlider(false);
+            this.setMoodleOptions(true);
         }
     }
 
@@ -98,15 +98,59 @@ class Settings {
         let resourceData = await ApiConnector.getNewTOTPRegistration();
         this.totpRequestId = resourceData.requestId;
         this.imgQrCode.src = resourceData.qr;
+        this.textTwoFactorStatus.innerText = "Warte auf Benutzereingabe...";
+        this.buttonTwoFactorCodeEntry.disabled = false;
+        this.buttonTwoFactorCodeEntry.onclick = () => {
+            Settings.global.submitValidationCode();
+        }
     }
 
     async submitValidationCode() {
-        console.log("Validation");
-        console.log(this.totpCOdeField.value)
+        let code: number = parseInt(this.totpCOdeField.value);
+        let res
+        try {
+            res = await ApiConnector.validateTOTPRegistration(code);
+        }catch (e) {
+            console.log(e);
+        }
+
+        if(res.hasOwnProperty("err")){
+            if(res.err === "Invalid code"){
+                this.buttonTwoFactorCodeEntry.disabled = false;
+                this.textTwoFactorStatus.innerText = "Ungültiger Code";
+            }
+        }else{
+            window.location.reload();
+        }
     }
 
     async disableTOTP() {
+        this.textTwoFactorStatus.innerText = "Warte auf Benutzereingabe...";
+        this.totpAddContainer.style.visibility = "visible";
+        this.totpAddContainer.style.height = "auto";
+        this.buttonTwoFactorCodeEntry.disabled = false;
+        this.buttonTwoFactorCodeEntry.onclick = () => {
+            Settings.global.submitDeactivationCode();
+        }
+    }
 
+    async submitDeactivationCode() {
+        this.buttonTwoFactorCodeEntry.disabled = true;
+        let code: number = parseInt(this.totpCOdeField.value);
+        let res
+        try {
+            res = await ApiConnector.deactivateTOTP(code);
+        }catch (e) {
+            console.log(e);
+        }
+        if(res.hasOwnProperty("err")){
+            if(res.err === "Invalid code"){
+                this.buttonTwoFactorCodeEntry.disabled = false;
+                this.textTwoFactorStatus.innerText = "Ungültiger Code";
+            }
+        }else{
+            window.location.reload();
+        }
     }
 
     async sliderPushNotification(element) {
