@@ -98,7 +98,7 @@
                     <input class="form-control" id="dateInput" type="date">
                 </td>
                 <td>
-                    <input class="form-control" type="checkbox">
+                    <input class="form-control" type="checkbox" id="onDisplay">
                 </td>
                 <td>
                     <textarea class="form-control" id="announcementContent"></textarea>
@@ -106,7 +106,6 @@
                 <td>
                     <div class="btn-group">
                         <button class="btn btn-success" id="saveAnnouncement" onclick="createAnnouncement();">Speichern</button>
-                        <button class="btn btn-danger" id="clearInput">Leeren</button>
                     </div>
                 </td>
             </tr>
@@ -115,12 +114,6 @@
                     <button class="btn btn-success" onclick="openCreateView();">Erstellen</button>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <button class="btn btn-info" id="openPresets">Vorlagen</button>
-                </td>
-            </tr>
-
             </tbody>
         </table>
     </div>

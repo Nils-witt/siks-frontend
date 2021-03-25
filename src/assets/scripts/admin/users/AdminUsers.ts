@@ -117,13 +117,14 @@ class AdminUsers {
         row.append(containerFirstname);
         containerLastname.innerText = user.lastName;
         row.append(containerLastname);
-        if (user.type === UserType.STUDENT) {
+        if (user.type == UserType.STUDENT) {
             containerType.innerText = "Student";
-        } else if (user.type === UserType.TEACHER) {
+        } else if (user.type == UserType.TEACHER) {
             containerType.innerText = "Teacher";
         }
         row.append(containerType);
 
+        /*
         let deleteButton = document.createElement('button');
         deleteButton.innerText = "Löschen";
         deleteButton.className = "btn btn-danger";
@@ -135,6 +136,7 @@ class AdminUsers {
         resetButton.className = "btn btn-danger";
         resetButton.onclick = () => AdminUsers.openUserReset(user.id);
         containerActions.append(resetButton);
+        */
 
         let openButton = document.createElement('button');
         openButton.innerText = "Öffnen";
@@ -174,8 +176,7 @@ class AdminUsers {
         let lastnameField = <any>document.getElementById('ProfileDetailLastname');
         let mailAddressField = <any>document.getElementById('ProfileDetailMail');
         let buttonCourseView = <any>document.getElementById('buttonOpenCourseFrame');
-        console.log(user[0]);
-        user = user[0];
+        console.log(user);
         usernameField.value = user["username"];
         firstnameField.value = user["firstName"];
         lastnameField.value = user["lastName"];
