@@ -110,16 +110,16 @@ class Settings {
         let res
         try {
             res = await ApiConnector.validateTOTPRegistration(code);
-        }catch (e) {
+        } catch (e) {
             console.log(e);
         }
 
-        if(res.hasOwnProperty("err")){
-            if(res.err === "Invalid code"){
+        if (res.hasOwnProperty("err")) {
+            if (res.err === "Invalid code") {
                 this.buttonTwoFactorCodeEntry.disabled = false;
                 this.textTwoFactorStatus.innerText = "Ungültiger Code";
             }
-        }else{
+        } else {
             window.location.reload();
         }
     }
@@ -140,15 +140,15 @@ class Settings {
         let res
         try {
             res = await ApiConnector.deactivateTOTP(code);
-        }catch (e) {
+        } catch (e) {
             console.log(e);
         }
-        if(res.hasOwnProperty("err")){
-            if(res.err === "Invalid code"){
+        if (res.hasOwnProperty("err")) {
+            if (res.err === "Invalid code") {
                 this.buttonTwoFactorCodeEntry.disabled = false;
                 this.textTwoFactorStatus.innerText = "Ungültiger Code";
             }
-        }else{
+        } else {
             window.location.reload();
         }
     }

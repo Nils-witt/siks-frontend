@@ -45,7 +45,7 @@ class ServiceworkerConnector {
                         console.log('Registrierung fehlgeschlagen mit ' + error);
                         reject();
                     });
-                }else{
+                } else {
                     console.log("LS")
                     resolve();
                 }

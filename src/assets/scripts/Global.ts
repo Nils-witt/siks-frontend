@@ -28,11 +28,12 @@
 
 class Global {
     static user: User;
+
     /**
      * Function to be called on each site load to set the runtime
      */
-    public static async init(){
-        if (window.location.protocol === 'http:'){
+    public static async init() {
+        if (window.location.protocol === 'http:') {
             console.log("Wrong Protocol");
             window.location.protocol = 'https:';
         }
@@ -42,7 +43,7 @@ class Global {
         ApiConnector.token = localStorage.getItem("API_TOKEN");
 
         await DatabaseConnector.initDB();
-        if(ApiConnector.token !== null){
+        if (ApiConnector.token !== null) {
             await ApiConnector.updateStores();
         }
     }
