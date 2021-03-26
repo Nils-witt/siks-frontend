@@ -373,14 +373,13 @@ class TimeTable implements Pagination {
         });
 
         this.data.announcements.forEach(announcement => {
-            let weekday = announcement.date;
-
+            let weekday = (new Date(announcement.date)).getDay();
             if (!announcements.hasOwnProperty(weekday)) {
                 announcements[weekday] = {};
             }
-            if(lessons.hasOwnProperty(weekday)){
+            if (lessons.hasOwnProperty(weekday)) {
                 Object.keys(lessons[weekday]).forEach(lessonNumber => {
-                    let lesson = lessons[weekday][lessonNumber];
+                    let lesson = lessons[weekday][lessonNumber][0];
                     if (announcement["courseId"] === lesson["course"]["id"]) {
                         if (!announcements[weekday].hasOwnProperty(lesson["lessonNumber"])) {
                             announcements[weekday][lesson["lessonNumber"]] = [];
