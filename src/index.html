@@ -28,18 +28,17 @@
 
 <!Doctype HTML>
 <html lang="de">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/S-Plan.png">
-<meta name="apple-mobile-web-app-title" content="S-Plan">
-<link rel="stylesheet" href="/assets/css/global.scss">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<link href="/S-Plan.png" rel="apple-touch-icon">
+<meta content="S-Plan" name="apple-mobile-web-app-title">
+<link href="/assets/css/global.scss" rel="stylesheet">
 <script>
 
-    if(window.localStorage.getItem("token") !== null){
+    if (window.localStorage.getItem("token") !== null) {
         window.location.href = "/pages/timeTable.html";
-    }else {
+    } else {
         window.location = '/pages/login.html';
     }
-
 
 
     /*

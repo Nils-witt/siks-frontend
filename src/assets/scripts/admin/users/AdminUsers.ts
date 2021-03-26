@@ -79,13 +79,13 @@ class AdminUsers {
                 }
             }
 
-            if(this.filter.lastname != null){
+            if (this.filter.lastname != null) {
                 if (!user.lastName.toLowerCase().includes(this.filter.lastname)) {
                     add = false;
                 }
             }
 
-            if(this.filter.firstname != null){
+            if (this.filter.firstname != null) {
                 if (!user.firstName.toLowerCase().includes(this.filter.firstname)) {
                     add = false;
                 }

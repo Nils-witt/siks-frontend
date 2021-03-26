@@ -27,72 +27,72 @@
  */
 
 #detailBox {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: black;
-    opacity: 0.6;
-    visibility: hidden;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.6;
+  visibility: hidden;
 }
 
 #detailFrame {
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    max-width: 1000px;
-    max-height: 700px;
-    bottom: 50px;
-    padding: 1em;
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  max-width: 1000px;
+  max-height: 700px;
+  bottom: 50px;
+  padding: 1em;
 
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
 
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: white;
-    visibility: hidden;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: white;
+  visibility: hidden;
 }
 
 #detailCloseButton {
-    float: right;
+  float: right;
 }
 
 .indicator {
-    width: 5px;
-    padding: 0;
-    height: 100%;
+  width: 5px;
+  padding: 0;
+  height: 100%;
 }
 
 .dark .indicator-red {
-    background-color: #801a00;
+  background-color: #801a00;
 }
 
 .indicator-red {
-    background-color: red;
+  background-color: red;
 }
 
 .indicator-green {
-    background-color: lime;
+  background-color: lime;
 }
 
 .dark .indicator-green {
-    background-color: #008000;
+  background-color: #008000;
 }
 
 .indicator-blue {
-    background-color: blue;
+  background-color: blue;
 }
 
 .dark .indicator-blue {
-    background-color: #00009d;
+  background-color: #00009d;
 }
 
 .indicator-orange {
-    background-color: orange;
+  background-color: orange;
 }
 
 .dark .indicator-orange {
-    background-color: lightsalmon;
+  background-color: lightsalmon;
 }

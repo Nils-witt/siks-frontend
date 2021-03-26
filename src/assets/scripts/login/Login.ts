@@ -94,7 +94,7 @@ class Login {
                 let responseBody = await response.json();
                 window.localStorage.setItem('API_TOKEN', responseBody.token);
                 let type = 0;
-                if (responseBody.userType === "teacher"){
+                if (responseBody.userType === "teacher") {
                     type = 2;
                 }
                 window.localStorage.setItem('USER_TYPE', type.toString());

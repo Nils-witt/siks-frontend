@@ -40,24 +40,23 @@ self.addEventListener('install', event => {
 });
 
 
-
 //Event for the control takeover
 self.addEventListener('activate', async (event) => {
     forceCacheUpdate();
-    setTimeout( ()=> {
+    setTimeout(() => {
         refreshClients();
-    },500);
+    }, 500);
 });
 
 //Event if a site requests a file from the server
-self.addEventListener('fetch', (event) =>{
+self.addEventListener('fetch', (event) => {
     try {
         event.respondWith(
-            caches.match(event.request).then((response) =>{
+            caches.match(event.request).then((response) => {
                 return response || fetch(event.request);
             })
         );
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 });
@@ -66,34 +65,34 @@ self.addEventListener('fetch', (event) =>{
 self.addEventListener("message", (event) => {
     let data = event.data;
 
-    if(data.hasOwnProperty("command")){
-        if(data.command === "getApiKey"){
+    if (data.hasOwnProperty("command")) {
+        if (data.command === "getApiKey") {
             event.ports[0].postMessage(apiKey);
-        }else if (data.command === "setApiKey"){
+        } else if (data.command === "setApiKey") {
             apiKey = data.key;
-            event.ports[0].postMessage({"set":true});
-        }else if (data.command === "logout"){
+            event.ports[0].postMessage({"set": true});
+        } else if (data.command === "logout") {
             logout();
-            event.ports[0].postMessage({"set":true});
-        }else if (data.command === "setUsername"){
+            event.ports[0].postMessage({"set": true});
+        } else if (data.command === "setUsername") {
             username = data.Username;
-            event.ports[0].postMessage({"set":true});
-        }else if (data.command === "getUsername"){
-            event.ports[0].postMessage({"success":true,"Type":"username","Username":username});
-        }else if (data.command === "push"){
+            event.ports[0].postMessage({"set": true});
+        } else if (data.command === "getUsername") {
+            event.ports[0].postMessage({"success": true, "Type": "username", "Username": username});
+        } else if (data.command === "push") {
             initPush();
-            event.ports[0].postMessage({"push":"done"});
-        }else if (data.command === "disableCache"){
+            event.ports[0].postMessage({"push": "done"});
+        } else if (data.command === "disableCache") {
             caches.delete(staticCacheName);
             disableCache = true;
-            event.ports[0].postMessage({"cache":"disabled"});
-        }else if (data.command === "enableCache"){
+            event.ports[0].postMessage({"cache": "disabled"});
+        } else if (data.command === "enableCache") {
             loadCacheManifest()
             disableCache = false;
-            event.ports[0].postMessage({"cache":"enabled"});
-        }else if (data.command === "updateCache"){
+            event.ports[0].postMessage({"cache": "enabled"});
+        } else if (data.command === "updateCache") {
             loadCacheManifest();
-        }else if (data.command === "forceUpdateCache"){
+        } else if (data.command === "forceUpdateCache") {
             forceCacheUpdate();
         }
     }
@@ -124,7 +123,7 @@ function logout() {
 }
 
 //refreshes the windows of all tabs / windows controlled by this instance
-function refreshClients(){
+function refreshClients() {
     self.clients.matchAll({type: 'window'})
         .then(clients => {
             return clients.map(client => {
@@ -135,8 +134,9 @@ function refreshClients(){
             });
         })
 }
+
 //Enables push notifications
-async function initPush(){
+async function initPush() {
     try {
         const applicationServerKey = urlB64ToUint8Array("BBDWHJkJr4mFzQwkNVWKG_Lj6NTXFx38XxBvUCHV9Sm_U4xlvMYapvImY8BBUSd6UI8NkzNygJRZ5J_MMgsSTek");
         const options = {applicationServerKey, userVisibleOnly: true}
@@ -162,31 +162,31 @@ const urlB64ToUint8Array = base64String => {
 async function loadCacheManifest() {
     try {
         //For development purposes delete cache if there is one and dont create a new one
-        if(!disableCache){
+        if (!disableCache) {
             //Load file containing Information about which files should be loaded for a cache version and retained until the the version increases
-            let res = await fetch( "/cache.json");
+            let res = await fetch("/cache.json");
             let cacheDetails = await res.json();
-            if(cacheDetails.files.length > 0){
-                if(cacheDetails.version !== cacheVersion){
+            if (cacheDetails.files.length > 0) {
+                if (cacheDetails.version !== cacheVersion) {
                     console.log("Updating cache");
                     //clearing existing cache
                     await caches.delete(staticCacheName);
                     let cache = await caches.open(staticCacheName);
                     for (const cacheDetailsKey in cacheDetails.files) {
-                        if(cacheDetails.files.hasOwnProperty(cacheDetailsKey)){
+                        if (cacheDetails.files.hasOwnProperty(cacheDetailsKey)) {
                             //Load files from the list and save them into the cache
                             await cache.put(cacheDetails.files[cacheDetailsKey], await fetch(cacheDetails.files[cacheDetailsKey]));
                         }
                     }
                     cacheVersion = cacheDetails.version;
                 }
-            }else {
+            } else {
                 console.log("Cache file may invalid");
             }
-        }else {
+        } else {
             await caches.delete(staticCacheName);
         }
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -194,29 +194,29 @@ async function loadCacheManifest() {
 async function forceCacheUpdate() {
     try {
         //For development purposes delete cache if there is one and dont create a new one
-        if(!disableCache){
+        if (!disableCache) {
             //Load file containing Information about which files should be loaded for a cache version and retained until the the version increases
-            let res = await fetch( "/cache.json");
+            let res = await fetch("/cache.json");
             let cacheDetails = await res.json();
-            if(cacheDetails.files.length > 0){
+            if (cacheDetails.files.length > 0) {
                 //clearing existing cache
                 await caches.delete(staticCacheName);
                 let cache = await caches.open(staticCacheName);
                 for (const cacheDetailsKey in cacheDetails.files) {
-                    if(cacheDetails.files.hasOwnProperty(cacheDetailsKey)){
+                    if (cacheDetails.files.hasOwnProperty(cacheDetailsKey)) {
                         //Load files from the list and save them into the cache
                         await cache.put(cacheDetails.files[cacheDetailsKey], await fetch(cacheDetails.files[cacheDetailsKey]));
                     }
                 }
                 cacheVersion = cacheDetails.version;
 
-            }else {
+            } else {
                 console.log("Cache file may invalid");
             }
-        }else {
+        } else {
             await caches.delete(staticCacheName);
         }
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 }

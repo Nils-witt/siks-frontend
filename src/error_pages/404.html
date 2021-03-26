@@ -29,22 +29,22 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Error 404</title>
+    <meta charset="UTF-8">
+    <title>Error 404</title>
 </head>
 
 <body>
-	Seite nicht gefunden
-	
-	<script>
-		
-		function messageToServiceWorker(msg) {
-			navigator.serviceWorker.controller.postMessage(msg);
-		}
-		
-	    localStorage.removeItem("token");
-    	messageToServiceWorker({"command": "logout"});
-    	window.location.href = "/pages/login.html";
-	</script>
+Seite nicht gefunden
+
+<script>
+
+    function messageToServiceWorker(msg) {
+        navigator.serviceWorker.controller.postMessage(msg);
+    }
+
+    localStorage.removeItem("token");
+    messageToServiceWorker({"command": "logout"});
+    window.location.href = "/pages/login.html";
+</script>
 </body>
 </html>

@@ -34,11 +34,12 @@ class ListView {
     dataObject = {};
 
     listContainer: HTMLDivElement;
+
     constructor() {
 
     }
 
-    async load(){
+    async load() {
         this.container.innerText = "Load ..";
         await this.loadData();
 
@@ -48,16 +49,16 @@ class ListView {
     }
 
 
-    async loadData(){
+    async loadData() {
         await DatabaseConnector.initDB();
         let exams = await DatabaseConnector.getExams();
 
-        exams.sort((a,b) => {
-            if(a.date < b.date){
+        exams.sort((a, b) => {
+            if (a.date < b.date) {
                 return -1
-            }else if (a.date > b.date){
-                return  1
-            }else {
+            } else if (a.date > b.date) {
+                return 1
+            } else {
                 return 0;
             }
         });
@@ -65,23 +66,23 @@ class ListView {
         for (const examsKey in exams) {
             let exam = exams[examsKey];
             let course = exam.course.grade + "/" + exam.course.subject + "-" + exam.course.group;
-            if(!this.dataObject.hasOwnProperty(course)){
+            if (!this.dataObject.hasOwnProperty(course)) {
                 this.dataObject[course] = [];
             }
             this.dataObject[course].push(exam);
         }
     }
 
-    generateList(){
+    generateList() {
         let locContainer = document.createElement('div');
 
         let courses = Object.keys(this.dataObject);
-        courses.sort((a,b) => {
-            if(a < b){
+        courses.sort((a, b) => {
+            if (a < b) {
                 return -1
-            }else if (a > b){
-                return  1
-            }else {
+            } else if (a > b) {
+                return 1
+            } else {
                 return 0;
             }
         });
