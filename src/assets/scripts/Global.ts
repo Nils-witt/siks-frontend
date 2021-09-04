@@ -60,6 +60,7 @@ class Global {
 Global.init();
 
 enum UserType {
-    STUDENT,
-    TEACHER
+    NONE = -1,
+    STUDENT = 0,
+    TEACHER = 1,
 }

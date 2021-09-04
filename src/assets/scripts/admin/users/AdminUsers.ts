@@ -49,7 +49,7 @@ class AdminUsers {
     static filter: { firstname: string | null, lastname: string | null, active: number | null, type: UserType | null } = {firstname: null, lastname: null, active: null, type: null};
 
     static load(): Promise<void> {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             this.users = await ApiConnector.loadUsers();
             this.updateTable();
             resolve();
@@ -58,7 +58,7 @@ class AdminUsers {
 
     static updateFilter() {
         this.filter.type = Number(this.selectFilterType.options[this.selectFilterType.options.selectedIndex.valueOf()].value);
-        if (this.filter.type === -1) {
+        if (this.filter.type === UserType.NONE) {
             this.filter.type = null;
         }
         this.filter.active = this.selectFilterStatus.options.selectedIndex.valueOf();
@@ -74,7 +74,7 @@ class AdminUsers {
             let user = this.users[i];
             let add = true;
             if (this.filter.type != null) {
-                if (user.type != this.filter.type) {
+                if (user.type !== this.filter.type) {
                     add = false;
                 }
             }
@@ -117,9 +117,9 @@ class AdminUsers {
         row.append(containerFirstname);
         containerLastname.innerText = user.lastName;
         row.append(containerLastname);
-        if (user.type == UserType.STUDENT) {
+        if (user.type === UserType.STUDENT) {
             containerType.innerText = "Student";
-        } else if (user.type == UserType.TEACHER) {
+        } else if (user.type === UserType.TEACHER) {
             containerType.innerText = "Teacher";
         }
         row.append(containerType);
